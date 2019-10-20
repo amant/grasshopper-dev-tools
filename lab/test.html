@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello world</title>
+  <script src="https://unpkg.com/vue"></script>
+  <style>
+    #container {
+        display: flex;
+        height: 100%;
+        outline: 1px solid red;
+    }
+
+    .app {
+        width: 100%;
+        height: 100%;
+        user-select: none;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        outline: 1px solid blue;
+    }
+
+    .app > .header {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        position: relative;
+        outline: 1px solid blue;
+        box-shadow: 0 0 8px rgba(0,0,0,0.15);
+    }
+
+    .container {
+        height: calc(100%  - 60px);
+        position: relative;
+        overflow: hidden;
+        flex: 1;
+    }
+
+    .split-pane {
+        display: flex;
+        height: 100%;
+        outline: 1px solid blue;
+    }
+
+    .vertical {
+
+    }
+
+    .left, .right {
+        position: relative;
+        height: 100%;
+    }
+
+    .top {
+
+    }
+
+    .right {
+
+    }
+
+    .bottom {
+
+    }
+
+    .scroll-pane {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        outline: 1px solid green;
+    }
+
+    .dragger {
+        position: absolute;
+        z-index: 99;
+    }
+
+    .vertical .dragger {
+        top: 0;
+        bottom: 0;
+        right: -5px;
+        width: 10px;
+        cursor: ew-resize;
+        border: 1px solid green;
+    }
+
+    .action-header {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        font-size: 12px;
+        border-bottom: 1px solid #eee;
+        color: #666;
+        height: 50px;
+        outline: 1px solid blue;
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+
+    .scroll {
+        position: relative;
+        flex: 1;
+        overflow: auto;
+        outline: 1px solid blue;
+    }
+
+    .notice {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        color: #aaa;
+        outline: 1px solid blue;
+    }
+
+    .notice div {
+      text-align: center;
+      padding: 0.5em;
+      margin: 0 auto;
+    }
+
+    .logo {
+      width: 30px;
+      height: 30px;
+      margin: 0 15px;
+      background: green;
+      outline: 1px solid blue;
+    }
+
+    .message-container {
+      height: 1em;
+      cursor: default;
+      display: block;
+      outline: 1px solid blue;
+    }
+
+    .message {
+      color: #3ba776;
+      transition: all 0.3s ease;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      outline: 1px solid blue;
+    }
+
+    .actions {
+      flex: auto 1 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .ui-group {
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+    }
+
+    .ui-group>.content-wrapper {
+      position: relative;
+    }
+    .ui-group> .content-wrapper > .content {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .ui-button {
+      display: inline-block;
+      vertical-align: middle;
+      border: none;
+      font-family: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      box-sizing: border-box;
+      border-radius: 3px;
+      padding: 0 14px;
+      font-size: 14px;
+      line-height: 16px;
+      height: 32px;
+      color: #2c3e50;
+      background: #e0f8ed;
+      outline: 0;
+    }
+
+
+    .tree {
+      padding: 5px;
+    }
+
+    /* Remove default bullets */
+    ul, #myUL {
+      list-style-type: none;
+    }
+
+    /* Remove margins and padding from the parent ul */
+    #myUL {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Style the caret/arrow */
+    #myUL .caret {
+      cursor: pointer;
+      user-select: none; /* Prevent text selection */
+    }
+
+    /* Create the caret/arrow with a unicode, and style it */
+    #myUL .caret::before {
+      content: "\25B6";
+      color: black;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+    #myUL .caret-down::before {
+      transform: rotate(90deg);
+    }
+
+    /* Hide the nested list */
+    #myUL .nested {
+      display: none;
+    }
+
+    /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+    #myUL .active {
+      display: block;
+    }
+  </style>
+  <style>
+    .hero {
+      /* Photo by mnm.all on Unsplash */
+      background: url('https://images.unsplash.com/photo-1518176258769-f227c798150e') center;
+      background-size: cover;
+      padding: 4rem 2rem;
+
+      /* Grid styles */
+      display: grid;
+      align-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  </style>
+</head>
+<body style="height: 800px;">
+  <div id="container">
+    <div class="app">
+        <div class="header">
+          <div class="logo"></div>
+          <span class="message-container">
+            <span class="message">
+              <span class="text">
+                  Ready Set and Go ...
+              </span>
+            </span>
+
+          </span>
+          <div class="actions">
+            <div class="ui-group">
+              <div class="content-wrapper">
+                <div class="content">
+                  <button>Option 1</button>
+                  <button>Option 2</button>
+                  <button>Option 3</button>
+                  <button>Option 4</button>
+                  <button>Option 5</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+            <div class="split-pane vertical">
+                <div class="left top" style="width: 50%">
+                    <div class="scroll-pane">
+                        <div class="header">
+                            <div class="action-header">
+                              <input type="text" placeholder="Filter component" class="search">
+                            </div>
+                        </div>
+                        <div class="scroll">
+                          <div class="tree">
+                              <ul id="myUL">
+                                  <li><span class="caret">&lt;Beverages&gt;</span>
+                                    <ul class="active">
+                                      <li>&lt;Water&gt;</li>
+                                      <li>&lt;Coffee&gt;</li>
+                                      <li><span class="caret">&lt;Tea&gt;</span>
+                                        <ul class="active">
+                                          <li>&lt;Black Tea&gt;</li>
+                                          <li>&lt;White Tea&gt;</li>
+                                          <li><span class="caret">&lt;Green Tea&gt;</span>
+                                            <ul class="active">
+                                              <li>&lt;Sencha&gt;</li>
+                                              <li>&lt;Gyokuro&gt;</li>
+                                              <li>&lt;Matcha&gt;</li>
+                                              <li>&lt;Pi Lo Chun&gt;</li>
+                                            </ul>
+                                          </li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="dragger"></div>
+                </div>
+                <div class="right bottom" style="width: 50%">
+                    <div class="scroll-pane">
+                        <div class="header">
+                            <div class="action-header">
+                              <span class="title" style="margin-right: 10px;">&lt;Water&gt;</span>
+                              <input type="text" placeholder="Filter properties" class="search">
+                            </div>
+                        </div>
+                        <div class="scroll">
+                            <section class="notice">
+                                <div>Select a component to inspect.</div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div id="app">
+    <p>{{ message }}</p>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue.js!'
+      }
+    })
+  </script>
+</body>
+</html>

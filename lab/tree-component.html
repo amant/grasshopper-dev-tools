@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hello world</title>
+</head>
+<body>
+  <at-treeview></at-treeview>
+
+  <script type="module">
+    // import {html, render, LitElement} from 'https://unpkg.com/lit-html?module';
+    import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
+
+    class TreeView extends LitElement {
+      _toggleExpand(e) {
+        const el = e.target;
+        el.parentElement.querySelector('.nested').classList.toggle('active');
+        el.classList.toggle('caret-down');
+      }
+
+      render() {
+        return html`
+          <style>
+            /* Remove default bullets */
+            ul, #myUL {
+              list-style-type: none;
+            }
+
+            /* Remove margins and padding from the parent ul */
+            #myUL {
+              margin: 0;
+              padding: 0;
+            }
+
+            /* Style the caret/arrow */
+            .caret {
+              cursor: pointer;
+              user-select: none; /* Prevent text selection */
+            }
+
+            /* Create the caret/arrow with a unicode, and style it */
+            .caret::before {
+              content: "\\25B6";
+              color: black;
+              display: inline-block;
+              margin-right: 6px;
+            }
+
+            /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+            .caret-down::before {
+              transform: rotate(90deg);
+            }
+
+            /* Hide the nested list */
+            .nested {
+              display: none;
+            }
+
+            /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+            .active {
+              display: block;
+            }
+            </style>
+          <ul id="myUL">
+            <li><span class="caret" @click="${this._toggleExpand}">Beverages</span>
+              <ul class="nested">
+                <li>Water</li>
+                <li>Coffee</li>
+                <li><span class="caret" @click="${this._toggleExpand}">Tea</span>
+                  <ul class="nested">
+                    <li>Black Tea</li>
+                    <li>White Tea</li>
+                    <li><span class="caret" @click="${this._toggleExpand}">Green Tea</span>
+                      <ul class="nested">
+                        <li>Sencha</li>
+                        <li>Gyokuro</li>
+                        <li>Matcha</li>
+                        <li>Pi Lo Chun</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        `;
+      }
+    }
+    customElements.define('at-treeview',  TreeView)
+  </script>
+</body>
+</html>
