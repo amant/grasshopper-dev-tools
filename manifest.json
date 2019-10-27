@@ -5,10 +5,12 @@
   "devtools_page": "devtools.html",
   "manifest_version": 2,
 
-  "permissions": ["*://*/*"],
-
+  "permissions": ["*://*/*", "https://unpkg.com/"],  
+  
   "background": {
     "scripts": ["background.js"],
     "persistent": false
-  }
+  },
+
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://unpkg.com; object-src 'self'"
 }

@@ -1,14 +1,64 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hello world</title>
 </head>
+
 <body>
   <at-treeview></at-treeview>
+
+  <script>
+
+    function getAllElements(rootNode) {
+      const isWebComponent = (element) => element.tagName.includes('-');
+
+      const toFilterOut = (node) => {
+        return !(node instanceof HTMLElement) ||
+          (!isWebComponent(node) && node.children.length <= 0) ||
+          (['template', 'custom-style', 'style', 'script'].includes(node.nodeName.toLowerCase()));
+      }
+
+      const findAllElements = (node) => {
+        const nodeCollection = [];
+
+        if (!node.children) debugger;
+
+        for (let element of node.children) {
+          const nodeObj = {
+            inShadow: element.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
+            nodeName: element.nodeName,
+            children: []
+          };
+
+          if (toFilterOut(element)) {
+            continue;
+          }
+
+          nodeCollection.push(nodeObj);
+
+          if (element.shadowRoot) {
+            nodeObj.children = nodeObj.children.concat(findAllElements(element.shadowRoot));
+          }
+
+          if (element.children && element.children.length > 0) {
+            nodeObj.children = nodeObj.children.concat(...findAllElements(element));
+          }
+
+        }
+
+        return nodeCollection;
+      }
+
+      return findAllElements(rootNode);
+    }
+
+    copy(JSON.stringify(getAllElements(document.body)));
+  </script>
 
   <script type="module">
     // import {html, render, LitElement} from 'https://unpkg.com/lit-html?module';
@@ -89,7 +139,8 @@
         `;
       }
     }
-    customElements.define('at-treeview',  TreeView)
+    customElements.define('at-treeview', TreeView)
   </script>
 </body>
+
 </html>

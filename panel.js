@@ -14,45 +14,52 @@
 
 
 
+
 (function() {
     function getAllElements(rootNode) {
         const isWebComponent = (element) => element.tagName.includes('-');
-    
-        const toFilter = (node) => {
-            return !(node instanceof HTMLElement) || 
-                (!isWebComponent(node) && node.children.length <= 0) ||
-                (['template', 'custom-style', 'style', 'script'].includes(node.nodeName.toLowerCase()));
+  
+        const toFilterOut = (node) => {
+          return !(node instanceof HTMLElement) ||
+            // (!isWebComponent(node) && node.children.length === 0) ||
+            (['template', 'custom-style', 'style', 'script'].includes(node.nodeName.toLowerCase()));
         }
-    
-    
-        const findAllElements = (node, nodeCollection = []) => {
-            for (let element of node.children) {
-                const nodeObj = {
-                    nodeName: element.nodeName,
-                    children: []
-                };
-    
-                // if (toFilter(element)) {
-                //     continue;
-                // }
-    
-                
-                nodeCollection.push(nodeObj);
-    
-                if (element.children.length > 0) {
-                    nodeObj.children = findAllElements(element);
-                }
-    
-                if (element.shadowRoot) {
-                    nodeObj.children = findAllElements(element.shadowRoot);
-                }
+  
+        const findAllElements = (node) => {
+          const nodeCollection = [];
+  
+          if (!node.children) debugger;
+  
+          for (let element of node.children) {
+            const nodeObj = {
+              inShadow: element.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
+              nodeName: element.nodeName,
+              id: element.id,
+              classList: Array.from(element.classList),
+              children: []
+            };
+  
+            if (toFilterOut(element)) {
+              continue;
             }
-
-            return nodeCollection;
+  
+            nodeCollection.push(nodeObj);
+  
+            if (element.shadowRoot) {
+              nodeObj.children = nodeObj.children.concat(findAllElements(element.shadowRoot));
+            }
+  
+            if (element.children && element.children.length > 0) {
+              nodeObj.children = nodeObj.children.concat(...findAllElements(element));
+            }
+  
+          }
+  
+          return nodeCollection;
         }
-    
+  
         return findAllElements(rootNode);
-    }
+      }
     
     getAllElements(document.body);
 
@@ -71,37 +78,9 @@
                 }
             );
         });
-    }
+    };
 
-    const htmlComponentStructure = (elementCollection) => {
-        let htmlTemplate = '';
-
-        const walk = (elements) => {
-            htmlTemplate += '<ul>';
-
-            elements.map(el => {
-                console.log(el);
-
-                htmlTemplate += `<li>${el.nodeName}</li>`
-
-                if (el.children && el.children.length > 0) {
-                    walk(el.children);
-                }
-            });
-
-            htmlTemplate += '</ul>';
-
-            return htmlTemplate;
-        }
-        
-        return walk(elementCollection); 
-    }
-
-    collectElements().then(elementCollection => {
-        console.log('elementCollection', elementCollection);
-
-        const templateComponentTree = htmlComponentStructure(elementCollection);
-    
-        document.querySelector('#app').innerHTML = templateComponentTree;
-    })
+    collectElements().then(elements => {
+        document.querySelector('#component-tree').innerHTML = `<at-tree data=${JSON.stringify(elements)}></at-tree>`;
+    });
  })();

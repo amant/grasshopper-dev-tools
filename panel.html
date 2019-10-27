@@ -1,24 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-      html, body {
-        height: 100%;
-        color: blue;
-        background-color: white;
-      }
-      #container {
-        display: flex;
-        height: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container">
-      <div id="app">Loading...</div>
+
+<head>
+  <meta charset="utf-8">
+  <title>GrassHopper-Dev-Tools</title>
+  <link rel="stylesheet" type="text/css" href="styles/light-style.css">
+  <script type="module" src="./components/at-tree.js"></script>
+</head>
+
+<body style="background: white; height: 500px;">
+  <div id="app-container">
+    <div class="app">
+      <div class="header">
+        <div class="logo"></div>
+        <span class="message-container">
+          <span class="message"><span class="text">GrassHopper Dev Tools</span></span>
+        </span>
+        <div class="actions">
+          <div class="ui-group">
+            <div class="content-wrapper">
+              <div class="content">
+                <button>Tree Component</button>
+                <button>A11Y Check</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="split-pane vertical">
+          <div class="left top" style="width: 50%">
+            <div class="scroll-pane">
+              <div class="header">
+                <div class="action-header">
+                  <input type="text" placeholder="Filter component" class="search">
+                </div>
+              </div>
+              <div class="scroll">
+                <div id="component-tree">Loading...</div>
+              </div>
+            </div>
+            <div class="dragger"></div>
+          </div>
+          <div class="right bottom" style="width: 50%">
+            <div class="scroll-pane">
+              <div class="header">
+                <div class="action-header">
+                  <span class="title" style="margin-right: 10px;">&lt;To-do&gt;</span>
+                  <input type="text" placeholder="Filter properties" class="search">
+                </div>
+              </div>
+              <div class="scroll">
+                <section class="notice">
+                  <div>Select a component to inspect.</div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <script src="panel.js"></script>
-  </body>
+  </div>
+  <script src="panel.js"></script>
+</body>
+
 </html>

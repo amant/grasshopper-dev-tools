@@ -1,0 +1,176 @@
+#app-container {
+    display: flex;
+    height: 100%;
+    outline: 1px solid red;
+}
+
+.app {
+    width: 100%;
+    height: 100%;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    outline: 1px solid blue;
+}
+
+.app>.header {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    position: relative;
+    outline: 1px solid blue;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.container {
+    height: calc(100% - 60px);
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+}
+
+.split-pane {
+    display: flex;
+    height: 100%;
+    outline: 1px solid blue;
+}
+
+.vertical {}
+
+.left, .right {
+    position: relative;
+    height: 100%;
+}
+
+.top {}
+
+.right {}
+
+.bottom {}
+
+.scroll-pane {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    outline: 1px solid green;
+}
+
+.dragger {
+    position: absolute;
+    z-index: 99;
+}
+
+.vertical .dragger {
+    top: 0;
+    bottom: 0;
+    right: -5px;
+    width: 10px;
+    cursor: ew-resize;
+    border: 1px solid green;
+}
+
+.action-header {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 12px;
+    border-bottom: 1px solid #eee;
+    color: #666;
+    height: 50px;
+    outline: 1px solid blue;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.scroll {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+    outline: 1px solid blue;
+}
+
+.notice {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    color: #aaa;
+    outline: 1px solid blue;
+}
+
+.notice div {
+    text-align: center;
+    padding: 0.5em;
+    margin: 0 auto;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    margin: 0 15px;
+    background: url('images/grasshopper.svg') no-repeat center center;
+}
+
+.message-container {
+    height: 1em;
+    cursor: default;
+    display: block;
+    outline: 1px solid blue;
+}
+
+.message {
+    color: #3ba776;
+    transition: all 0.3s ease;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    outline: 1px solid blue;
+}
+
+.actions {
+    flex: auto 1 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ui-group {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.ui-group>.content-wrapper {
+    position: relative;
+}
+
+.ui-group>.content-wrapper>.content {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.ui-button {
+    display: inline-block;
+    vertical-align: middle;
+    border: none;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    box-sizing: border-box;
+    border-radius: 3px;
+    padding: 0 14px;
+    font-size: 14px;
+    line-height: 16px;
+    height: 32px;
+    color: #2c3e50;
+    background: #e0f8ed;
+    outline: 0;
+}
