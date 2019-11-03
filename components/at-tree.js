@@ -75,40 +75,54 @@ class AtTree extends LitElement {
         el.classList.toggle('caret-down');
     }
 
-    get _componentStructureTemplate() {
-        const getNameWithToggleExpand = el => html`<span class="caret ${el.inShadow ? 'shadow' : ''}" @click="${this._toggleExpand}"><${el.nodeName.toLowerCase()}></span>`;
+    _showProperties(selector) {
+        this.dispatchEvent(new CustomEvent('show-properties', {
+            detail: { selector },
+            bubbles: true,
+            composed: true
+        }));
+    }
 
-        const getName = el => html`<span class="${el.inShadow ? 'shadow' : ''}"> <${el.nodeName.toLowerCase()}> </span>`;
-        
+    get _componentStructureTemplate() {
+        const getNameWithToggleExpand = el => html`
+            <span class="caret" @click="${this._toggleExpand}"></span>
+            ${getName(el)}
+        `;
+
+        const getName = el => {
+            const nodeName = el.nodeName.toLowerCase();
+            return html`<span class="${el.inShadow ? 'shadow' : ''}" @click="${() => this._showProperties(nodeName)}"><${nodeName}></span>`
+        };
+
         const compactOneChildElement = element => {
             const compactNamesTemplate = [];
 
             const walk = el => {
                 const hasChildren = el.children && el.children.length > 0;
-                const hasOneChild = el.children && el.children.length === 1;            
+                const hasOneChild = el.children && el.children.length === 1;
 
                 if (hasOneChild) {
                     compactNamesTemplate.push(getName(el));
                     compactNamesTemplate.push( html`<span> &#8250; </span>` )
-                    return walk(el.children[0]);                
+                    return walk(el.children[0]);
                 } else if ( !hasChildren ) {
                     compactNamesTemplate.push(getName(el));
                 } else {
                     compactNamesTemplate.push(getNameWithToggleExpand(el));
                 }
-    
+
                 return el;
             }
 
             const newElement = walk(element);
 
-            return [compactNamesTemplate, newElement];            
+            return [compactNamesTemplate, newElement];
         }
 
         const buildList = elements => elements.map(el => {
             const [compactNamesTemplate, newElement] = compactOneChildElement(el);
             const hasChildren = newElement.children && newElement.children.length > 0;
-           
+
             return html`<li>
                 ${compactNamesTemplate}
                 ${ hasChildren ? html`<ul class="nested">${buildList(newElement.children)}</ul>` : ''}
@@ -119,7 +133,7 @@ class AtTree extends LitElement {
         console.log('my collection', collection);
 
         return html`<ul id="myUL">${buildList(collection)}</ul>`;
-    }    
+    }
 
     render() {
         return html`${this._componentStructureTemplate}`;
