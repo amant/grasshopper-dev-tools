@@ -4,65 +4,12 @@
 <head>
   <meta charset="utf-8">
   <title>GrassHopper-Dev-Tools</title>
-  <link rel="stylesheet" type="text/css" href="styles/light-style.css">
-  <script type="module" src="./components/at-tree.js"></script>
+  <script type="module" src="build/main-app.js"></script>
 </head>
 
 <body style="background: white; height: 500px;">
-  <div id="app-container">
-    <div class="app">
-      <div class="header">
-        <div class="logo"></div>
-        <span class="message-container">
-          <span class="message"><span class="text">GrassHopper Dev Tools</span></span>
-        </span>
-        <div class="actions">
-          <div class="ui-group">
-            <div class="content-wrapper">
-              <div class="content">
-                <button>Tree</button>
-                <button>Chart</button>
-                <button>A11Y Check</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="container">
-        <div class="split-pane vertical">
-          <div class="left top" style="width: 50%">
-            <div class="scroll-pane">
-              <div class="header">
-                <div class="action-header">
-                  <input type="text" placeholder="Filter component" class="search">
-                </div>
-              </div>
-              <div class="scroll">
-                <div id="component-tree">Loading...</div>
-              </div>
-            </div>
-            <div class="dragger"></div>
-          </div>
-          <div class="right bottom" style="width: 50%">
-            <div class="scroll-pane">
-              <div class="header">
-                <div class="action-header">
-                  <span class="title" style="margin-right: 10px;">&lt;To-do&gt;</span>
-                  <input type="text" placeholder="Filter properties" class="search">
-                </div>
-              </div>
-              <div class="scroll">                
-                <section class="notice" id="component-properties">
-                  <div>Select a component to inspect.</div>
-                </section>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script src="panel.js"></script>
+  <main-app></main-app>
+  <script src="build/panel.js"></script>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
+import { LitElement, html, css } from 'lit-element';
 
 class AtTree extends LitElement {
     static get styles() {
@@ -51,18 +51,19 @@ class AtTree extends LitElement {
 
     static get properties() {
         return {
-            data: { type: String }
+            data: { type: String },
+            toCompactOneChildElement: { type: Boolean }
         };
     }
 
-    _isCustomElement(elementName) {
-        return elementName.includes('-');
+    constructor() {
+        super();
+        this.toCompactOneChildElement = false;
     }
 
     _getElements(value) {
         try {
-            const elementCollection = JSON.parse(value);
-            return elementCollection;
+            return JSON.parse(value);
         } catch(err) {
             console.error(err);
             return [];
@@ -95,49 +96,60 @@ class AtTree extends LitElement {
         };
 
         const compactOneChildElement = element => {
-            const compactNamesTemplate = [];
+            const compactElementWithOneChild = el => {
+                const hasOneChild = el.children && el.children.length === 1;
+                const nameTemplate = [];
+                if (hasOneChild) {
+                    nameTemplate.push(getName(el));
+                    nameTemplate.push( html`<span> &#8250; </span>` );
+                    return [nameTemplate, el.children[0]]
+                }
+            };
+
+           return getNodeNameAndElement(element, compactElementWithOneChild);
+        };
+
+        const getNodeNameAndElement = (element, fn = null) => {
+            const nameTemplate = [];
 
             const walk = el => {
                 const hasChildren = el.children && el.children.length > 0;
-                const hasOneChild = el.children && el.children.length === 1;
+                const [names, node] = (fn && fn(el)) || [[], null];
 
-                if (hasOneChild) {
-                    compactNamesTemplate.push(getName(el));
-                    compactNamesTemplate.push( html`<span> &#8250; </span>` )
-                    return walk(el.children[0]);
+                if (names && names.length > 0) {
+                    nameTemplate.push(...names);
+                    return walk(node);
                 } else if ( !hasChildren ) {
-                    compactNamesTemplate.push(getName(el));
+                    nameTemplate.push(getName(el));
                 } else {
-                    compactNamesTemplate.push(getNameWithToggleExpand(el));
+                    nameTemplate.push(getNameWithToggleExpand(el));
                 }
 
                 return el;
-            }
+            };
 
             const newElement = walk(element);
 
-            return [compactNamesTemplate, newElement];
-        }
+            return [nameTemplate, newElement];
+        };
 
         const buildList = elements => elements.map(el => {
-            const [compactNamesTemplate, newElement] = compactOneChildElement(el);
+            const [nameTemplate, newElement] = this.toCompactOneChildElement
+                ? compactOneChildElement(el) : getNodeNameAndElement(el);
             const hasChildren = newElement.children && newElement.children.length > 0;
 
             return html`<li>
-                ${compactNamesTemplate}
+                ${nameTemplate}
                 ${ hasChildren ? html`<ul class="nested">${buildList(newElement.children)}</ul>` : ''}
             </li>`;
         });
 
-        const collection = this._getElements(this.data);
-        console.log('my collection', collection);
-
-        return html`<ul id="myUL">${buildList(collection)}</ul>`;
+        return html`<ul id="myUL">${buildList(this._getElements(this.data))}</ul>`;
     }
 
     render() {
         return html`${this._componentStructureTemplate}`;
     }
 }
-customElements.define('at-tree', AtTree)
+customElements.define('at-tree', AtTree);
 export { AtTree };

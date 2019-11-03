@@ -4,13 +4,10 @@
   "description": "Grasshopper Developer Tools",
   "devtools_page": "devtools.html",
   "manifest_version": 2,
-
-  "permissions": ["*://*/*", "https://unpkg.com/"],  
-  
+  "permissions": ["*://*/*", "https://unpkg.com/"],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["./build/background.js"],
     "persistent": false
   },
-
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://unpkg.com; object-src 'self'"
+  "content_security_policy": "object-src 'self'"
 }

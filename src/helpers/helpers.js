@@ -1,3 +1,65 @@
+export const getAllDocumentElement = () => {
+    function _getAllElements(rootNode) {
+        const toFilterOut = (node) => {
+            return !(node instanceof HTMLElement) ||
+              (['template', 'custom-style', 'style', 'script'].includes(node.nodeName.toLowerCase()));
+        };
+
+        const findAllElements = (node) => {
+            const nodeCollection = [];
+
+            for (let element of node.children) {
+                const nodeObj = {
+                    inShadow: element.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
+                    nodeName: element.nodeName,
+                    id: element.id,
+                    classList: Array.from(element.classList),
+                    children: []
+                };
+
+                if (toFilterOut(element)) {
+                    continue;
+                }
+
+                nodeCollection.push(nodeObj);
+
+                if (element.shadowRoot) {
+                    nodeObj.children = nodeObj.children.concat(findAllElements(element.shadowRoot));
+                }
+
+                if (element.children && element.children.length > 0) {
+                    nodeObj.children = nodeObj.children.concat(...findAllElements(element));
+                }
+
+            }
+
+            return nodeCollection;
+        };
+
+        return findAllElements(rootNode);
+    }
+
+    return new Promise((resolve, reject) => {
+        // run the component walker on the inspectedWindow context
+        chrome.devtools.inspectedWindow.eval(
+          `(${_getAllElements.toString()}(document.body))`,
+          (result, isException) => {
+              if (isException) {
+                  console.error('Error can not read component structure.');
+                  reject(isException);
+              } else {
+                  resolve(result);
+              }
+          }
+        );
+    });
+}
+
+
+
+
+
+
 export const getProperties = (elementId) => {
     function _getProperties(elementId) {
         const element = document.getQuerySelector(elementId);
@@ -18,7 +80,7 @@ export const getProperties = (elementId) => {
             resolve(result);
         });
     })
-}
+};
 
 
 // Add a overlay ontop of a component's DOM
@@ -38,7 +100,7 @@ export const highlightComponent = (componentId) => {
             console.log('Could not highlight component layer', isException);
         }
     });
-},
+};
 
 // Remove overlay from the component's DOM
 export const unhighlightComponent = () => {
@@ -47,4 +109,4 @@ export const unhighlightComponent = () => {
             console.log('Could not remove highlight component layer', isException);
         }
     });
-},
+};
