@@ -44,7 +44,15 @@ class AtTree extends LitElement {
             }
 
             .shadow {
-                border: 1px dashed #E0E0E0
+                border: 1px dashed #E0E0E0;
+            }
+            
+            .hover-element {
+                background-color: #C9ECFF;
+            }
+             
+            .selected-element {
+                background-color: #00A5FF;
             }
         `;
     }
@@ -76,12 +84,47 @@ class AtTree extends LitElement {
         el.classList.toggle('caret-down');
     }
 
-    _showProperties(selector) {
+    _expandAll() {
+        Array
+          .from(this.shadowRoot.querySelectorAll('.caret:not(.caret-down)'))
+          .map(el => el.classList.add('caret-down'));
+
+        Array
+          .from(this.shadowRoot.querySelectorAll('.nested:not(.active)'))
+          .map(el => el.classList.add('active'));
+    }
+
+    _collapseAll(event) {
+        Array
+          .from(this.shadowRoot.querySelectorAll('.caret'))
+          .map(el => el.classList.remove('caret-down'));
+
+        Array
+          .from(this.shadowRoot.querySelectorAll('.nested'))
+          .map(el => el.classList.remove('active'));
+    }
+
+    _handlerClick(event, selector) {
+        // clear previous selection
+        const prevSelectedEl = this.shadowRoot.querySelector('.selected-element');
+        prevSelectedEl && prevSelectedEl.classList.remove('selected-element');
+
+        // add new selection
+        event.target.classList.add('selected-element');
+
         this.dispatchEvent(new CustomEvent('show-properties', {
             detail: { selector },
             bubbles: true,
             composed: true
         }));
+    }
+
+    _mouseOver(event) {
+        event.target.classList.add('hover-element');
+    }
+
+    _mouseOut(event) {
+        event.target.classList.remove('hover-element');
     }
 
     get _componentStructureTemplate() {
@@ -92,7 +135,12 @@ class AtTree extends LitElement {
 
         const getName = el => {
             const nodeName = el.nodeName.toLowerCase();
-            return html`<span class="${el.inShadow ? 'shadow' : ''}" @click="${() => this._showProperties(nodeName)}"><${nodeName}></span>`
+            return html`<span 
+                class="${el.inShadow ? 'shadow' : ''}" 
+                @click="${(event) => this._handlerClick(event, nodeName)}"
+                @mouseover="${this._mouseOver}"
+                @mouseout="${this._mouseOut}"
+                ><${nodeName}></span>`
         };
 
         const compactOneChildElement = element => {
@@ -133,14 +181,15 @@ class AtTree extends LitElement {
             return [nameTemplate, newElement];
         };
 
-        const buildList = elements => elements.map(el => {
+        const buildList = (elements, parentNodeName = 'root') => elements.map(el => {
             const [nameTemplate, newElement] = this.toCompactOneChildElement
                 ? compactOneChildElement(el) : getNodeNameAndElement(el);
             const hasChildren = newElement.children && newElement.children.length > 0;
-
-            return html`<li>
+            const newParentNodeName = `${parentNodeName}>${(elements.inShadow ? `::shadow::${el.nodeName}` : el.nodeName)}`;
+            return html`<li data-selector="${parentNodeName}">
                 ${nameTemplate}
-                ${ hasChildren ? html`<ul class="nested">${buildList(newElement.children)}</ul>` : ''}
+                <span>${parentNodeName}</span>
+                ${ hasChildren ? html`<ul class="nested">${buildList(newElement.children, newParentNodeName)}</ul>` : ''}
             </li>`;
         });
 
@@ -148,7 +197,13 @@ class AtTree extends LitElement {
     }
 
     render() {
-        return html`${this._componentStructureTemplate}`;
+        return html`
+            <div>
+              <button @click=${this._expandAll}>Expand</button>
+              <button @click=${this._collapseAll}>Collapse</button>
+            </div>
+            ${this._componentStructureTemplate}
+        `;
     }
 }
 customElements.define('at-tree', AtTree);

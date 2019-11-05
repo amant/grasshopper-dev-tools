@@ -5,8 +5,15 @@ import { getAllDocumentElement } from './helpers/helpers.js'
 class MainApp extends LitElement {
   static get properties() {
     return {
-      _documentElements: { type: Object }
+      _documentElements: { type: Object },
+      _elementProperties: { type: Array },
+      _showProperty: { type: Boolean }
     };
+  }
+
+  constructor() {
+    super();
+    this._elementProperties = [];
   }
 
   connectedCallback() {
@@ -14,6 +21,19 @@ class MainApp extends LitElement {
     getAllDocumentElement().then(elements => {
       this._documentElements = elements;
     });
+  }
+
+  _handlerShowProperties(event) {
+    // console.log('showProperties', event.detail.selector);
+    this._showProperty = Boolean(event.detail.selector);
+    this._elementProperties = [event.detail.selector];
+  }
+
+  get _elementPropertiesTemplate() {
+    return html`<ul>${this._elementProperties.map(property => 
+                html`<li>${property}</li>`)
+                }</ul>
+            `;
   }
 
   render() {
@@ -51,7 +71,10 @@ class MainApp extends LitElement {
                     <div id="component-tree">
                       ${ !this._documentElements ?
                         html`<span>Loading...</span>` :
-                        html`<at-tree data=${ JSON.stringify(this._documentElements) }></at-tree>`
+                        html`<at-tree 
+                              data=${ JSON.stringify(this._documentElements) }
+                              @show-properties=${this._handlerShowProperties}
+                             ></at-tree>`
                       }
                     </div>
                   </div>
@@ -68,7 +91,9 @@ class MainApp extends LitElement {
                   </div>
                   <div class="scroll">                
                     <section class="notice" id="component-properties">
-                      <div>Select a component to inspect.</div>
+                    ${this._showProperty ? 
+                        this._elementPropertiesTemplate : html`<div>Select a component to inspect.</div>`
+                    }
                     </section>
                   </div>
                 </div>
