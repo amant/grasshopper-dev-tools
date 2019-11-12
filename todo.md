@@ -6,6 +6,7 @@
 - (done) Basic layout, style, and logo
 - (done) Setup web-pack, npm?
 - (done) Panel and all handle through litElement?
+- (done) Show Source code class of Custom Element in Source Panel
 - () Show a  component's property details
 - () Highlight rendered DOM as user select component on tree
 - () Layout implementation, logo and tabs
@@ -25,3 +26,8 @@
 #New Ideas
 - () Implement variable change observer
 - () Build Tree with D3
+
+
+#note:
+- https://github.com/googlearchive/polymer-devtools-extension/blob/6ee759380e4b3b086b6151853c6b6917a3d149b7/panel-orig.js
+polymer-devtools-extension

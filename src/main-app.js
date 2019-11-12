@@ -1,19 +1,28 @@
-import { LitElement, html } from 'lit-element';
-import './components/at-tree.js';
-import { getAllDocumentElement } from './helpers/helpers.js'
+import { LitElement, html, css } from 'lit-element';
+import { getAllDocumentElement, getProperties, showSource } from './helpers/helpers.js';
+
+import './components/component-tree.js';
+import './components/property-tree.js';
+import { setProperty } from "./helpers/helpers";
 
 class MainApp extends LitElement {
   static get properties() {
     return {
       _documentElements: { type: Object },
       _elementProperties: { type: Array },
-      _showProperty: { type: Boolean }
+      _showProperty: { type: Boolean },
     };
+  }
+
+  static get styles() {
+    return [css`
+      .b { 1px solid blue;}
+    `]
   }
 
   constructor() {
     super();
-    this._elementProperties = [];
+    this._currentQuerySelector = null;
   }
 
   connectedCallback() {
@@ -23,17 +32,24 @@ class MainApp extends LitElement {
     });
   }
 
-  _handlerShowProperties(event) {
-    // console.log('showProperties', event.detail.selector);
-    this._showProperty = Boolean(event.detail.selector);
-    this._elementProperties = [event.detail.selector];
+  async _handlerShowProperties(event) {
+    this._currentQuerySelector = event.detail.selector;
+    this._showProperty = Boolean(this._currentQuerySelector);
+    this._elementProperties = await getProperties(this._currentQuerySelector);
   }
 
-  get _elementPropertiesTemplate() {
-    return html`<ul>${this._elementProperties.map(property => 
-                html`<li>${property}</li>`)
-                }</ul>
-            `;
+  _handlerShowSource(event) {
+    showSource(event.detail.nodeName);
+  }
+
+  _handlerChangeProperty(event) {
+    const value = event.detail.value;
+    const property = event.detail.property;
+    setProperty({
+      querySelector: this._currentQuerySelector,
+      property,
+      value
+    }).then(() => console.log('setProperty done!'));
   }
 
   render() {
@@ -71,10 +87,11 @@ class MainApp extends LitElement {
                     <div id="component-tree">
                       ${ !this._documentElements ?
                         html`<span>Loading...</span>` :
-                        html`<at-tree 
+                        html`<component-tree 
                               data=${ JSON.stringify(this._documentElements) }
-                              @show-properties=${this._handlerShowProperties}
-                             ></at-tree>`
+                              @show-properties=${ this._handlerShowProperties }
+                              @show-source=${ this._handlerShowSource }
+                             ></component-tree>`
                       }
                     </div>
                   </div>
@@ -89,12 +106,16 @@ class MainApp extends LitElement {
                       <input type="text" placeholder="Filter properties" class="search">
                     </div>
                   </div>
-                  <div class="scroll">                
-                    <section class="notice" id="component-properties">
-                    ${this._showProperty ? 
-                        this._elementPropertiesTemplate : html`<div>Select a component to inspect.</div>`
+                  <div class="scroll">
+                    ${ this._showProperty ?
+                        html`<section>
+                              <property-tree 
+                                .data=${ this._elementProperties } 
+                                @change-property=${ this._handlerChangeProperty }
+                              ></property-tree>
+                             </section>` : 
+                        html`<section class="notice"><div>Select a component to inspect.</div></section>`
                     }
-                    </section>
                   </div>
                 </div>
               </div>
