@@ -1,9 +1,16 @@
 import { LitElement, html, css } from 'lit-element';
-import { getAllDocumentElement, getProperties, showSource } from './helpers/helpers.js';
-
+import {
+  getAllDocumentElement,
+  getProperties,
+  showSource,
+  highlightComponent,
+  unhighlightComponent
+} from './helpers/helpers.js';
 import './components/component-tree.js';
 import './components/property-tree.js';
-import { setProperty } from "./helpers/helpers";
+import { setProperty } from './helpers/helpers';
+import { enrichWith, enrichWithSelector, enrichWithRef } from './helpers/enrich-helpers';
+
 
 class MainApp extends LitElement {
   static get properties() {
@@ -25,11 +32,14 @@ class MainApp extends LitElement {
     this._currentQuerySelector = null;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback();
-    getAllDocumentElement().then(elements => {
-      this._documentElements = elements;
-    });
+    const elements = await getAllDocumentElement();
+
+    // enrich elements with node reference and element selector path
+    enrichWith([enrichWithRef, enrichWithSelector])(elements);
+
+    this._documentElements = elements;
   }
 
   async _handlerShowProperties(event) {
@@ -50,6 +60,14 @@ class MainApp extends LitElement {
       property,
       value
     }).then(() => console.log('setProperty done!'));
+  }
+
+  _handlerHighlightComponent(event) {
+    highlightComponent(event.detail.selector);
+  }
+
+  _handlerUnHighlightComponent(event) {
+    unhighlightComponent(event.detail.selector);
   }
 
   render() {
@@ -91,6 +109,8 @@ class MainApp extends LitElement {
                               data=${ JSON.stringify(this._documentElements) }
                               @show-properties=${ this._handlerShowProperties }
                               @show-source=${ this._handlerShowSource }
+                              @highlight-component=${ this._handlerHighlightComponent }
+                              @unhighlight-component=${ this._handlerUnHighlightComponent }
                              ></component-tree>`
                       }
                     </div>

@@ -115,23 +115,14 @@ export const setProperty = ({querySelector, property, value}) => {
       return;
     }
 
-    if (val.trim()[0] === '{' || val === 'true' || val === 'false') {
-      try{
-        const parsedVal = JSON.parse(val);
-        element[key] = parsedVal;
-      } catch(e) {
-        element[key] = val;
-      }
+    // TODO: implement for polymer elements
+    if (val === 'true') {
+      element[key] = true;
+    } else if (val === 'false') {
+      element[key] = false;
     } else {
       element[key] = val;
     }
-
-    // TODO: implement for polymer elements
-    /*if (element.__data) {
-      element[key] = val;
-    } else {
-      element[`__${key}`] = val;
-    }*/
   }
 
   return new Promise((resolve, reject) => {
@@ -162,29 +153,72 @@ export const showSource = (nodeName) => {
 };
 
 // Add a overlay ontop of a component's DOM
-export const highlightComponent = (componentId) => {
-  const _highlightComponent = function (id) {
-    let componentEl = $('[componentid="' + id + '"]')[0];
-    if (componentEl) {
-      $('#JiveDevtoolComponentHighlight').remove();
-      let rect = componentEl.getBoundingClientRect();
-      let el = $(`<div id="JiveDevtoolComponentHighlight" style="width:${ rect.width }px; height:${ rect.height }px; left: ${ rect.left }px; top: ${ rect.top }px; position: fixed; background-color: orange; opacity: 0.5; z-index: 1000;"><span style="font-size:9px; color: blue;">${ id }</span></div>`)[0];
-      document.body.appendChild(el);
+export const highlightComponent = (querySelector) => {
+  const _highlightComponent = function (selector) {
+
+    const getElement = selectorQuery => {
+      const sel = selectorQuery.split('>::shadowroot>');
+      let result = document.querySelector(sel[0]);
+      for (let i = 1, len = sel.length; i < len; i++) {
+        if (result) {
+          result = result.shadowRoot.querySelector(sel[i]);
+        } else {
+          break;
+        }
+      }
+      return result;
+    };
+
+    const element = getElement(selector);
+
+    if (!element) {
+      return;
     }
+
+    if (document.querySelector('#grasshopper-devtool-highlight')) {
+      document.querySelector('#grasshopper-devtool-highlight').remove();
+    }
+
+    const rect = element.getBoundingClientRect();
+    const highlightEl = document.createElement('div');
+    highlightEl.setAttribute('id', 'grasshopper-devtool-highlight');
+    highlightEl.setAttribute('style', `width:${ rect.width }px; height:${ rect.height }px;
+      min-width: 64px; min-height: 64px;       
+      left: ${ rect.left }px; top: ${ rect.top }px; position: fixed; 
+      background-color: orange; opacity: 0.5; z-index: 999999;`
+    );
+    highlightEl.innerHTML = `<span style="font-size:9px; color: blue;">${ element.nodeName.toLowerCase() }</span>`;
+    document.body.appendChild(highlightEl);
   };
 
-  chrome.devtools.inspectedWindow.eval(`(${ _highlightComponent.toString() }('${ componentId }'))`, (result, isException) => {
-    if (isException) {
-      console.log('Could not highlight component layer', isException);
-    }
+  return new Promise((resolve, reject) => {
+    chrome.devtools.inspectedWindow.eval(`(${ _highlightComponent.toString() }('${ querySelector }'))`, (result, isException) => {
+      if (isException) {
+        console.log('Could not highlight component layer', isException);
+        return reject();
+      }
+
+      resolve();
+    });
   });
 };
 
 // Remove overlay from the component's DOM
 export const unhighlightComponent = () => {
-  chrome.devtools.inspectedWindow.eval(`$('#JiveDevtoolComponentHighlight').remove();`, (result, isException) => {
-    if (isException) {
-      console.log('Could not remove highlight component layer', isException);
+  const _unhighlightComponent = function() {
+    if (document.querySelector('#grasshopper-devtool-highlight')) {
+      document.querySelector('#grasshopper-devtool-highlight').remove();
     }
+  };
+
+  return new Promise((resolve, reject) => {
+    chrome.devtools.inspectedWindow.eval(`(${ _unhighlightComponent.toString() }())`, (result, isException) => {
+      if (isException) {
+        console.log('Could not remove highlight component layer', isException);
+        return reject();
+      }
+
+      resolve(result);
+    });
   });
 };

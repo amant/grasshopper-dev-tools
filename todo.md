@@ -7,8 +7,8 @@
 - (done) Setup web-pack, npm?
 - (done) Panel and all handle through litElement?
 - (done) Show Source code class of Custom Element in Source Panel
-- () Show a  component's property details
-- () Highlight rendered DOM as user select component on tree
+- (done) Highlight rendered DOM as user select component on tree
+- (progress) Show a  component's property details
 - () Layout implementation, logo and tabs
 - () Splitbar implementation
 - () Style At-Tree component
@@ -16,7 +16,7 @@
 - () Search filter in Tree
 - () Refresh tree on tab reload
 - () remember last checked component
-- () Setup webpack and build script
+- () Setup build script
 - () Publish to google store
 - () Ask for feedback
 - () Unit test, and demo pages

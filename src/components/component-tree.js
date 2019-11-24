@@ -105,7 +105,7 @@ class ComponentTree extends LitElement {
       .map(el => el.classList.add('active'));
   }
 
-  _collapseAll(event) {
+  _collapseAll() {
     Array
       .from(this.shadowRoot.querySelectorAll('.caret'))
       .map(el => el.classList.remove('caret-down'));
@@ -115,7 +115,7 @@ class ComponentTree extends LitElement {
       .map(el => el.classList.remove('active'));
   }
 
-  _handlerClick(event) {
+  _handlerClick(event, el) {
     // clear previous selection
     const prevSelectedEl = this.shadowRoot.querySelector('.selected-element');
     prevSelectedEl && prevSelectedEl.classList.remove('selected-element');
@@ -123,12 +123,9 @@ class ComponentTree extends LitElement {
     // add new selection
     event.target.classList.add('selected-element');
 
-    const parentElement = event.target.closest('li');
-    const selector = _get(parentElement, ['dataset', 'selector'], null);
-
     // emit event to parent 'show-properties'
     this.dispatchEvent(new CustomEvent('show-properties', {
-      detail: { selector },
+      detail: { selector: el._selector },
       bubbles: true,
       composed: true
     }));
@@ -143,12 +140,22 @@ class ComponentTree extends LitElement {
     }));
   }
 
-  _mouseOver(event) {
+  _mouseOver(event, el) {
     event.target.classList.add('hover-element');
+    this.dispatchEvent(new CustomEvent('highlight-component', {
+      detail: { selector: el._selector },
+      bubbles: true,
+      composed: true
+    }));
   }
 
-  _mouseOut(event) {
+  _mouseOut(event, el) {
     event.target.classList.remove('hover-element');
+    this.dispatchEvent(new CustomEvent('unhighlight-component', {
+      detail: { selector: el._selector },
+      bubbles: true,
+      composed: true
+    }));
   }
 
   get _componentStructureTemplate() {
@@ -163,9 +170,9 @@ class ComponentTree extends LitElement {
       const nodeName = el.nodeName.toLowerCase();
       return html`<span 
                 class="${ el.inShadow ? 'shadow' : '' }" 
-                @click="${ this._handlerClick }"
-                @mouseover="${ this._mouseOver }"
-                @mouseout="${ this._mouseOut }"
+                @click="${ (event) => this._handlerClick(event, el) }"
+                @mouseover="${ (event) => this._mouseOver(event, el) }"
+                @mouseout="${ (event) => this._mouseOut(event, el) }"
                 ><${ nodeName }></span> 
                 ${isCustomElement(nodeName) && !this.toShowCompactView? 
                   html`<span class="small-button" @click=${(e) => this._handlerCustomElementClick(e, nodeName)}>custom</span>` : ''
@@ -211,22 +218,15 @@ class ComponentTree extends LitElement {
       return [nameTemplate, newElement];
     };
 
-    const getQuerySelector = (element, selector = 'body') => {
-      const nodeName = element.nodeName.toLowerCase();
-      return `${ selector }>${ (element.inShadow ? `::shadowroot>${ nodeName }` : nodeName) }`;
-    };
-
-    const buildList = (elements, selector) => elements.map(el => {
+    const buildList = (elements) => elements.map(el => {
       const [nameTemplate, newElement] = this.toShowCompactView
         ? compactOneChildElement(el) : getNodeNameAndElement(el);
 
       const hasChildren = _get(newElement, ['children', 'length']) > 0;
 
-      const currentSelector = getQuerySelector(newElement, selector);
-
-      return html`<li data-selector="${ currentSelector }">
-                ${ nameTemplate }                
-                ${ hasChildren ? html`<ul class="nested">${ buildList(newElement.children, currentSelector) }</ul>` : '' }
+      return html`<li>
+                ${ nameTemplate }
+                ${ hasChildren ? html`<ul class="nested">${ buildList(newElement.children) }</ul>` : '' }
             </li>`;
     });
 
