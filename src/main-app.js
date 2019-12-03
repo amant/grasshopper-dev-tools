@@ -1,73 +1,89 @@
 import { LitElement, html, css } from 'lit-element';
+import { debounce as _debounce } from 'lodash';
 import {
-  getAllDocumentElement,
-  getProperties,
+  getAllComponents,
+  getComponentProperties,
   showSource,
   highlightComponent,
-  unhighlightComponent
+  unhighlightComponent,
+  setProperty,
 } from './helpers/helpers.js';
 import './components/component-tree.js';
 import './components/property-tree.js';
-import { setProperty } from './helpers/helpers';
-import { enrichWith, enrichWithSelector, enrichWithRef } from './helpers/enrich-helpers';
-
+import {
+  componentsWalk,
+  enrichWithSelector,
+  enrichWithRef,
+  convertNodeNameToLowerCase
+} from './helpers/enrich-helpers.js';
+import { buildComponentsSearchIndex, searchComponents, searchComponentProperty } from './helpers/search-helpers.js';
+import { DEBOUNCE_WAIT } from './constants';
 
 class MainApp extends LitElement {
   static get properties() {
     return {
-      _documentElements: { type: Object },
-      _elementProperties: { type: Array },
+      _componentsFilter: { type: Object },
+      _componentPropertiesFilter: { type: Array },
       _showProperty: { type: Boolean },
+      _selectedComponentName: { type: String }
     };
   }
 
   static get styles() {
     return [css`
       .b { 1px solid blue;}
+      .property-title { margin-right: 8px; }
     `]
   }
 
   constructor() {
     super();
     this._currentQuerySelector = null;
+    this._components = null;
+    this._componentsFilter = null;
+    this._componentProperties = null;
+    this._componentPropertiesFilter = null;
+
+    this._debouncedComponentFilter = _debounce(async (value) => {
+      if (!value) {
+        this._componentsFilter = this._components;
+        return;
+      }
+
+      this._componentsFilter = searchComponents(this._components, value);
+    }, DEBOUNCE_WAIT);
+
+    this._debouncedPropertyFilter = _debounce(async (value) => {
+      if (!value) {
+        this._componentPropertiesFilter = this._componentProperties;
+        return;
+      }
+
+      this._componentPropertiesFilter = searchComponentProperty(this._componentProperties, value);
+    }, DEBOUNCE_WAIT);
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback();
-    const elements = await getAllDocumentElement();
 
-    // enrich elements with node reference and element selector path
-    enrichWith([enrichWithRef, enrichWithSelector])(elements);
+    (async function () {
+      const components = await getAllComponents();
 
-    this._documentElements = elements;
+      // enrich with node reference and element selector path
+      componentsWalk([enrichWithRef, enrichWithSelector, convertNodeNameToLowerCase])(components);
+
+      this._componentsFilter = this._components = components;
+
+      buildComponentsSearchIndex(this._components);
+    }.bind(this)());
   }
 
   async _handlerShowProperties(event) {
+    this._selectedComponentName = event.detail.nodeName;
     this._currentQuerySelector = event.detail.selector;
     this._showProperty = Boolean(this._currentQuerySelector);
-    this._elementProperties = await getProperties(this._currentQuerySelector);
-  }
 
-  _handlerShowSource(event) {
-    showSource(event.detail.nodeName);
-  }
-
-  _handlerChangeProperty(event) {
-    const value = event.detail.value;
-    const property = event.detail.property;
-    setProperty({
-      querySelector: this._currentQuerySelector,
-      property,
-      value
-    }).then(() => console.log('setProperty done!'));
-  }
-
-  _handlerHighlightComponent(event) {
-    highlightComponent(event.detail.selector);
-  }
-
-  _handlerUnHighlightComponent(event) {
-    unhighlightComponent(event.detail.selector);
+    this._componentProperties = this._componentPropertiesFilter = await getComponentProperties(this._currentQuerySelector);
   }
 
   render() {
@@ -98,19 +114,24 @@ class MainApp extends LitElement {
                 <div class="scroll-pane">
                   <div class="header">
                     <div class="action-header">
-                      <input type="text" placeholder="Filter component" class="search">
+                      <input
+                        type="text"
+                        placeholder="Filter component"
+                        class="search"
+                        @input=${(event) => this._debouncedComponentFilter(event.target.value)}
+                      >
                     </div>
                   </div>
                   <div class="scroll">
                     <div id="component-tree">
-                      ${ !this._documentElements ?
+                      ${ !this._componentsFilter ?
                         html`<span>Loading...</span>` :
                         html`<component-tree 
-                              data=${ JSON.stringify(this._documentElements) }
+                              data=${ JSON.stringify(this._componentsFilter) }
                               @show-properties=${ this._handlerShowProperties }
-                              @show-source=${ this._handlerShowSource }
-                              @highlight-component=${ this._handlerHighlightComponent }
-                              @unhighlight-component=${ this._handlerUnHighlightComponent }
+                              @show-source=${ (event) => showSource(event.detail.nodeName) }
+                              @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
+                              @unhighlight-component=${ (event) => unhighlightComponent(event.detail.selector) }
                              ></component-tree>`
                       }
                     </div>
@@ -122,16 +143,26 @@ class MainApp extends LitElement {
                 <div class="scroll-pane">
                   <div class="header">
                     <div class="action-header">
-                      <span class="title" style="margin-right: 10px;">&lt;To-do&gt;</span>
-                      <input type="text" placeholder="Filter properties" class="search">
+                      ${ this._showProperty ? 
+                      html`<div class="property-title">${ this._selectedComponentName } :</div>` : ''}                      
+                      <input 
+                        type="text" 
+                        placeholder="Filter properties" 
+                        class="search" 
+                        @input=${ (event) => this._debouncedPropertyFilter(event.target.value) }
+                      >
                     </div>
                   </div>
                   <div class="scroll">
                     ${ this._showProperty ?
                         html`<section>
                               <property-tree 
-                                .data=${ this._elementProperties } 
-                                @change-property=${ this._handlerChangeProperty }
+                                .data=${ this._componentPropertiesFilter } 
+                                @change-property=${ (event) => setProperty({ 
+                                  querySelector: this._currentQuerySelector, 
+                                  property: event.detail.property, 
+                                  value: event.detail.value 
+                                })}
                               ></property-tree>
                              </section>` : 
                         html`<section class="notice"><div>Select a component to inspect.</div></section>`

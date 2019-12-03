@@ -23,7 +23,8 @@
   "homepage": "https://github.com/amant/grasshopper-dev-tools#readme",
   "dependencies": {
     "lit-element": "^2.2.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "trie-search": "^1.2.11"
   },
   "devDependencies": {
     "webpack": "^4.41.2",

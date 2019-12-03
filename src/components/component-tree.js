@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import { get as _get } from 'lodash';
 
-// TODO: rename to component-tree
 class ComponentTree extends LitElement {
   static get styles() {
     return css`
@@ -125,7 +124,7 @@ class ComponentTree extends LitElement {
 
     // emit event to parent 'show-properties'
     this.dispatchEvent(new CustomEvent('show-properties', {
-      detail: { selector: el._selector },
+      detail: { selector: el._selector, nodeName: el.nodeName },
       bubbles: true,
       composed: true
     }));
@@ -167,7 +166,7 @@ class ComponentTree extends LitElement {
     const isCustomElement = nodeName => nodeName.includes('-');
 
     const getName = el => {
-      const nodeName = el.nodeName.toLowerCase();
+      const nodeName = el.nodeName;
       return html`<span 
                 class="${ el.inShadow ? 'shadow' : '' }" 
                 @click="${ (event) => this._handlerClick(event, el) }"

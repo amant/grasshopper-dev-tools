@@ -1,17 +1,21 @@
-export const enrichWith = (enrichFns) => {
-  return function walk(elements, parentEl) {
-    elements.forEach((el, index) => {
-      enrichFns.forEach(fn => fn(el, index, parentEl));
+export const componentsWalk = (fns) => {
+  return function walk(components, parentEl) {
+    components.forEach((component, index) => {
+      fns.forEach(fn => fn(component, index, parentEl));
 
-      if (el.children && el.children.length > 0) {
-        walk(el.children, el);
+      if (component.children && component.children.length > 0) {
+        walk(component.children, component);
       }
     })
   }
 };
 
-export const enrichWithRef = (el, index, parentEl = {}) => {
-  el._ref = `${parentEl._ref || ''}[${index}]`;
+export const enrichWithRef = (component, index, parentComponent = {}) => {
+  component._ref = parentComponent._ref ? `${parentComponent._ref}.children.[${index}]` : `[${index}]`;
+};
+
+export const convertNodeNameToLowerCase = (component) => {
+  component.nodeName = component.nodeName.toLowerCase();
 };
 
 const getQuerySelector = (element, selector = 'body') => {
@@ -19,6 +23,6 @@ const getQuerySelector = (element, selector = 'body') => {
   return `${ selector }>${ (element.inShadow ? `::shadowroot>${ nodeName }` : nodeName) }`;
 };
 
-export const  enrichWithSelector = (el, index, parentEl = {}) => {
-  el._selector = getQuerySelector(el, parentEl._selector);
+export const  enrichWithSelector = (component, index, parentComponent = {}) => {
+  component._selector = getQuerySelector(component, parentComponent._selector);
 };

@@ -1,5 +1,5 @@
-export const getAllDocumentElement = () => {
-  function _getAllElements(rootNode) {
+export const getAllComponents = () => {
+  function _getAllComponents(rootNode) {
     const toFilterOut = (node) => {
       return !(node instanceof HTMLElement) ||
         (['template', 'custom-style', 'style', 'script'].includes(node.nodeName.toLowerCase()));
@@ -42,7 +42,7 @@ export const getAllDocumentElement = () => {
   return new Promise((resolve, reject) => {
     // run the component walker on the inspectedWindow context
     chrome.devtools.inspectedWindow.eval(
-      `(${ _getAllElements.toString() }(document.body))`,
+      `(${ _getAllComponents.toString() }(document.body))`,
       (result, isException) => {
         if (isException) {
           console.error('Error can not read component structure.');
@@ -55,8 +55,8 @@ export const getAllDocumentElement = () => {
   });
 };
 
-export const getProperties = (querySelector) => {
-  function _getProperties(selector) {
+export const getComponentProperties = (querySelector) => {
+  function _getComponentProperties(selector) {
     const getElement = selectorQuery => {
       const sel = selectorQuery.split('>::shadowroot>');
       let result = document.querySelector(sel[0]);
@@ -83,7 +83,7 @@ export const getProperties = (querySelector) => {
   }
 
   return new Promise((resolve, reject) => {
-    chrome.devtools.inspectedWindow.eval(`(${ _getProperties.toString() }('${ querySelector }'))`, (result, isException) => {
+    chrome.devtools.inspectedWindow.eval(`(${ _getComponentProperties.toString() }('${ querySelector }'))`, (result, isException) => {
       if (isException) {
         console.log('Could not get properties', isException);
         return reject();
@@ -94,7 +94,7 @@ export const getProperties = (querySelector) => {
 };
 
 export const setProperty = ({querySelector, property, value}) => {
-  function _setProperty(selector, key, val) {
+  function _setComponentProperty(selector, key, val) {
 
     const getElement = selectorQuery => {
       const sel = selectorQuery.split('>::shadowroot>');
@@ -126,7 +126,7 @@ export const setProperty = ({querySelector, property, value}) => {
   }
 
   return new Promise((resolve, reject) => {
-    chrome.devtools.inspectedWindow.eval(`(${ _setProperty.toString() }('${ querySelector }', '${ property }', '${ value }'))`, (result, isException) => {
+    chrome.devtools.inspectedWindow.eval(`(${ _setComponentProperty.toString() }('${ querySelector }', '${ property }', '${ value }'))`, (result, isException) => {
       if (isException) {
         console.log('Could not get properties', isException);
         return reject();
