@@ -1,70 +1,92 @@
 import { LitElement, html, css } from 'lit-element';
+import { classMap } from 'lit-html/directives/class-map';
 import { get as _get } from 'lodash';
 
 class ComponentTree extends LitElement {
   static get styles() {
     return css`
-            /* Remove default bullets */
-            ul, #myUL {
-                list-style-type: none;
-            }
+      :host {
+        color: #666;
+      }
+      
+      .action {
+        display: flex;
+        justify-content: flex-end;        
+      }
+      
+      .action .item {
+        margin: 0 4px;
+      }
+      
+      ul, #tree {
+          list-style-type: none;
+      }
 
-            /* Remove margins and padding from the parent ul */
-            #myUL {
-                margin: 0;
-                padding: 0;
-            }
+      #tree {
+          margin: 0;
+          padding: 0;
+      }
 
-            /* Style the caret/arrow */
-            .caret {
-                cursor: pointer;
-                user-select: none; /* Prevent text selection */
-            }
+      
+      .caret {
+          cursor: pointer;
+          user-select: none; /* Prevent text selection */
+      }
 
-            /* Create the caret/arrow with a unicode, and style it */
-            .caret::before {
-                content: "\\25B6";
-                color: black;
-                display: inline-block;
-                margin-right: 6px;
-            }
+      /* Create the caret/arrow with a unicode, and style it */
+      .caret::before {
+          content: "\\25B6";
+          color: black;
+          display: inline-block;
+          margin-right: 6px;
+      }
 
-            /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
-            .caret-down::before {
-                transform: rotate(90deg);
-            }
+      /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+      .caret-down::before {
+          transform: rotate(90deg);
+      }
 
-            /* Hide the nested list */
-            .nested {
-                display: none;
-            }
+      /* Hide the nested list */
+      .nested {
+          display: none;
+      }
 
-            /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
-            .active {
-                display: block;
-            }
+      /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+      .active {
+          display: block;
+      }
 
-            .shadow {
-                border: 1px dashed #E0E0E0;
-            }
-            
-            .hover-element {
-                background-color: #C9ECFF;
-            }
-             
-            .selected-element {
-                background-color: #00A5FF;
-            }
-            
-            .small-button {
-              border: 1px solid black;
-              background-color: grey;
-              color: white;
-              font-size: 9px;
-              border-radius: 2px;
-              cursor: pointer;
-            }
-        `;
+      .shadow {
+          border: 1px dashed #E0E0E0;
+      }
+      
+      .hover-element {
+          background-color: #C9ECFF;
+          cursor: pointer;
+      }
+       
+      .selected-element {
+          background-color: #00A5FF;
+      }
+      
+      .small-button {
+        border: 1px solid black;
+        background-color: grey;
+        color: white;
+        font-size: 9px;
+        border-radius: 2px;
+        cursor: pointer;
+        padding: 0 2px;
+      }
+      
+      .small-button:hover {
+        background-color: black;
+      }
+      
+      .custom-element {
+        color: #000;
+      }
+  `;
   }
 
   static get properties() {
@@ -167,16 +189,26 @@ class ComponentTree extends LitElement {
 
     const getName = el => {
       const nodeName = el.nodeName;
+      const isCustomEl = isCustomElement(nodeName);
+      const cssClassName = {
+        shadow: el.inShadow ,
+        'custom-element': isCustomEl
+      };
+
       return html`<span 
-                class="${ el.inShadow ? 'shadow' : '' }" 
-                @click="${ (event) => this._handlerClick(event, el) }"
-                @mouseover="${ (event) => this._mouseOver(event, el) }"
-                @mouseout="${ (event) => this._mouseOut(event, el) }"
-                ><${ nodeName }></span> 
-                ${isCustomElement(nodeName) && !this.toShowCompactView? 
-                  html`<span class="small-button" @click=${(e) => this._handlerCustomElementClick(e, nodeName)}>custom</span>` : ''
+                    class="${ classMap(cssClassName) }" 
+                    @click="${ (event) => this._handlerClick(event, el) }"
+                    @mouseover="${ (event) => this._mouseOver(event, el) }"
+                    @mouseout="${ (event) => this._mouseOut(event, el) }"
+                  ><${ nodeName }></span> 
+                ${ (isCustomEl && !this.toShowCompactView) 
+                  ? html`<span 
+                            class="small-button" 
+                            @click=${(e) => this._handlerCustomElementClick(e, nodeName)}
+                         >custom</span>` 
+                  : ''
                 }
-                `
+                `;
     };
 
     const compactOneChildElement = element => {
@@ -229,24 +261,26 @@ class ComponentTree extends LitElement {
             </li>`;
     });
 
-    return html`<ul id="myUL">${ buildList(this._getElements(this.data)) }</ul>`;
+    return html`<ul id="tree">${ buildList(this._getElements(this.data)) }</ul>`;
   }
 
   render() {
     return html`
-            <div>
-              <button @click=${ this._expandAll }>Expand</button>
-              <button @click=${ this._collapseAll }>Collapse</button>
+            <div class="action">
+              <button class="item" @click=${ this._expandAll }>Expand</button>
+              <button class="item" @click=${ this._collapseAll }>Collapse</button>
               
-              <span>
+              <span class="item">
                 <input 
-                  type="checkbox" 
+                  type="checkbox"
+                  id="toggleCompactView" 
                   @click=${() => this.toShowCompactView = !this.toShowCompactView} 
                   ?check=${this.toShowCompactView}
                 >         
-                <label>Compact View</label>
+                <label for="toggleCompactView">Compact View</label>
               </span>              
             </div>
+            
             ${ this._componentStructureTemplate }
         `;
   }

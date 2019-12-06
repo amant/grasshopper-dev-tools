@@ -1,17 +1,17 @@
-#app-container {
-    display: flex;
-    height: 100%;
-    outline: 1px solid red;
+@font-face {
+    font-family: 'INGMe';
+    src: url('INGMeWeb-Regular.woff2') format('woff2');
 }
 
 .app {
+    font-family: 'INGMe', sans-serif;
     width: 100%;
     height: 100%;
     user-select: none;
     display: flex;
     flex-direction: column;
     position: relative;
-    outline: 1px solid blue;
+    font-size: 1.1em;
 }
 
 .app>.header {
@@ -19,8 +19,7 @@
     align-items: center;
     font-size: 14px;
     position: relative;
-    outline: 1px solid blue;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+    outline: 2px solid var(--outline-color);
 }
 
 .container {
@@ -30,68 +29,27 @@
     flex: 1;
 }
 
-.split-pane {
-    display: flex;
-    height: 100%;
-    outline: 1px solid blue;
-}
-
-.vertical {}
-
-.left, .right {
-    position: relative;
-    height: 100%;
-}
-
-.top {}
-
-.right {}
-
-.bottom {}
-
-.scroll-pane {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    outline: 1px solid green;
-}
-
-.dragger {
-    position: absolute;
-    z-index: 99;
-}
-
-.vertical .dragger {
-    top: 0;
-    bottom: 0;
-    right: -5px;
-    width: 10px;
-    cursor: ew-resize;
-    border: 1px solid green;
-}
-
 .action-header {
     display: flex;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 8px;
     font-size: 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--outline-color);
     color: #666;
     height: 50px;
-    outline: 1px solid blue;
 }
 
 .search {
     display: flex;
     align-items: center;
     flex: 1;
+    font-size: 16px;
 }
 
 .scroll {
     position: relative;
     flex: 1;
     overflow: auto;
-    outline: 1px solid blue;
 }
 
 .notice {
@@ -100,7 +58,6 @@
     height: 100%;
     width: 100%;
     color: #aaa;
-    outline: 1px solid blue;
 }
 
 .notice div {
@@ -112,24 +69,27 @@
 .logo {
     width: 48px;
     height: 48px;
-    margin: 0 15px;
-    background: url('images/grasshopper.svg') no-repeat center center;
+    margin: 0 4px;
+    background: url('images/grass-hopper-logo.png') no-repeat center center;
+    background-size: 48px;
 }
 
 .message-container {
     height: 1em;
     cursor: default;
     display: block;
-    outline: 1px solid blue;
+}
+
+.message-container .title {
+    color: var(--title-color);
+    font-size: 16px;
 }
 
 .message {
-    color: #3ba776;
-    transition: all 0.3s ease;
+    color: darkblue;
     position: absolute;
     display: flex;
     align-items: center;
-    outline: 1px solid blue;
 }
 
 .actions {
@@ -172,5 +132,8 @@
     height: 32px;
     color: #2c3e50;
     background: #e0f8ed;
-    outline: 0;
+}
+
+.component-tree-container, .property-tree-container {
+    padding: 8px;
 }

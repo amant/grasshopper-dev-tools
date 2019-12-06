@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Hello world</title>
-  <script src="https://unpkg.com/vue"></script>
   <style >
     #container {
         display: flex;
@@ -41,10 +40,15 @@
         display: flex;
         height: 100%;
         outline: 1px solid blue;
+        transform: translateZ(0);
     }
 
     .vertical {
+      flex-direction: row;
+    }
 
+    .horizontal {
+      flex-direction: column;
     }
 
     .left, .right {
@@ -83,6 +87,14 @@
         width: 10px;
         cursor: ew-resize;
         border: 1px solid green;
+    }
+
+    .horizontal .dragger {
+      left: 0;
+      right: 0;
+      bottom: -5px;
+      height: 10px;
+      cursor: ns-resize;
     }
 
     .action-header {
@@ -234,6 +246,14 @@
     #myUL .active {
       display: block;
     }
+
+    .vertical.dragging {
+      cursor: ew-resize;
+    }
+
+    .horizontal.dragging {
+      cursor: nw-resize;
+    }
   </style>
   <style>
     .hero {
@@ -298,8 +318,8 @@
           </div>
         </div>
         <div class="container">
-            <div class="split-pane vertical">
-                <div class="left top" style="width: 50%">
+            <div id="pane" class="split-pane vertical" onmousemove="dragMove(event)" onmouseup="dragEnd()" onmouseleave="dragEnd()">
+                <div id="left-pane" class="left top" style="width: 50%">
                     <div class="scroll-pane">
                         <div class="header">
                             <div class="action-header">
@@ -333,13 +353,13 @@
                           </div>
                         </div>
                     </div>
-                    <div class="dragger"></div>
+                    <div class="dragger" onmousedown="dragStart(event);"></div>
                 </div>
-                <div class="right bottom" style="width: 50%">
+                <div id="right-pane" class="right bottom" style="width: 50%">
                     <div class="scroll-pane">
                         <div class="header">
                             <div class="action-header">
-                              <span class="title" style="margin-right: 10px;">&lt;Water&gt;</span>
+                              <span class="title" style="margin-right: 10px;">&lt;water&gt;</span>
                               <input type="text" placeholder="Filter properties" class="search">
                             </div>
                         </div>
@@ -355,17 +375,54 @@
     </div>
   </div>
 
-  <div id="app">
-    <p>{{ message }}</p>
-  </div>
-
   <script>
-    new Vue({
-      el: '#app',
-      data: {
-        message: 'Hello Vue.js!'
+    const el = document.querySelector('#pane');
+    const leftPaneEl = document.querySelector('#left-pane');
+    const rightPaneEl = document.querySelector('#right-pane');
+    const view = 'vertical';
+
+    let dragging = false;
+    let startPosition = 0;
+    let split = 50;
+    let startSplit;
+
+    function dragStart(e) {
+      dragging = true;
+      startPosition = view === 'vertical' ? e.pageX : e.pageY;
+      startSplit = split;
+      e.preventDefault();
+
+      el.classList.add('dragging');
+    }
+
+    function dragMove(e) {
+      if (dragging) {
+        let position
+        let totalSize
+
+        if (view === 'vertical') {
+          position = e.pageX
+          totalSize = el.offsetWidth
+        } else {
+          position = e.pageY
+          totalSize = el.offsetHeight
+        }
+
+        const dPosition = position - startPosition
+        split = startSplit + Math.floor(dPosition / totalSize * 100)
+
+        requestAnimationFrame(() => {
+          leftPaneEl.style.width = `${split}%`;
+          rightPaneEl.style.width = `${(100 - split)}%`;
+        });
+
       }
-    })
+    }
+
+    function dragEnd() {
+      dragging = false
+      el.classList.remove('dragging');
+    }
   </script>
 </body>
 </html>

@@ -8,14 +8,20 @@
 - (done) Panel and all handle through litElement?
 - (done) Show Source code class of Custom Element in Source Panel
 - (done) Highlight rendered DOM as user select component on tree
-- (progress) Show a  component's property details
-- () Layout implementation, logo and tabs
-- () Splitbar implementation
-- () Style At-Tree component
+- (done) Search filter in Component Tree
+- (done) Search filter in Property Tree
+- (progress) Show a component's property details
+- (done) Splitbar implementation - Horizontal
+- () Splitbar responsive - Vertial
+- (progress) Layout implementation, logo and tabs
+- (progress) Style Component-Tree
+- (progress) Style Property-Tree
+- (progress) Dark mode and responsive layout, custom element bold
 - () Show class or id
-- () Search filter in Tree
 - () Refresh tree on tab reload
-- () remember last checked component
+- () Refresh on DOM mutation
+- () Add manual refresh component tree button
+- () Remember last checked component
 - () Setup build script
 - () Publish to google store
 - () Ask for feedback
