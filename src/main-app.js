@@ -50,9 +50,7 @@ class MainApp extends LitElement {
     super();
     this._currentQuerySelector = null;
     this._components = null;
-    this._componentsFilter = null;
     this._componentProperties = null;
-    this._componentPropertiesFilter = null;
 
     this._debouncedComponentFilter = _debounce(async (value) => {
       if (!value) {
@@ -85,16 +83,7 @@ class MainApp extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    (async function () {
-      const components = await getAllComponents();
-
-      // enrich with node reference and element selector path
-      componentsWalk([enrichWithRef, enrichWithSelector, convertNodeNameToLowerCase])(components);
-
-      this._componentsFilter = this._components = components;
-
-      buildComponentsSearchIndex(this._components);
-    }.bind(this)());
+    this._refreshComponent();
   }
 
   async _handlerShowProperties(event) {
@@ -103,6 +92,20 @@ class MainApp extends LitElement {
     this._showProperty = Boolean(this._currentQuerySelector);
 
     this._componentProperties = this._componentPropertiesFilter = await getComponentProperties(this._currentQuerySelector);
+  }
+
+  async _refreshComponent() {
+    const components = await getAllComponents();
+
+    // enrich with node reference and element selector path
+    componentsWalk([enrichWithRef, enrichWithSelector, convertNodeNameToLowerCase])(components);
+
+    this._componentsFilter = this._components = components;
+
+    buildComponentsSearchIndex(this._components);
+
+    // reset search component value
+    this.shadowRoot.querySelector('#inputFilterComponent').value = '';
   }
 
   render() {
@@ -132,6 +135,7 @@ class MainApp extends LitElement {
             <div slot="left-pane" class="header">
               <div class="action-header">
                 <input
+                  id="inputFilterComponent"
                   type="search"
                   placeholder="Filter component"
                   class="search"
@@ -149,6 +153,7 @@ class MainApp extends LitElement {
                         @show-source=${ (event) => showSource(event.detail.nodeName) }
                         @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
                         @unhighlight-component=${ (event) => unhighlightComponent(event.detail.selector) }
+                        @refresh-component=${ this._refreshComponent }
                        ></component-tree>`
                   }
               </div>
@@ -160,6 +165,7 @@ class MainApp extends LitElement {
               <div class="action-header">
                 ${ this._showProperty ? html`<div class="property-title">${ this._selectedComponentName } :</div>` : ''}                      
                 <input 
+                  id="inputFilterProperties"
                   type="search" 
                   placeholder="Filter properties" 
                   class="search" 

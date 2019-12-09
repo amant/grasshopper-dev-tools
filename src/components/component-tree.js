@@ -136,6 +136,14 @@ class ComponentTree extends LitElement {
       .map(el => el.classList.remove('active'));
   }
 
+  _refresh() {
+    // emit event to parent 'show-properties'
+    this.dispatchEvent(new CustomEvent('refresh-component', {
+      bubbles: true,
+      composed: true
+    }));
+  }
+
   _handlerClick(event, el) {
     // clear previous selection
     const prevSelectedEl = this.shadowRoot.querySelector('.selected-element');
@@ -269,7 +277,6 @@ class ComponentTree extends LitElement {
             <div class="action">
               <button class="item" @click=${ this._expandAll }>Expand</button>
               <button class="item" @click=${ this._collapseAll }>Collapse</button>
-              
               <span class="item">
                 <input 
                   type="checkbox"
@@ -278,7 +285,8 @@ class ComponentTree extends LitElement {
                   ?check=${this.toShowCompactView}
                 >         
                 <label for="toggleCompactView">Compact View</label>
-              </span>              
+              </span>
+              <button class="item" @click=${ this._refresh }>Refresh</button>              
             </div>
             
             ${ this._componentStructureTemplate }
