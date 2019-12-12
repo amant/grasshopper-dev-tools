@@ -38,8 +38,11 @@ customElements.define('split-pane', class SplitPane extends LitElement {
       .scroll-pane {
         display: flex;
         flex-direction: column;
-        height: 100%;
-        outline: 1px solid var(--outline-color);
+        height: 100%;        
+      }
+      
+      .divider-outline {
+        outline: 1px solid var(--divider-color);
       }
     
       .dragger {
@@ -140,7 +143,7 @@ customElements.define('split-pane', class SplitPane extends LitElement {
                 @mouseup=${this._onDragEnd}
                 @mouseleave=${this._onDragEnd}
                 ><div id="left-side" class="left top" style="${styleMap(leftStyle)}">
-                    <div class="scroll-pane">
+                    <div class="scroll-pane divider-outline">
                         <slot name="left-pane"></slot>
                     </div>
                     <div class="dragger" @mousedown=${this._onDragStart}></div>

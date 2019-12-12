@@ -14,6 +14,7 @@ export const getAllComponents = () => {
           nodeName: element.nodeName,
           id: element.id,
           classList: Array.from(element.classList),
+          name: element.name,
           children: []
         };
 
@@ -74,10 +75,11 @@ export const getComponentProperties = (querySelector) => {
 
     const props = ((element.__data) ?
       Object.keys(element.__data) :
-      Object.keys(element).filter(el => el.includes('__') && el.substr(2) in element)) || [];
+      Object.keys(element).filter(prop => prop.includes('__') && prop.substr(2) in element)) || [];
 
-    return props.reduce((acc, prop) => {
-      acc[prop.substr(2)] = JSON.stringify(element[prop]) || null;
+    return props.sort().reduce((acc, prop) => {
+      const key = prop.includes('__') ? prop.substr(2) : prop;
+      acc[key] = JSON.stringify(element[prop]) || null;
       return acc;
     }, {});
   }

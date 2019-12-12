@@ -5,10 +5,6 @@ import { get as _get } from 'lodash';
 class ComponentTree extends LitElement {
   static get styles() {
     return css`
-      :host {
-        color: #666;
-      }
-      
       .action {
         display: flex;
         justify-content: flex-end;        
@@ -19,54 +15,48 @@ class ComponentTree extends LitElement {
       }
       
       ul, #tree {
-          list-style-type: none;
+        list-style-type: none;
       }
 
       #tree {
-          margin: 0;
-          padding: 0;
+        margin: 0;
+        padding: 0;
       }
-
+      
+      #tree li {
+        line-height: 18px;
+      }
       
       .caret {
-          cursor: pointer;
-          user-select: none; /* Prevent text selection */
+        cursor: pointer;
+        user-select: none; /* Prevent text selection */
       }
 
-      /* Create the caret/arrow with a unicode, and style it */
       .caret::before {
-          content: "\\25B6";
-          color: black;
-          display: inline-block;
-          margin-right: 6px;
+        content: "\\25B6";
+        color: var(--item-tree-caret-color);
+        display: inline-block;
+        font-size: 9px;
       }
 
-      /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
       .caret-down::before {
-          transform: rotate(90deg);
+        transform: rotate(90deg);
       }
 
-      /* Hide the nested list */
       .nested {
-          display: none;
+        display: none;
       }
 
-      /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
       .active {
-          display: block;
+        display: block;
       }
 
       .shadow {
-          border: 1px dashed #E0E0E0;
+        border: 1px dotted var(--item-is-shadow-element-color);
       }
       
-      .hover-element {
-          background-color: #C9ECFF;
-          cursor: pointer;
-      }
-       
       .selected-element {
-          background-color: #00A5FF;
+        background-color: var(--item-selection-inactive-bg-color);
       }
       
       .small-button {
@@ -83,8 +73,21 @@ class ComponentTree extends LitElement {
         background-color: black;
       }
       
-      .custom-element {
-        color: #000;
+      .dom-tag-name:hover {
+        background-color: var(--item-selection-bg-color);
+        cursor: pointer;
+      }
+      
+      .dom-attribute-name {
+        color: var(--dom-attribute-name-color);
+      }
+      
+      .dom-attribute-value {
+        color: var(--dom-attribute-value-color);
+      }
+      
+      .dom-tag-name {
+        color: var(--dom-tag-name-color);
       }
   `;
   }
@@ -145,12 +148,14 @@ class ComponentTree extends LitElement {
   }
 
   _handlerClick(event, el) {
-    // clear previous selection
-    const prevSelectedEl = this.shadowRoot.querySelector('.selected-element');
-    prevSelectedEl && prevSelectedEl.classList.remove('selected-element');
+    if (event.target.classList.contains('dom-tag-name')) {
+      // clear previous selection
+      const prevSelectedEl = this.shadowRoot.querySelector('.selected-element');
+      prevSelectedEl && prevSelectedEl.classList.remove('selected-element');
 
-    // add new selection
-    event.target.classList.add('selected-element');
+      // add new selection
+      event.target.classList.add('selected-element');
+    }
 
     // emit event to parent 'show-properties'
     this.dispatchEvent(new CustomEvent('show-properties', {
@@ -170,7 +175,6 @@ class ComponentTree extends LitElement {
   }
 
   _mouseOver(event, el) {
-    event.target.classList.add('hover-element');
     this.dispatchEvent(new CustomEvent('highlight-component', {
       detail: { selector: el._selector },
       bubbles: true,
@@ -179,7 +183,6 @@ class ComponentTree extends LitElement {
   }
 
   _mouseOut(event, el) {
-    event.target.classList.remove('hover-element');
     this.dispatchEvent(new CustomEvent('unhighlight-component', {
       detail: { selector: el._selector },
       bubbles: true,
@@ -195,6 +198,7 @@ class ComponentTree extends LitElement {
 
     const isCustomElement = nodeName => nodeName.includes('-');
 
+    const attributeTemplate = (key, value) => html` <span class="dom-attribute-name">${ key }="</span><span class="dom-attribute-value">${ value }</span>"`;
     const getName = el => {
       const nodeName = el.nodeName;
       const isCustomEl = isCustomElement(nodeName);
@@ -202,13 +206,17 @@ class ComponentTree extends LitElement {
         shadow: el.inShadow ,
         'custom-element': isCustomEl
       };
+      const idAttribute =  isCustomEl && el.id ? attributeTemplate('id', el.id) : '';
+      const nameAttribute = el.name && nodeName === 'slot' ? attributeTemplate('name', el.name) : '';
+      const attributes = !this.toShowCompactView ? html`${idAttribute}${nameAttribute}` : '';
 
       return html`<span 
-                    class="${ classMap(cssClassName) }" 
+                    class="dom-tag-name ${ classMap(cssClassName) }"
+                    title="${el.inShadow ? 'inside shadowroot' : ''}"
                     @click="${ (event) => this._handlerClick(event, el) }"
                     @mouseover="${ (event) => this._mouseOver(event, el) }"
                     @mouseout="${ (event) => this._mouseOut(event, el) }"
-                  ><${ nodeName }></span> 
+                  ><${ nodeName }${attributes}></span> 
                 ${ (isCustomEl && !this.toShowCompactView) 
                   ? html`<span 
                             class="small-button" 

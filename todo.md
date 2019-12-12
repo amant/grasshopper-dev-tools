@@ -10,17 +10,18 @@
 - (done) Highlight rendered DOM as user select component on tree
 - (done) Search filter in Component Tree
 - (done) Search filter in Property Tree
-- (progress) Show a component's property details
 - (done) Splitbar implementation - Horizontal
-- () Splitbar responsive - Vertial
+- (done) Splitbar responsive - Vertial
+- (done) Style Component-Tree
+- (done) Style Property-Tree
+- (done) Dark mode and responsive layout, custom element bold
+- (done) Show class or id
+- (done) Add manual refresh component tree button
+- (done) Show a component's property details
 - (progress) Layout implementation, logo and tabs
-- (progress) Style Component-Tree
-- (progress) Style Property-Tree
-- (progress) Dark mode and responsive layout, custom element bold
-- () Show class or id
+- () Compact component style
 - () Refresh tree on tab reload
 - () Refresh on DOM mutation
-- () Add manual refresh component tree button
 - () Remember last checked component
 - () Setup build script
 - () Publish to google store
@@ -32,6 +33,8 @@
 #New Ideas
 - () Implement variable change observer
 - () Build Tree with D3
+- () Remember selected component in component tree, search resets the selected
+- () Add reference node ?
 
 
 #note:

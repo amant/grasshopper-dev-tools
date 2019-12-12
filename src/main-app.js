@@ -19,6 +19,9 @@ import {
 } from './helpers/enrich-helpers.js';
 import { buildComponentsSearchIndex, searchComponents, searchComponentProperty } from './helpers/search-helpers.js';
 import { DEBOUNCE_WAIT, VERTICAL, HORIZONTAL } from './constants';
+import { mainAppStyle } from './styles/main-app-style';
+
+const chromeTheme = chrome.devtools.panels.themeName || 'dark';
 
 class MainApp extends LitElement {
   static get properties() {
@@ -37,13 +40,19 @@ class MainApp extends LitElement {
         display: flex;
         height: 100vh;
         min-height: 500px;
-        
-        --outline-color: #f0f0f0;
-        --title-color: #ff6200;
       }
       
-      .property-title { margin-right: 8px; }
-    `]
+      .app-title {
+        color: var(--title-text-color);
+      }
+      
+      .property-title { 
+        margin-right: 8px;
+        color: var(--dom-tag-name-color); 
+      }
+    `,
+      mainAppStyle,
+    ]
   }
 
   constructor() {
@@ -77,13 +86,18 @@ class MainApp extends LitElement {
   }
 
   mediaQueryHandler(mediaQuery) {
-    this._view = mediaQuery.matches ? 'vertical' : 'horizontal';
+    this._view = mediaQuery.matches ? VERTICAL : HORIZONTAL;
   }
 
   connectedCallback() {
     super.connectedCallback();
 
     this._refreshComponent();
+
+    // TODO: css for high-contrast mode
+    if (chromeTheme === 'dark') {
+      document.body.classList.add('dark-mode')
+    }
   }
 
   async _handlerShowProperties(event) {
@@ -110,12 +124,11 @@ class MainApp extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" href="./styles/light-style.css">
       <div class="app">
         <div class="header">
           <div class="logo"></div>
           <span class="message-container">
-            <span class="message"><span class="title">Grass-Hopper Dev-Tools</span></span>
+            <span class="message"><span class="app-title">Grass-Hopper Dev-Tools</span></span>
           </span>
           <div class="actions">
             <div class="ui-group">
@@ -163,7 +176,7 @@ class MainApp extends LitElement {
             <!-- Start right-pane -->  
             <div slot="right-pane" class="header">
               <div class="action-header">
-                ${ this._showProperty ? html`<div class="property-title">${ this._selectedComponentName } :</div>` : ''}                      
+                ${ this._showProperty ? html`<div class="property-title"><${ this._selectedComponentName }> :</div>` : ''}                      
                 <input 
                   id="inputFilterProperties"
                   type="search" 

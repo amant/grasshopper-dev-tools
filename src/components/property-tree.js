@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 import { isArray as _isArray, isBoolean as _isBoolean, isObject as _isObject, isEmpty as _isEmpty } from 'lodash';
 
 class PropertyTree extends LitElement {
@@ -6,6 +6,38 @@ class PropertyTree extends LitElement {
     return {
       data: { type: Array },
     };
+  }
+
+  static get styles() {
+    return [css`
+      .property {
+        padding: 0px;
+      }
+      
+      .property-list {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+      
+      .property-name {
+        color: var(--component-property-name-color);
+      }
+      
+      .property-value {
+        margin-left: 4px;
+        width: 100%
+      }
+      
+      input {
+        font-size: 14px;
+        background-color: var(--app-bg-color);
+        color: var(--app-text-color);
+        outline: none;
+        border: 1px solid var(--divider-color);
+        width: 100%;                
+      }
+    `];
   }
 
   _parseValue(value) {
@@ -19,10 +51,10 @@ class PropertyTree extends LitElement {
 
   _treeList() {
     return html`
-    <ul>${ Object.keys(this.data).map(key => html`
-      <li>
-        <span>${ key }:</span>
-        ${ this._getValue(key, this.data[key]) }
+    <ul class="property">${ Object.keys(this.data).map(key => html`
+      <li class="property-list">
+        <div class="property-name">${ key }:</div>
+        <div class="property-value">${ this._getValue(key, this.data[key]) }</div>        
       </li>`) }
     </ul>`;
   };
@@ -34,7 +66,8 @@ class PropertyTree extends LitElement {
       return html`<input @change=${(event) => this._onChange(event, key)} type="text" value="${value}">`;
     }
     else if (_isArray(value)) {
-      return html`<button>arr +</button>${value.map(item => this._getValue(key, item))}`;
+      return html`<input @change=${(event) => this._onChange(event, key)} type="text" value="${JSON.stringify(value)}">`;
+      // return html`<button>arr +</button>${value.map(item => this._getValue(key, item))}`;
     }
     else if (_isObject(value) && !_isEmpty(value)) {
       return html`<input @change=${(event) => this._onChange(event, key)} type="text" value="${JSON.stringify(value)}">`;
@@ -42,8 +75,7 @@ class PropertyTree extends LitElement {
     }
     else if (_isBoolean(value)) {
       return html`
-      <span>${value}</span>
-      <select>
+      <select @change=${(event) => this._onChange(event, key)}>
         <option value="true" ?selected=${value.toString() === 'true'}>True</option>
         <option value="false" ?selected=${value.toString() === 'false'}>False</option>
       </select>`;

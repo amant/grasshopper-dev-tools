@@ -1,0 +1,51 @@
+:root {
+  --accent-color: #1a73e8;
+  --accent-fg-color: #1a73e8;
+  --accent-color-hover: #3b86e8;
+  --app-bg-color: white;
+  --app-text-color: rgb(48, 57, 66);
+  --divider-color: #d0d0d0;
+  --title-text-color: #e16428;
+
+  --dom-tag-name-color: rgb(136, 18, 128);
+  --dom-attribute-name-color: rgb(153, 69, 0);
+  --dom-attribute-value-color: rgb(26, 26, 166);
+
+  --item-selection-bg-color: #cfe8fc;
+  --item-selection-inactive-bg-color: #e0e0e0;
+
+  --item-tree-caret-color: rgb(141, 141, 141);
+  --item-is-shadow-element-color: #d0d0d0;
+
+  --component-property-name-color: rgb(200, 0, 0);
+
+  --focus-ring-inactive-shadow: 0 0 0 1px #e0e0e0;
+
+}
+
+.dark-mode {
+  --accent-color: #0e639c;
+  --accent-fg-color: #cccccc;
+  --accent-color-hover: rgb(17, 119, 187);
+  --app-bg-color: rgb(36, 36, 36);
+  --app-text-color: rgb(189, 198, 207);
+  --divider-color: #525252;
+  --title-text-color: #e16428;
+
+  --dom-tag-name-color: rgb(93, 176, 215);
+  --dom-attribute-name-color: rgb(155, 187, 220);
+  --dom-attribute-value-color: rgb(242, 151, 102);
+
+  --item-selection-bg-color: hsl(207, 88%, 22%);
+  --item-selection-inactive-bg-color: #454545;
+  --item-tree-caret-color: rgb(141, 141, 141);
+  --item-is-shadow-element-color: #525252;
+
+  --component-property-name-color: rgb(53, 212, 199);
+
+  --focus-ring-inactive-shadow: 0 0 0 1px #5a5a5a;
+}
+
+:root {
+  --focus-ring-active-shadow: 0 0 0 1px var(--accent-color);
+}
