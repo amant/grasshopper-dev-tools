@@ -18,8 +18,12 @@
 - (done) Show class or id
 - (done) Add manual refresh component tree button
 - (done) Show a component's property details
-- (progress) Layout implementation, logo and tabs
+- (done) Slot's component tree should render inside, rather than where it's define in dom tree
+- (done) Layout implementation, logo
+- () Refactor to use content-script, background and communicate via postMessage
 - () Compact component style
+- () Build Tree with D3
+- () Implement tabs and show (Component Tree | D3 Chart | A11Y)
 - () Refresh tree on tab reload
 - () Refresh on DOM mutation
 - () Remember last checked component
@@ -29,10 +33,8 @@
 - () Unit test, and demo pages
 - () Implement A11 tab
 
-
 #New Ideas
 - () Implement variable change observer
-- () Build Tree with D3
 - () Remember selected component in component tree, search resets the selected
 - () Add reference node ?
 

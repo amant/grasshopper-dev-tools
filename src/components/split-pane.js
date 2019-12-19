@@ -8,7 +8,7 @@ customElements.define('split-pane', class SplitPane extends LitElement {
     return {
       view: { type: String },
       dragging: { type: Boolean },
-      split: {type: Number },
+      split: { type: Number },
       leftStyle: { type: Object },
       rightStyle: { type: Object }
     }
@@ -133,7 +133,7 @@ customElements.define('split-pane', class SplitPane extends LitElement {
     const splitPaneCssClasses = {
       'split-pane': true,
       [this.view]: true,
-      'dragging' : this.dragging
+      'dragging': this.dragging
     };
 
     return html`

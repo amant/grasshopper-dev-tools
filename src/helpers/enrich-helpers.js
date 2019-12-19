@@ -20,9 +20,16 @@ export const convertNodeNameToLowerCase = (component) => {
 
 const getQuerySelector = (element, selector = 'body') => {
   const nodeName = element.nodeName.toLowerCase();
-  return `${ selector }>${ (element.inShadow ? `::shadowroot>${ nodeName }` : nodeName) }`;
+  const query = `${selector}>${(element.inShadow ? `::shadowroot>${nodeName}` : nodeName)}`;
+  const ownIndex = element.ownIndex;
+
+  if (ownIndex !== null) {
+    return `${query}:nth-child(${ownIndex + 1})`;
+  }
+
+  return query;
 };
 
-export const  enrichWithSelector = (component, index, parentComponent = {}) => {
+export const enrichWithSelector = (component, index, parentComponent = {}) => {
   component._selector = getQuerySelector(component, parentComponent._selector);
 };

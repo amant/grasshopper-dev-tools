@@ -1,12 +1,26 @@
 {
   "name": "GrassHopper Dev-Tools",
-  "version": "1.1",
+  "version": "0.5",
   "description": "Grasshopper Developer Tools",
   "devtools_page": "devtools.html",
   "manifest_version": 2,
-  "permissions": ["*://*/*", "https://unpkg.com/"],
+  "permissions": ["http://*/*", "https://*/*", "activeTab", "tabs"],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
   "background": {
     "scripts": ["./build/background.js"],
     "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["./build/content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "incognito": "split",
+  "icons": {
+    "128": "./assets/images/grass-hopper-logo-128.png",
+    "48": "./assets/images/grass-hopper-logo-48.png",
+    "16": "./assets/images/grass-hopper-logo-16.png"
   }
 }

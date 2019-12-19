@@ -6,7 +6,8 @@ module.exports = {
     devtools: './src/devtools.js',
     background: './src/background.js',
     panel: './src/panel.js',
-    'main-app': './src/main-app.js'
+    'main-app': './src/main-app.js',
+    'content-script': './src/content-script.js',
   },
   output: {
     path: path.join(__dirname, 'build'),

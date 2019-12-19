@@ -1,4 +1,5 @@
 import { css } from 'lit-element';
+
 export const mainAppStyle = css`
   @font-face {
       font-family: 'INGMe';

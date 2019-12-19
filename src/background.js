@@ -1,5 +1,5 @@
-(function() {
-    // TODO: implement
-    
+(function () {
+  // TODO: implement
+
 }())
 
