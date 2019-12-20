@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/amant/grasshopper-dev-tools#readme",
   "dependencies": {
+    "d3": "^5.14.2",
     "lit-element": "^2.2.1",
     "lit-html": "^1.1.2",
     "lodash": "^4.17.15",
-    "trie-search": "^1.2.11"
+    "trie-search": "^1.2.11",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "webpack": "^4.41.2",

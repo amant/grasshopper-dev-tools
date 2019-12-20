@@ -1,4 +1,14 @@
-export function installBackendHelpers(target) {
+export function injectScript(fn) {
+  const source = `;( ${fn.toString()} )(window)`;
+  const script = document.createElement('script');
+
+  script.textContent = source;
+  document.documentElement.appendChild(script);
+  script.parentNode.removeChild(script);
+};
+
+
+export function installHelpers(target) {
   if (target.hasOwnProperty('__GRASSHOPPER_DEVTOOLS__')) return;
 
   const getElement = (query) => {
@@ -7,7 +17,7 @@ export function installBackendHelpers(target) {
     const findInAncestor = (selectorQuery) => {
       let element = null;
 
-      for (let i = ancestors.length - 1; i > 0; i--) {
+      for (let i = ancestors.length - 1; i >= 0; i--) {
         element = ancestors[i].querySelector(selectorQuery);
 
         if (element) {
@@ -38,7 +48,8 @@ export function installBackendHelpers(target) {
   };
 
   const highlightComponent = (selector) => {
-    const element = getElement(selector);
+    const el = getElement(selector);
+    const element = el.nodeName.toLowerCase() === 'slot' ? el.parentElement : el;
 
     if (!element) {
       return;
@@ -76,13 +87,12 @@ export function installBackendHelpers(target) {
     };
 
     const getComponentObj = (element) => ({
-      inSlot: Boolean(element.assignedSlot),
       inShadow: element.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
       nodeName: element.nodeName,
-      id: element.id,
+      idName: element.id,
       classList: Array.from(element.classList),
       name: element.name,
-      ownIndex: null,
+      ownIndex: [...element.parentNode.children].indexOf(element),
       children: []
     });
 
@@ -95,7 +105,6 @@ export function installBackendHelpers(target) {
         }
 
         const nodeObj = getComponentObj(element);
-        nodeObj.ownIndex = [...element.parentNode.children].indexOf(element);
 
         nodeCollection.push(nodeObj);
 

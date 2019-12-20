@@ -90,6 +90,7 @@ class ComponentTree extends LitElement {
       
       .dom-tag-name {
         color: var(--dom-tag-name-color);
+        font-size: 16px;
       }
   `;
   }
@@ -208,7 +209,7 @@ class ComponentTree extends LitElement {
         shadow: el.inShadow,
         'custom-element': isCustomEl
       };
-      const idAttribute = isCustomEl && el.id ? attributeTemplate('id', el.id) : '';
+      const idAttribute = isCustomEl && el.idName ? attributeTemplate('id', el.idName) : '';
       const nameAttribute = el.name && nodeName === 'slot' ? attributeTemplate('name', el.name) : '';
       const attributes = !this.toShowCompactView ? html`${idAttribute}${nameAttribute}` : '';
 
@@ -220,13 +221,13 @@ class ComponentTree extends LitElement {
                     @mouseout="${(event) => this._mouseOut(event, el)}"
                   ><${nodeName}${attributes}></span> 
                 ${(isCustomEl && !this.toShowCompactView)
-        ? html`<span 
-                            class="small-button" 
-                            @click=${(e) => this._handlerCustomElementClick(e, nodeName)}
-                         >custom</span>`
-        : ''
-      }
-                `;
+                    ? html`<span 
+                              class="small-button" 
+                              @click=${(e) => this._handlerCustomElementClick(e, nodeName)}
+                           >custom</span>`
+                    : ''
+                  }
+              `;
     };
 
     const compactOneChildElement = element => {

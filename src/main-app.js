@@ -9,6 +9,7 @@ import {
   setProperty,
 } from './helpers/helpers.js';
 import './components/component-tree.js';
+import './components/component-tree-chart.js';
 import './components/property-tree.js';
 import './components/split-pane.js';
 import {
@@ -21,7 +22,10 @@ import { buildComponentsSearchIndex, searchComponents, searchComponentProperty }
 import { DEBOUNCE_WAIT, VERTICAL, HORIZONTAL } from './constants';
 import { mainAppStyle } from './styles/main-app-style';
 
-const chromeTheme = chrome.devtools.panels.themeName || 'dark';
+const CHROME_THEME = chrome.devtools.panels.themeName || 'dark';
+
+const COMPONENT_TREE = 'COMPONENT_TREE';
+const COMPONENT_CHART = 'COMPONENT_CHART';
 
 class MainApp extends LitElement {
   static get properties() {
@@ -30,7 +34,8 @@ class MainApp extends LitElement {
       _componentPropertiesFilter: { type: Array },
       _showProperty: { type: Boolean },
       _selectedComponentName: { type: String },
-      _view: { type: String }
+      _view: { type: String },
+      _mainContent: { type: String }
     };
   }
 
@@ -63,6 +68,7 @@ class MainApp extends LitElement {
     this._currentQuerySelector = null;
     this._components = null;
     this._componentProperties = null;
+    this._mainContent = COMPONENT_TREE;
 
     this._debouncedComponentFilter = _debounce(async (value) => {
       if (!value) {
@@ -98,7 +104,7 @@ class MainApp extends LitElement {
     this._refreshComponent();
 
     // TODO: css for high-contrast mode
-    if (chromeTheme === 'dark') {
+    if (CHROME_THEME === 'dark') {
       document.body.classList.add('dark-mode')
     }
   }
@@ -125,6 +131,74 @@ class MainApp extends LitElement {
     this.shadowRoot.querySelector('#inputFilterComponent').value = '';
   }
 
+  get _mainContentTemplate() {
+    if (this._mainContent === COMPONENT_CHART) {
+     return html`<component-tree-chart .data=${this._componentsFilter}></component-tree-chart>`
+    }
+
+    return html`
+      <split-pane view=${this._view}>
+        <!-- Start left-pane -->
+        <div slot="left-pane" class="header">
+          <div class="action-header">
+            <input
+              id="inputFilterComponent"
+              type="search"
+              placeholder="Filter component"
+              class="search"
+              @input=${(event) => this._debouncedComponentFilter(event.target.value)}
+            >
+          </div>
+        </div>
+        <div slot="left-pane" class="scroll">
+          <div class="component-tree-container">
+            ${!this._componentsFilter ?
+              html`<span>Loading...</span>` :
+              html`<component-tree 
+                      data=${JSON.stringify(this._componentsFilter)}
+                      @show-properties=${this._handlerShowProperties}
+                      @show-source=${(event) => showSource(event.detail.nodeName)}
+                      @highlight-component=${(event) => highlightComponent(event.detail.selector)}
+                      @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
+                      @refresh-component=${this._refreshComponent}
+                     ></component-tree>`
+              }
+          </div>
+        </div>              
+        <!-- End left-pane -->
+            
+        <!-- Start right-pane -->  
+        <div slot="right-pane" class="header">
+          <div class="action-header">
+            ${this._showProperty ? html`<div class="property-title"><${this._selectedComponentName}> :</div>` : ''}                      
+            <input 
+              id="inputFilterProperties"
+              type="search" 
+              placeholder="Filter properties" 
+              class="search" 
+              @input=${(event) => this._debouncedPropertyFilter(event.target.value)}
+            >
+          </div>
+        </div>
+        <div slot="right-pane" class="scroll">
+          ${this._showProperty ?
+            html`<section class="property-tree-container">
+                   <property-tree 
+                    .data=${this._componentPropertiesFilter} 
+                    @change-property=${(event) => setProperty({
+                      querySelector: this._currentQuerySelector,
+                      property: event.detail.property,
+                      value: event.detail.value
+                    })}></property-tree>
+                  </section>` :
+            html`<section class="notice"><div>Select a component to inspect.</div></section>`
+          }
+        </div>
+        <!-- End right-pane -->
+      </split-pane>
+    `;
+  }
+
   render() {
     return html`
       <div class="app">
@@ -137,74 +211,15 @@ class MainApp extends LitElement {
             <div class="ui-group">
               <div class="content-wrapper">
                 <div class="content">
-                  <button>Tree</button>
-                  <button>Chart</button>
-                  <button>A11Y Check</button>
+                  <button @click=${() => this._mainContent = COMPONENT_TREE }>Tree</button>
+                  <button @click=${() => this._mainContent = COMPONENT_CHART }>Chart</button>                  
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="container">
-          <split-pane view=${this._view}>
-            <!-- Start left-pane -->
-            <div slot="left-pane" class="header">
-              <div class="action-header">
-                <input
-                  id="inputFilterComponent"
-                  type="search"
-                  placeholder="Filter component"
-                  class="search"
-                  @input=${(event) => this._debouncedComponentFilter(event.target.value)}
-                >
-              </div>
-            </div>
-            <div slot="left-pane" class="scroll">
-              <div class="component-tree-container">
-                ${!this._componentsFilter ?
-      html`<span>Loading...</span>` :
-      html`<component-tree 
-                        data=${JSON.stringify(this._componentsFilter)}
-                        @show-properties=${this._handlerShowProperties}
-                        @show-source=${(event) => showSource(event.detail.nodeName)}
-                        @highlight-component=${(event) => highlightComponent(event.detail.selector)}
-                        @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
-                        @refresh-component=${this._refreshComponent}
-                       ></component-tree>`
-    }
-              </div>
-            </div>              
-            <!-- End left-pane -->
-            
-            <!-- Start right-pane -->  
-            <div slot="right-pane" class="header">
-              <div class="action-header">
-                ${this._showProperty ? html`<div class="property-title"><${this._selectedComponentName}> :</div>` : ''}                      
-                <input 
-                  id="inputFilterProperties"
-                  type="search" 
-                  placeholder="Filter properties" 
-                  class="search" 
-                  @input=${(event) => this._debouncedPropertyFilter(event.target.value)}
-                >
-              </div>
-            </div>
-            <div slot="right-pane" class="scroll">
-              ${this._showProperty ?
-      html`<section class="property-tree-container">
-                      <property-tree 
-                        .data=${this._componentPropertiesFilter} 
-                        @change-property=${(event) => setProperty({
-        querySelector: this._currentQuerySelector,
-        property: event.detail.property,
-        value: event.detail.value
-      })}></property-tree>
-                     </section>` :
-      html`<section class="notice"><div>Select a component to inspect.</div></section>`
-    }
-            </div>
-            <!-- End right-pane -->
-          </split-pane>
+          ${ this._mainContentTemplate }
         </div>
       </div>
     `;

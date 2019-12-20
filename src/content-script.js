@@ -1,15 +1,5 @@
-import { installBackendHelpers } from './helpers/backend-helpers'
-
-const injectScript = (fn) => {
-  const source = `;( ${fn.toString()} )(window)`;
-
-  const script = document.createElement('script');
-
-  script.textContent = source;
-  document.documentElement.appendChild(script);
-  script.parentNode.removeChild(script);
-};
+import { installHelpers, injectScript } from './helpers/content-script-helpers'
 
 if (document instanceof HTMLDocument) {
-  injectScript(installBackendHelpers);
+  injectScript(installHelpers);
 }

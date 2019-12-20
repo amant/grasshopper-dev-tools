@@ -20,9 +20,10 @@
 - (done) Show a component's property details
 - (done) Slot's component tree should render inside, rather than where it's define in dom tree
 - (done) Layout implementation, logo
-- () Refactor to use content-script, background and communicate via postMessage
-- () Compact component style
+- (done) Refactor to use content-script, 
 - () Build Tree with D3
+- () Refactor background script and bridge to communicate via postMessage
+- () Compact component style
 - () Implement tabs and show (Component Tree | D3 Chart | A11Y)
 - () Refresh tree on tab reload
 - () Refresh on DOM mutation
