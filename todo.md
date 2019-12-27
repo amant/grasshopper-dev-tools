@@ -21,14 +21,14 @@
 - (done) Slot's component tree should render inside, rather than where it's define in dom tree
 - (done) Layout implementation, logo
 - (done) Refactor to use content-script, 
-- () Build Tree with D3
-- () Refactor background script and bridge to communicate via postMessage
-- () Compact component style
-- () Implement tabs and show (Component Tree | D3 Chart | A11Y)
-- () Refresh tree on tab reload
-- () Refresh on DOM mutation
-- () Remember last checked component
-- () Setup build script
+- (done) Build Tree with D3
+- (done) Compact component style
+- (done) Implement tabs and show (Component Tree | D3 Chart)
+- (done) Refresh tree on tab reload
+- (done) Setup build script
+- (?) Refactor background script and bridge to communicate via postMessage
+- (?) Refresh on DOM mutation
+- (?) Remember last checked component
 - () Publish to google store
 - () Ask for feedback
 - () Unit test, and demo pages

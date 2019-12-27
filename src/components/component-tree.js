@@ -12,6 +12,7 @@ class ComponentTree extends LitElement {
       
       .action .item {
         margin: 0 4px;
+        height: 18px;
       }
       
       ul, #tree {

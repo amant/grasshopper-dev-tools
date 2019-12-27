@@ -4,8 +4,8 @@
   "description": "The Developer Tools for Webcomponent",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js",
-    "start": "webpack --config webpack.config.js --watch"
+    "build": "node_modules/.bin/rimraf ./dist && webpack --config webpack.prod.config.js",
+    "start": "node_modules/.bin/rimraf ./build && webpack --config webpack.dev.config.js --watch"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,8 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "rimraf": "^3.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }

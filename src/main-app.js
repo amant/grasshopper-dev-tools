@@ -21,6 +21,7 @@ import {
 import { buildComponentsSearchIndex, searchComponents, searchComponentProperty } from './helpers/search-helpers.js';
 import { DEBOUNCE_WAIT, VERTICAL, HORIZONTAL } from './constants';
 import { mainAppStyle } from './styles/main-app-style';
+import { classMap } from "lit-html/directives/class-map";
 
 const CHROME_THEME = chrome.devtools.panels.themeName || 'dark';
 
@@ -103,7 +104,14 @@ class MainApp extends LitElement {
 
     this._refreshComponent();
 
-    // TODO: css for high-contrast mode
+    // TODO: refactor to use bridge event bus pattern
+    // listen for changes to the tab
+    chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+      if (changeInfo.status === 'complete') {
+        this._refreshComponent();
+      }
+    });
+
     if (CHROME_THEME === 'dark') {
       document.body.classList.add('dark-mode')
     }
@@ -133,7 +141,11 @@ class MainApp extends LitElement {
 
   get _mainContentTemplate() {
     if (this._mainContent === COMPONENT_CHART) {
-     return html`<component-tree-chart .data=${this._componentsFilter}></component-tree-chart>`
+     return html`<component-tree-chart 
+                  .data=${this._components}
+                  @highlight-component=${(event) => highlightComponent(event.detail.selector)}
+                  @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
+                 ></component-tree-chart>`
     }
 
     return html`
@@ -152,7 +164,7 @@ class MainApp extends LitElement {
         </div>
         <div slot="left-pane" class="scroll">
           <div class="component-tree-container">
-            ${!this._componentsFilter ?
+            ${!this._components ?
               html`<span>Loading...</span>` :
               html`<component-tree 
                       data=${JSON.stringify(this._componentsFilter)}
@@ -199,6 +211,15 @@ class MainApp extends LitElement {
     `;
   }
 
+  get actionButtonTemplate() {
+    const selectedBtn = value => this._mainContent === value ? 'selected' : '';
+
+    return html`
+      <button type="button" class="btn ${selectedBtn(COMPONENT_TREE)}" @click=${() => this._mainContent = COMPONENT_TREE }>Tree</button>
+      <button type="button" class="btn ${selectedBtn(COMPONENT_CHART)}" @click=${() => this._mainContent = COMPONENT_CHART }>Chart</button>
+    `;
+  }
+
   render() {
     return html`
       <div class="app">
@@ -211,8 +232,7 @@ class MainApp extends LitElement {
             <div class="ui-group">
               <div class="content-wrapper">
                 <div class="content">
-                  <button @click=${() => this._mainContent = COMPONENT_TREE }>Tree</button>
-                  <button @click=${() => this._mainContent = COMPONENT_CHART }>Chart</button>                  
+                  ${this.actionButtonTemplate}
                 </div>
               </div>
             </div>

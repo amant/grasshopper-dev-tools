@@ -155,4 +155,44 @@ export const mainAppStyle = css`
   .component-tree-container, .property-tree-container {
       padding: 8px;
   }
+  
+  .actions .ui-group{
+    background-color: var(--toolbar-bg-color);
+  }
+  
+  .actions .btn {
+    display: inline-block;
+    font-weight: normal;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 0;
+    padding: 0 14px;
+    font-size: 14px;
+    line-height: 16px;
+    height: 48px;
+    background: transparent;
+    color: var(--tab-color);
+    box-shadow: none;
+  }
+  
+  .actions .btn:focus {
+    outline: none;
+  }
+  
+  .actions .btn:last-child {
+    margin-right: 8px;
+  }
+  
+  .actions .btn.selected {
+    border-bottom: 2px solid var(--accent-fg-color);
+    color: var(--tab-selected-fg-color);
+    background-color: var(--tab-selected-bg-color);
+  }
+  
+  .actions .btn:not(.selected):hover {
+    color: var(--tab-selected-fg-color);
+    background-color: var(--toolbar-hover-bg-color);
+  }
 `;

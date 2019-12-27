@@ -4,6 +4,11 @@
   --accent-color-hover: #3b86e8;
   --app-bg-color: white;
   --app-text-color: rgb(48, 57, 66);
+  --toolbar-bg-color: #f3f3f3;
+  --toolbar-hover-bg-color: #eaeaea;
+  --tab-color: #5a5a5a;
+  --tab-selected-fg-color: #333;
+  --tab-selected-bg-color: var(--toolbar-bg-color);
   --divider-color: #d0d0d0;
   --title-text-color: #e16428;
 
@@ -29,6 +34,11 @@
   --accent-color-hover: rgb(17, 119, 187);
   --app-bg-color: rgb(36, 36, 36);
   --app-text-color: rgb(189, 198, 207);
+  --toolbar-bg-color: #333333;
+  --toolbar-hover-bg-color: #202020;
+  --tab-color: white;
+  --tab-selected-fg-color: #eaeaea;
+  --tab-selected-bg-color: black;
   --divider-color: #525252;
   --title-text-color: #e16428;
 

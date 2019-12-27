@@ -6,10 +6,6 @@
   "manifest_version": 2,
   "permissions": ["http://*/*", "https://*/*", "activeTab", "tabs"],
   "content_security_policy": "script-src 'self'; object-src 'self'",
-  "background": {
-    "scripts": ["./build/background.js"],
-    "persistent": false
-  },
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
