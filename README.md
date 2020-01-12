@@ -1,15 +1,18 @@
 # grasshopper-dev-tools
-Tool helps to explore lit-html component's structure. Shows component's hierarchy structure and it's properties.
+Tool helps to explore lit-html component's structure and it's properties.
 
-<p align="center"><img src="https://raw.githubusercontent.com/amant/grasshopper-dev-tools/master/assets/images/screen-shot.png?token=AAFBOWV4DUHNUSHVGDKXVK26CGEHO" alt="screenshot"></p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/amant/grasshopper-dev-tools/master/assets/images/screen-shot-1-1280x800.png" alt="screenshot">  
+</p>
 
 #Functionality
-##Tree tab 
-- This page shows component's hierarchy of the web page.
-- Clicking on web-component lists all associated properties.
+##Tree page
+- Component's hierarchy is listed on left panel.
+- Clicking on a web-component list all properties right panel.
+- Clicking also high-light's that component on web-application
 
-## Chart tab
-- This page shows component's hierarchy in a visual form.
+## Chart page
+- This page shows component's hierarchy in a tree chart.
 
 # To start development and load extension through chrome://extension
 - $ npm i

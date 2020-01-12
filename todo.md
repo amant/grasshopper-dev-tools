@@ -29,8 +29,8 @@
 - (?) Refactor background script and bridge to communicate via postMessage
 - (?) Refresh on DOM mutation
 - (?) Remember last checked component
-- () Publish to google store
-- () Ask for feedback
+- (?) Publish to google store
+- (?) Ask for feedback
 - () Unit test, and demo pages
 - () Implement A11 tab
 
