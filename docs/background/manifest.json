@@ -1,0 +1,16 @@
+{
+  "name": "Background Basic",
+  "version": "0.1.0",
+  "description": "A basic background example extension",
+  "manifest_version": 2,
+  "permissions": ["contextMenus", "tts"],
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
