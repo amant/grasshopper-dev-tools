@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Background script example</title>
+</head>
+<body>
+  <h1>Background script example</h1>
+  <p>
+    <strong>"Supercalifragilisticexpialidocious" : </strong>
+    is a song from the 1964 Disney musical film Mary Poppins.
+    The song was written by the Sherman Brothers, and sung by Julie Andrews and Dick Van Dyke.
+    It also appears in the stage show version.
+  </p>
+
+  <script>
+    const selection = window.getSelection();
+    const range = document.createRange();
+    const node = document.querySelector('strong');
+
+    range.selectNodeContents(node);
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+  </script>
+</body>
+</html>
