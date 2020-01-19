@@ -5,4 +5,3 @@ $('#add-btn').addEventListener('click', () => {
   $('#result').textContent = result.toString();
 });
 
-$('body').style = "background-color: lightgreen";
