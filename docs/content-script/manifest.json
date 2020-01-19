@@ -1,7 +1,7 @@
 {
-  "name": "Content Script Basic",
+  "name": "Content Script",
   "version": "0.1.0",
-  "description": "A basic content script example extension",
+  "description": "Content script example extension",
   "manifest_version": 2,
   "permissions": ["activeTab"],
   "content_scripts": [

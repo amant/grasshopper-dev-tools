@@ -1,0 +1,13 @@
+{
+  "name": "Devtool-Extension",
+  "version": "0.1.0",
+  "description": "Devtool extension example",
+  "manifest_version": 2,
+  "permissions": ["activeTab"],
+  "devtools_page": "devtools.html",
+  "icons": {
+    "128": "icon.png",
+    "48": "icon.png",
+    "16": "icon.png"
+  }
+}
