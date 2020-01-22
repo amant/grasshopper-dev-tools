@@ -32,8 +32,7 @@ function walk (children = []) {
   return collection;
 }
 
-function getList(value) {
-  debugger;
+function getList(value) {  
   let list = '<ul>';
 
   value.forEach(el => {
