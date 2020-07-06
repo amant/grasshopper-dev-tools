@@ -8,10 +8,6 @@ import {
   unHighlightComponent,
   setProperty,
 } from './helpers/helpers.js';
-import './components/component-tree.js';
-import './components/component-tree-chart.js';
-import './components/property-tree.js';
-import './components/split-pane.js';
 import {
   componentsWalk,
   enrichWithSelector,
@@ -19,14 +15,22 @@ import {
   convertNodeNameToLowerCase
 } from './helpers/enrich-helpers.js';
 import { buildComponentsSearchIndex, searchComponents, searchComponentProperty } from './helpers/search-helpers.js';
-import { DEBOUNCE_WAIT, VERTICAL, HORIZONTAL } from './constants';
+import {
+  DEBOUNCE_WAIT,
+  VERTICAL,
+  HORIZONTAL,
+  CHROME_THEME,
+  COMPONENT_TREE,
+  COMPONENT_CHART,
+  COMPONENT_REQUEST_MOCKING,
+} from './constants';
 import { mainAppStyle } from './styles/main-app-style';
-import { classMap } from "lit-html/directives/class-map";
 
-const CHROME_THEME = chrome.devtools.panels.themeName || 'dark';
-
-const COMPONENT_TREE = 'COMPONENT_TREE';
-const COMPONENT_CHART = 'COMPONENT_CHART';
+import './components/component-tree.js';
+import './components/component-tree-chart.js';
+import './components/component-request-mocking';
+import './components/property-tree.js';
+import './components/split-pane.js';
 
 class MainApp extends LitElement {
   static get properties() {
@@ -69,7 +73,7 @@ class MainApp extends LitElement {
     this._currentQuerySelector = null;
     this._components = null;
     this._componentProperties = null;
-    this._mainContent = COMPONENT_TREE;
+    this._mainContent = COMPONENT_REQUEST_MOCKING;
 
     this._debouncedComponentFilter = _debounce(async (value) => {
       if (!value) {
@@ -136,7 +140,10 @@ class MainApp extends LitElement {
     buildComponentsSearchIndex(this._components);
 
     // reset search component value
-    this.shadowRoot.querySelector('#inputFilterComponent').value = '';
+    const inputFilterComponentEl = this.shadowRoot.querySelector('#inputFilterComponent');
+    if (inputFilterComponentEl) {
+      inputFilterComponentEl.value = '';
+    }
   }
 
   get _mainContentTemplate() {
@@ -146,6 +153,10 @@ class MainApp extends LitElement {
                   @highlight-component=${(event) => highlightComponent(event.detail.selector)}
                   @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
                  ></component-tree-chart>`
+    }
+
+    if (this._mainContent === COMPONENT_REQUEST_MOCKING) {
+      return html`<component-request-mocking></component-request-mocking>`
     }
 
     return html`
@@ -215,8 +226,15 @@ class MainApp extends LitElement {
     const selectedBtn = value => this._mainContent === value ? 'selected' : '';
 
     return html`
-      <button type="button" class="btn ${selectedBtn(COMPONENT_TREE)}" @click=${() => this._mainContent = COMPONENT_TREE }>Tree</button>
-      <button type="button" class="btn ${selectedBtn(COMPONENT_CHART)}" @click=${() => this._mainContent = COMPONENT_CHART }>Chart</button>
+      <button type="button" class="btn ${selectedBtn(COMPONENT_TREE)}" 
+        @click=${() => this._mainContent = COMPONENT_TREE }
+      >Tree</button>
+      <button type="button" class="btn ${selectedBtn(COMPONENT_CHART)}" 
+        @click=${() => this._mainContent = COMPONENT_CHART }
+      >Chart</button>
+      <button type="button" class="btn ${selectedBtn(COMPONENT_REQUEST_MOCKING)}" 
+        @click=${() => this._mainContent = COMPONENT_REQUEST_MOCKING }
+      >Request mocking</button>
     `;
   }
 

@@ -1,7 +1,7 @@
 {
   "name": "GrassHopper Dev-Tools",
   "short_name": "GrassHopper",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Grasshopper Developer Tools",
   "devtools_page": "devtools.html",
   "manifest_version": 2,
@@ -9,7 +9,7 @@
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "content_scripts": [
     {
-      "matches": ["*://localhost/*", "*://127.0.0.1/*", "*://0.0.0.0/*", "*://*.ing.nl/*", "*://*.ing.be/*"],
+      "matches": ["*://localhost/*", "*://127.0.0.1/*", "*://0.0.0.0/*", "*://*.ing.nl/*", "*://*.ing.net/*", "*://*.ing.be/*"],
       "js": ["./build/content-script.js"],
       "run_at": "document_idle"
     }
