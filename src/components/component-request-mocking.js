@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import { db } from '../helpers/request-mocking-db-helpers.js';
+import * as dJSON from 'dirty-json';
 
 const SHOW_ADD_FORM = 0;
 
@@ -48,7 +49,7 @@ class ComponentRequestMocking extends LitElement {
     return html`
       <form id="requestForm">
         <fieldset>
-          <input type="text" id="requestId" value=${id}>
+          <input type="hidden" id="requestId" value=${id}>
           <div>Url: <input type="text" id="requestUrl" value=${requestUrl}></div>
           <div>Response: <textarea id="responseBody">${JSON.stringify(responseBody)}</textarea></div>
           <div>Response Status: <input type="text" id="responseStatus" value=${responseStatus}></div>
@@ -141,10 +142,8 @@ class ComponentRequestMocking extends LitElement {
     let responseBody;
 
     try {
-      // todo: validate and fix reponseBodyText, and JSON.parse
-      // https://www.npmjs.com/package/dirty-json
-      // https://github.com/4ossiblellc/fixjson/blob/117a2f6f35d16f6fc700e74e6891171493f29812/src/routes/home/Home.js
-      responseBody = JSON.parse(responseBodyText);
+      // validate and fix reponseBodyText, and JSON.parse
+      responseBody = dJSON.parse(responseBodyText);
       
     } catch (err) {
       console.log('parse error responseBodyText', err);

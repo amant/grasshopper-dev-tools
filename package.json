@@ -23,6 +23,7 @@
   "homepage": "https://github.com/amant/grasshopper-dev-tools#readme",
   "dependencies": {
     "d3": "^5.14.2",
+    "dirty-json": "^0.9.1",
     "idb": "^5.0.4",
     "lit-element": "^2.2.1",
     "lit-html": "^1.1.2",
