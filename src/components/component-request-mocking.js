@@ -1,6 +1,14 @@
 import { LitElement, html, css } from 'lit-element';
 import { db } from '../helpers/request-mocking-db-helpers.js';
 
+const SHOW_ADD_FORM = 0;
+
+const defaultFormValues = {
+  requestUrl: 'https://google.com',
+  responseBody: { hello: 'world' },
+  responseStatus: '200',
+};
+
 class ComponentRequestMocking extends LitElement {
   static get styles() {
     return css`
@@ -14,7 +22,9 @@ class ComponentRequestMocking extends LitElement {
     return {
       _toEnableRequestMocking: { type: Boolean },
       _mockLists: { type: Array },
-      _showForm: { type: Boolean },
+      _formIdToShow: { type: Number },
+      _showSaving: { type: Boolean }, 
+      _showLoading: { type: Boolean }, 
     }
   }
 
@@ -22,75 +32,111 @@ class ComponentRequestMocking extends LitElement {
   constructor() {
     super();
     this._toEnableRequestMocking = true; // todo: should be false by default
-    this._showForm = false;
-
-    this._mockLists = [];    
+    this._mockLists = [];
+    this._formIdToShow = null;
+    this._showSaving = false;
+    this._showLoading = false;
     this._setMockLists()
   }
 
+  _templateForm({
+    id = '',
+    requestUrl = '',
+    responseBody = '',
+    responseStatus = ''
+  } = {}) {
+    return html`
+      <form id="requestForm">
+        <fieldset>
+          <input type="text" id="requestId" value=${id}>
+          <div>Url: <input type="text" id="requestUrl" value=${requestUrl}></div>
+          <div>Response: <textarea id="responseBody">${JSON.stringify(responseBody)}</textarea></div>
+          <div>Response Status: <input type="text" id="responseStatus" value=${responseStatus}></div>
+          <div><button @click=${() => this._handleSave()}>Save</button> | <a href="#nolink" @click=${this._handleCancel}>Cancel</a></div>
+        </fieldset>
+      </form>
+    `;
+  }
+
+  // TODO: add spinner icon for saving and loading
   render() {
     return html`
+        ${this._showSaving ? html`<div>Saving....</div>`: html``}
+        ${this._showLoading ? html`<div>Loading....</div>`: html``}
+
          <div class="b"><input type="checkbox" ?checked=${this._toEnableRequestMocking}>
           <span>Enable request mocking | </span>
-          <button @click=${this._handlerAddMock}>+ Add Pattern</button>
-          <button @click=${this._handlerRemoveAllMocks}>- Remove All Patterns</button>
+          <button @click=${() => this._handleAddMock()}>+ Add Pattern</button>
+          <button @click=${() => this._handleRemoveAllMocks()}>- Remove All Patterns</button>
         </div>
         
-        ${ this._showForm ? html`
-          <div>
-            <div>Url: <input type="text" id="requestUrl" value="https://goole.com"></div>
-            <div>Response: <textarea id="responseBody">{"hello": "world"}</textarea></div>
-            <div>Response Status: <input type="text" id="responseStatus" value="200"></div>
-            <div><button @click=${() => this._handlerSave()}>Save</button> | <button @click=${this._handlerCancel}>Cancel</button></div>
-          </div>
-        ` : html``}
-       
+        ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html`` }
+
         ${ (!this._mockLists.length) ? html`
-            <div>Not any XHR Request Mocked. <button>+Add Pattern</button></div>
-          ` :
-          html`
-          <ul>
-            ${this._mockLists.map(list => html`
-              <li>
-                <div>Id: ${list.id}</span>
-                <div>URL: ${list.requestUrl}</span>
-                <div>Status: ${list.responseStatus}</span>
-                <div>Body: ${JSON.stringify(list.responseBody)}</span>
-              </li>
-            `)}
-          </ul>`
+            <div>Request Mocked Empty. <button @click=${() => this._handleAddMock()}>+Add Pattern</button></div>
+          ` : html`
+            <ul>
+              ${this._mockLists.map(list => html`
+                <li class="list" id="${`mock-list-id-${list.id}`}">
+                  ${this._formIdToShow !== list.id ? html`` : html`
+                    <div class="edit-list">
+                      ${this._templateForm(list)}
+                    </div>
+                  `}
+
+                  ${this._formIdToShow === list.id ? html`` : html`
+                    <div class="mock-list">
+                      <div>Id: ${list.id}</span>
+                      <div>URL: ${list.requestUrl}</span>
+                      <div>Status: ${list.responseStatus}</span>
+                      <div>Body: ${JSON.stringify(list.responseBody)}</span>
+                      <div><button @click=${() => this._handleEditMock(list.id)}>Edit</button> | <a href="#nolink" @click=${() => this._handleDelete(list.id)}>Delete</a></div>
+                    </div>
+                  `}
+                </li>
+              `)}
+            </ul>`
         }
     `;
   }
 
-  _handlerAddMock() {
-    this._showForm = true;
-    console.log('handler add mock');
+  _handleAddMock() {
+    this._formIdToShow = SHOW_ADD_FORM;
+    console.log('handle add mock');
   }
 
-  _handlerRemoveAllMocks() {
-    console.log('handler remove all mock');
+  async _handleRemoveAllMocks() {
+    if (confirm('Are you sure to remove all mocks?')) {
+      await db.clear();
+      this._setMockLists();
+    }
   }
 
-  _handlerRemoveMock() {
-   // TODO: implement
-    console.log('handler remove mock');
+  _handleEditMock(id) {
+    this._formIdToShow = id;
   }
 
-  _handlerEditMock() {
-    // TODO: implement
-    console.log('handler edit mock');
+  _handleCancel() {
+    this._formIdToShow = null;
   }
 
-  _handlerCancel() {
-    this._showForm = false;
-    console.log('handler cancel');
+  async _handleDelete(id) {
+    if (confirm('Are you sure?')) {
+      await db.delete(id);
+      this._setMockLists();
+    }
   }
 
-  _handlerSave() {
+  // TODO: refactor to make code readable
+  _handleSave() {
+    const id = this.shadowRoot.querySelector('#requestId').value;
     const requestUrl = this.shadowRoot.querySelector('#requestUrl').value;
     const responseBodyText = this.shadowRoot.querySelector('#responseBody').value;
     const responseStatus = this.shadowRoot.querySelector('#responseStatus').value;
+    const requestFormFieldSet = this.shadowRoot.querySelector('#requestForm > fieldset');
+
+    requestFormFieldSet.disabled = true;
+    this._showSaving = true;
 
     let responseBody;
 
@@ -105,26 +151,37 @@ class ComponentRequestMocking extends LitElement {
       responseBody = responseBodyText;
     }
 
-    db.add({
+    const data = {
       requestUrl,
       responseBody,
       responseStatus,
-    }).then(result => {
+    };
+
+    if (id) {
+      data.id = Number(id);
+    }
+
+    console.log('data', data);
+
+    db.put(data)
+    .then(result => {
       console.log('saved to index db', result);
-
       this._setMockLists();
-      
-    }).catch(err => {
+      this._formIdToShow = null;
+    })
+    .catch(err => {
       console.error('error saving to index db', err);
-      this._showForm = true;
+      this._formIdToShow = id;
+    })
+    .finally(() => {
+      this._showSaving = false;
+      requestFormFieldSet.disabled = false;
     });
-
-    this._showForm = false;
   }
 
   async _setMockLists() {
     const data = await db.getAll();
-    this._mockLists = data;    
+    this._mockLists = data;
     console.log('mockLists', this._mockLists);
   }
 }
