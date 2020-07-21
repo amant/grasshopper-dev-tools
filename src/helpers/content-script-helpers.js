@@ -161,7 +161,7 @@ export function installHelpers(target) {
         unHighlightComponent,
         getAllComponents,
         getComponentProperties,
-        setComponentProperty
+        setComponentProperty,
       }
     }
   });

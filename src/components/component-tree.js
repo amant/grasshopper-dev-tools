@@ -7,7 +7,7 @@ class ComponentTree extends LitElement {
     return css`
       .action {
         display: flex;
-        justify-content: flex-end;        
+        justify-content: flex-end;
       }
       
       .action .item {
@@ -151,7 +151,7 @@ class ComponentTree extends LitElement {
     }));
   }
 
-  _handlerClick(event, el) {
+  _handleClick(event, el) {
     if (event.target.classList.contains('dom-tag-name')) {
       // clear previous selection
       const prevSelectedEl = this.shadowRoot.querySelector('.selected-element');
@@ -169,7 +169,7 @@ class ComponentTree extends LitElement {
     }));
   }
 
-  _handlerCustomElementClick(event, nodeName) {
+  _handleCustomElementClick(event, nodeName) {
     // emit event to parent 'show-properties'
     this.dispatchEvent(new CustomEvent('show-source', {
       detail: { nodeName },
@@ -217,17 +217,17 @@ class ComponentTree extends LitElement {
       return html`<span 
                     class="dom-tag-name ${classMap(cssClassName)}"
                     title="${el.inShadow ? 'inside shadowroot' : ''}"
-                    @click="${(event) => this._handlerClick(event, el)}"
+                    @click="${(event) => this._handleClick(event, el)}"
                     @mouseover="${(event) => this._mouseOver(event, el)}"
                     @mouseout="${(event) => this._mouseOut(event, el)}"
                   ><${nodeName}${attributes}></span> 
                 ${(isCustomEl && !this.toShowCompactView)
-                    ? html`<span 
+          ? html`<span 
                               class="small-button" 
-                              @click=${(e) => this._handlerCustomElementClick(e, nodeName)}
+                              @click=${(e) => this._handleCustomElementClick(e, nodeName)}
                            >custom</span>`
-                    : ''
-                  }
+          : ''
+        }
               `;
     };
 

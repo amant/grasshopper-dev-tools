@@ -29,7 +29,8 @@
     "lit-html": "^1.1.2",
     "lodash": "^4.17.19",
     "trie-search": "^1.2.11",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "xhr-mock": "^2.5.1"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^5.1.1",

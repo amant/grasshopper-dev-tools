@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
-import { db } from '../helpers/request-mocking-db-helpers.js';
 import * as dJSON from 'dirty-json';
+import { db } from '../helpers/request-mocking-db-helpers.js';
 
 const SHOW_ADD_FORM = 0;
 
@@ -15,6 +15,12 @@ class ComponentRequestMocking extends LitElement {
     return css`
       .b {
         border: 1px solid red;
+      }
+
+      .response-body {
+        max-height: 150px;
+        width: 100%;
+        overflow: scroll;
       }
   `;
   }
@@ -62,6 +68,18 @@ class ComponentRequestMocking extends LitElement {
   // TODO: add spinner icon for saving and loading
   render() {
     return html`
+        <div>
+        <button @click=${ () => {
+          console.log('making request');
+            
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, {indexdb_db1: 'getAll'}, function(response) {
+                    console.log('response of getALL', response);
+                });
+              });
+        } }>GET-ALL<button>
+        </div>
+
         ${this._showSaving ? html`<div>Saving....</div>`: html``}
         ${this._showLoading ? html`<div>Loading....</div>`: html``}
 
@@ -87,10 +105,10 @@ class ComponentRequestMocking extends LitElement {
 
                   ${this._formIdToShow === list.id ? html`` : html`
                     <div class="mock-list">
-                      <div>Id: ${list.id}</span>
-                      <div>URL: ${list.requestUrl}</span>
-                      <div>Status: ${list.responseStatus}</span>
-                      <div>Body: ${JSON.stringify(list.responseBody)}</span>
+                      <div>Id: ${list.id}</div>
+                      <div>URL: ${list.requestUrl}</div>
+                      <div>Status: ${list.responseStatus}</div>
+                      <div class="response-body">Body: ${JSON.stringify(list.responseBody)}</div>
                       <div><button @click=${() => this._handleEditMock(list.id)}>Edit</button> | <a href="#nolink" @click=${() => this._handleDelete(list.id)}>Delete</a></div>
                     </div>
                   `}

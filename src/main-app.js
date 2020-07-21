@@ -121,7 +121,7 @@ class MainApp extends LitElement {
     }
   }
 
-  async _handlerShowProperties(event) {
+  async _handleShowProperties(event) {
     this._selectedComponentName = event.detail.nodeName;
     this._currentQuerySelector = event.detail.selector;
     this._showProperty = Boolean(this._currentQuerySelector);
@@ -179,7 +179,7 @@ class MainApp extends LitElement {
               html`<span>Loading...</span>` :
               html`<component-tree 
                       data=${JSON.stringify(this._componentsFilter)}
-                      @show-properties=${this._handlerShowProperties}
+                      @show-properties=${this._handleShowProperties}
                       @show-source=${(event) => showSource(event.detail.nodeName)}
                       @highlight-component=${(event) => highlightComponent(event.detail.selector)}
                       @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
