@@ -68,18 +68,6 @@ class ComponentRequestMocking extends LitElement {
   // TODO: add spinner icon for saving and loading
   render() {
     return html`
-        <div>
-        <button @click=${ () => {
-          console.log('making request');
-            
-            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {indexdb_db1: 'getAll'}, function(response) {
-                    console.log('response of getALL', response);
-                });
-              });
-        } }>GET-ALL<button>
-        </div>
-
         ${this._showSaving ? html`<div>Saving....</div>`: html``}
         ${this._showLoading ? html`<div>Loading....</div>`: html``}
 

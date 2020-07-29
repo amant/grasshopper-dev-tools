@@ -73,7 +73,7 @@ export const db = {
     put: (data) => {
         return new Promise(resolve => {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {indexdb_db1: 'put', data}, function(response) {
+                chrome.tabs.sendMessage(tabs[0].id, {db1: 'put', data}, function(response) {
                     console.log('response of data', response);
                     resolve(response.data);
                 });
@@ -83,7 +83,7 @@ export const db = {
     getAll: () => {
         return new Promise(resolve => {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {indexdb_db1: 'getAll'}, function(response) {
+                chrome.tabs.sendMessage(tabs[0].id, {db1: 'getAll'}, function(response) {
                     console.log('response of getALL', response);
                     resolve(response.data);
                 });
@@ -93,7 +93,7 @@ export const db = {
     delete: (key) => {
         return new Promise(resolve => {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {indexdb_db1: 'delete', key}, function(response) {
+                chrome.tabs.sendMessage(tabs[0].id, {db1: 'delete', key}, function(response) {
                     console.log('response of delete', response);
                     resolve(response.data);
                 });
@@ -103,7 +103,7 @@ export const db = {
     clear: () => {
         return new Promise(resolve => {
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, {indexdb_db1: 'clear'}, function(response) {
+                chrome.tabs.sendMessage(tabs[0].id, {db1: 'clear'}, function(response) {
                     console.log('response of clear', response);
                     resolve(response.data);
                 });
