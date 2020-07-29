@@ -30,8 +30,8 @@ class ComponentRequestMocking extends LitElement {
       _toEnableRequestMocking: { type: Boolean },
       _mockLists: { type: Array },
       _formIdToShow: { type: Number },
-      _showSaving: { type: Boolean }, 
-      _showLoading: { type: Boolean }, 
+      _showSaving: { type: Boolean },
+      _showLoading: { type: Boolean },
     }
   }
 
@@ -48,6 +48,7 @@ class ComponentRequestMocking extends LitElement {
 
   _templateForm({
     id = '',
+    requestEnable = true,
     requestUrl = '',
     responseBody = '',
     responseStatus = ''
@@ -56,10 +57,13 @@ class ComponentRequestMocking extends LitElement {
       <form id="requestForm">
         <fieldset>
           <input type="hidden" id="requestId" value=${id}>
+          <div>
+            <input type="checkbox" ?checked=${requestEnable} id="requestEnable"> : Enable request mocking
+          </div>
           <div>Url: <input type="text" id="requestUrl" value=${requestUrl}></div>
           <div>Response: <textarea id="responseBody">${JSON.stringify(responseBody)}</textarea></div>
           <div>Response Status: <input type="text" id="responseStatus" value=${responseStatus}></div>
-          <div><button @click=${() => this._handleSave()}>Save</button> | <a href="#nolink" @click=${this._handleCancel}>Cancel</a></div>
+          <div><button type="button" @click=${() => this._handleSave()}>Save</button> | <a href="#nolink" @click=${this._handleCancel}>Cancel</a></div>
         </fieldset>
       </form>
     `;
@@ -68,16 +72,16 @@ class ComponentRequestMocking extends LitElement {
   // TODO: add spinner icon for saving and loading
   render() {
     return html`
-        ${this._showSaving ? html`<div>Saving....</div>`: html``}
-        ${this._showLoading ? html`<div>Loading....</div>`: html``}
+        ${this._showSaving ? html`<div>Saving....</div>` : html``}
+        ${this._showLoading ? html`<div>Loading....</div>` : html``}
 
          <div class="b"><input type="checkbox" ?checked=${this._toEnableRequestMocking}>
           <span>Enable request mocking | </span>
           <button @click=${() => this._handleAddMock()}>+ Add Pattern</button>
           <button @click=${() => this._handleRemoveAllMocks()}>- Remove All Patterns</button>
         </div>
-        
-        ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html`` }
+
+        ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html``}
 
         ${ (!this._mockLists.length) ? html`
             <div>Request Mocked Empty. <button @click=${() => this._handleAddMock()}>+Add Pattern</button></div>
@@ -93,6 +97,9 @@ class ComponentRequestMocking extends LitElement {
 
                   ${this._formIdToShow === list.id ? html`` : html`
                     <div class="mock-list">
+                      <div>
+                        <input type="checkbox" ?checked=${list.requestEnable} @click=${(e) => this._handleRequestEnableClick(list.id, e)}> : Enable request mocking
+                      </div>
                       <div>Id: ${list.id}</div>
                       <div>URL: ${list.requestUrl}</div>
                       <div>Status: ${list.responseStatus}</div>
@@ -103,7 +110,7 @@ class ComponentRequestMocking extends LitElement {
                 </li>
               `)}
             </ul>`
-        }
+      }
     `;
   }
 
@@ -136,7 +143,10 @@ class ComponentRequestMocking extends LitElement {
 
   // TODO: refactor to make code readable
   _handleSave() {
+    console.log('hello world');
+
     const id = this.shadowRoot.querySelector('#requestId').value;
+    const requestEnable = this.shadowRoot.querySelector('#requestEnable').checked;
     const requestUrl = this.shadowRoot.querySelector('#requestUrl').value;
     const responseBodyText = this.shadowRoot.querySelector('#responseBody').value;
     const responseStatus = this.shadowRoot.querySelector('#responseStatus').value;
@@ -157,6 +167,7 @@ class ComponentRequestMocking extends LitElement {
     }
 
     const data = {
+      requestEnable,
       requestUrl,
       responseBody,
       responseStatus,
@@ -166,22 +177,37 @@ class ComponentRequestMocking extends LitElement {
       data.id = Number(id);
     }
 
-    console.log('data', data);
+    console.log('this is the data', data);
 
     db.put(data)
-    .then(result => {
-      console.log('saved to index db', result);
-      this._setMockLists();
-      this._formIdToShow = null;
-    })
-    .catch(err => {
-      console.error('error saving to index db', err);
-      this._formIdToShow = id;
-    })
-    .finally(() => {
-      this._showSaving = false;
-      requestFormFieldSet.disabled = false;
-    });
+      .then(result => {
+        console.log('saved to index db', result);
+        this._setMockLists();
+        this._formIdToShow = null;
+      })
+      .catch(err => {
+        console.error('error saving to index db', err);
+        this._formIdToShow = id;
+      })
+      .finally(() => {
+        this._showSaving = false;
+        requestFormFieldSet.disabled = false;
+      });
+  }
+
+  _handleRequestEnableClick(id, event) {
+    const requestEnable = event.target.checked
+    const list = this._mockLists.find(item => item.id === id);
+    const data = { ...list, requestEnable }
+
+    db.put(data)
+      .then(result => {
+        console.log('saved', result);
+        this._setMockLists();
+      })
+      .catch(err => {
+        console.error('error saving checked', err);
+      });
   }
 
   async _setMockLists() {
