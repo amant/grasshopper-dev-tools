@@ -1,3 +1,4 @@
+import { injectScript } from './helpers/content-script-helpers.js';
 import {
     overrideNetworkRequest,
     DB_GROUP_NAME,
@@ -41,18 +42,27 @@ const clearData = () => {
     return { data: db1 };
 }
 
+// run this in the main page context, as `window` is not accessible from the content-script
+function overrideNetworkRequestSetup() {
+    window.__GRASSHOPPER_DEVTOOLS_OVERRIDE__.overrideNetworkRequestSetup();
+}
+
 // TODO: refactor to simplify
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.db1 === 'put') {
-        return sendResponse(putData(request));
+        const result = putData(request);
+        injectScript(overrideNetworkRequestSetup);
+        return sendResponse(result);
     }
     else if (request.db1 === 'getAll') {
         return sendResponse({data: db1});
     }
     else if (request.db1 === 'delete') {
+        injectScript(overrideNetworkRequestSetup);
         return sendResponse(deleteData(request));
     }
     else if (request.db1 === 'clear') {
+        injectScript(overrideNetworkRequestSetup);
         return sendResponse(clearData());
     }
 
@@ -61,7 +71,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 (function () {
-    const el = document.createElement('script');
-    el.textContent = `(${ overrideNetworkRequest.toString() })()`;
-    document.documentElement.appendChild(el);
+    // override the network request and set __GRASSHOPPER_DEVTOOLS_OVERRIDE__.overrideNetworkRequestSetup
+    injectScript(overrideNetworkRequest);
 }());

@@ -2638,23 +2638,35 @@ export function overrideNetworkRequest() {
     });
   }
 
-  XHRMock.setup();
-  const DB_GROUP_NAME = 'grasshopper-db';
-  const content = localStorage.getItem(DB_GROUP_NAME);
-  let db1 = content ? JSON.parse(content) : [];
-  db1.forEach(item => {
-    if (!item.requestEnable) {
-      return;
-    }
+  function overrideNetworkRequestSetup() {
+    const DB_GROUP_NAME = 'grasshopper-db';
+    const content = localStorage.getItem(DB_GROUP_NAME);
+    let db1 = content ? JSON.parse(content) : [];
 
-    XHRMock.get(item.requestUrl, {
-      body: JSON.stringify(item.responseBody),
+    XHRMock.teardown();
+    XHRMock.setup();
+
+    db1.forEach(item => {
+      if (!item.requestEnable) {
+        return;
+      }
+
+      XHRMock.get(item.requestUrl, {
+        status: Number(item.responseStatus),
+        body: JSON.stringify(item.responseBody),
+      });
     });
-    console.dir(item);
-  });
 
-  XHRMock.use(proxy);
-  XHRMock.error(({ req, err }) => console.log('Request error', req.url()));
+    XHRMock.use(proxy);
+    XHRMock.error(({ req, err }) => console.error('Request error', req.url()));
+  }
+
+  // initial setup
+  overrideNetworkRequestSetup();
+
+  window.__GRASSHOPPER_DEVTOOLS_OVERRIDE__ = {
+    overrideNetworkRequestSetup
+  };
 }
 
 export const DB_GROUP_NAME = 'grasshopper-db';

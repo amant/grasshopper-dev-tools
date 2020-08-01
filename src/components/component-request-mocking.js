@@ -27,7 +27,6 @@ class ComponentRequestMocking extends LitElement {
 
   static get properties() {
     return {
-      _toEnableRequestMocking: { type: Boolean },
       _mockLists: { type: Array },
       _formIdToShow: { type: Number },
       _showSaving: { type: Boolean },
@@ -38,7 +37,6 @@ class ComponentRequestMocking extends LitElement {
   // TODO: save default on localhost storage
   constructor() {
     super();
-    this._toEnableRequestMocking = true; // todo: should be false by default
     this._mockLists = [];
     this._formIdToShow = null;
     this._showSaving = false;
@@ -75,8 +73,7 @@ class ComponentRequestMocking extends LitElement {
         ${this._showSaving ? html`<div>Saving....</div>` : html``}
         ${this._showLoading ? html`<div>Loading....</div>` : html``}
 
-         <div class="b"><input type="checkbox" ?checked=${this._toEnableRequestMocking}>
-          <span>Enable request mocking | </span>
+         <div class="b">
           <button @click=${() => this._handleAddMock()}>+ Add Pattern</button>
           <button @click=${() => this._handleRemoveAllMocks()}>- Remove All Patterns</button>
         </div>
