@@ -11,11 +11,18 @@ const sendMessage = (messageObj) => new Promise(resolve => {
     });
 });
 
+// refactor: rename mockItemDb
 export const db = {
     put: data => sendMessage({ db1: 'put', data }),
     getAll: () => sendMessage({ db1: 'getAll' }),
     delete: key => sendMessage({ db1: 'delete', key }),
     clear: () => sendMessage({ db1: 'clear' }),
+};
+
+
+export const configDb = {
+    put: data => sendMessage({ configDb: 'put', data }),
+    getAll: () => sendMessage({ configDb: 'getAll' }),
 };
 
 

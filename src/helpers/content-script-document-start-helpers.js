@@ -2640,25 +2640,39 @@ export function overrideNetworkRequest() {
 
   function overrideNetworkRequestSetup() {
     const DB_GROUP_NAME = 'grasshopper-db';
+    const DB_CONFIG = 'grasshopper-config-db';
     const content = localStorage.getItem(DB_GROUP_NAME);
-    let db1 = content ? JSON.parse(content) : [];
+    const configContent = localStorage.getItem(DB_CONFIG);
 
-    XHRMock.teardown();
-    XHRMock.setup();
+    try {
+      let db1 = content ? JSON.parse(content) : [];
+      let configDb = configContent ? JSON.parse(configContent) : {};
 
-    db1.forEach(item => {
-      if (!item.requestEnable) {
+      if (!configDb.mockEnable) {
         return;
       }
-
-      XHRMock.get(item.requestUrl, {
-        status: Number(item.responseStatus),
-        body: JSON.stringify(item.responseBody),
+  
+      XHRMock.teardown();
+  
+      XHRMock.setup();
+  
+      db1.forEach(item => {
+        if (!item.requestEnable) {
+          return;
+        }
+  
+        XHRMock.get(item.requestUrl, {
+          status: Number(item.responseStatus),
+          body: JSON.stringify(item.responseBody),
+        });
       });
-    });
+  
+      XHRMock.use(proxy);
+      XHRMock.error(({ req, err }) => console.error('Request error', req.url()));
 
-    XHRMock.use(proxy);
-    XHRMock.error(({ req, err }) => console.error('Request error', req.url()));
+    } catch (err) {
+      console.error('error in overrideNetworkRequestSetup', err);
+    }
   }
 
   // initial setup
@@ -2669,5 +2683,6 @@ export function overrideNetworkRequest() {
   };
 }
 
+export const DB_CONFIG = 'grasshopper-config-db';
 export const DB_GROUP_NAME = 'grasshopper-db';
-export const saveToLocalStorage = (data) => localStorage.setItem(DB_GROUP_NAME, JSON.stringify(data));
+export const saveToLocalStorage = (data, dbTable = DB_GROUP_NAME) => localStorage.setItem(dbTable, JSON.stringify(data));

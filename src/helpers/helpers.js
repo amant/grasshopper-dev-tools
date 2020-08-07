@@ -1,3 +1,10 @@
+// refresh current main page
+const refreshCurrentPage = () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      chrome.tabs.reload(tabs[0].id);
+  });
+}
+
 const evaluate = (expression) => new Promise((resolve, reject) => {
   chrome.devtools.inspectedWindow.eval(expression, (result, exceptionInfo) => {
       if (exceptionInfo) {

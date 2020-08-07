@@ -1,8 +1,18 @@
-export function injectScript(fn) {
-  const source = `;( ${fn.toString()} )(window)`;
+export function injectScript(fnOrUrl) {
   const script = document.createElement('script');
-
-  script.textContent = source;
+  
+  if (typeof fnOrUrl === 'function') {
+    // set script content
+    const source = `;( ${fnOrUrl.toString()} )(window)`;
+    script.textContent = source;
+    document.documentElement.appendChild(script);
+  } else {
+    // set src attribute, this is async
+    script.type = 'text/javascript';
+    script.src = fnOrUrl;
+    document.documentElement.appendChild(script);
+  }
+  
   document.documentElement.appendChild(script);
   script.parentNode.removeChild(script);
 };

@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
 import * as dJSON from 'dirty-json';
-import { db } from '../helpers/request-mocking-db-helpers.js';
+import { get as _get } from 'lodash';
+import { db, configDb } from '../helpers/request-mocking-db-helpers.js';
+import { refreshPage } from '../helpers/helpers.js';
 
 const SHOW_ADD_FORM = 0;
 
@@ -31,6 +33,7 @@ class ComponentRequestMocking extends LitElement {
       _formIdToShow: { type: Number },
       _showSaving: { type: Boolean },
       _showLoading: { type: Boolean },
+      _enableMock: { type: Boolean },
     }
   }
 
@@ -41,7 +44,7 @@ class ComponentRequestMocking extends LitElement {
     this._formIdToShow = null;
     this._showSaving = false;
     this._showLoading = false;
-    this._setMockLists()
+    this._enableMock = false;
   }
 
   _templateForm({
@@ -67,6 +70,11 @@ class ComponentRequestMocking extends LitElement {
     `;
   }
 
+  firstUpdated() {
+    this._setConfigLists();
+    this._setMockLists();
+  }
+
   // TODO: add spinner icon for saving and loading
   render() {
     return html`
@@ -74,8 +82,9 @@ class ComponentRequestMocking extends LitElement {
         ${this._showLoading ? html`<div>Loading....</div>` : html``}
 
          <div class="b">
-          <button @click=${() => this._handleAddMock()}>+ Add Pattern</button>
-          <button @click=${() => this._handleRemoveAllMocks()}>- Remove All Patterns</button>
+          <input type="checkbox" ?checked=${this._enableMock} id="mockEnable" @click=${(e) => this._handleEnableMock(e) }> : Enable Mocking |
+          <button @click=${() => this._handleAddMock()}>+ Add</button>
+          <button @click=${() => this._handleRemoveAllMocks()}>- Remove All</button>
         </div>
 
         ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html``}
@@ -140,8 +149,6 @@ class ComponentRequestMocking extends LitElement {
 
   // TODO: refactor to make code readable
   _handleSave() {
-    console.log('hello world');
-
     const id = this.shadowRoot.querySelector('#requestId').value;
     const requestEnable = this.shadowRoot.querySelector('#requestEnable').checked;
     const requestUrl = this.shadowRoot.querySelector('#requestUrl').value;
@@ -210,7 +217,29 @@ class ComponentRequestMocking extends LitElement {
   async _setMockLists() {
     const data = await db.getAll();
     this._mockLists = data;
-    console.log('mockLists', this._mockLists);
+    // console.log('mockLists', this._mockLists);
+  }
+
+  async _setConfigLists() {
+    try {
+      console.log('before');
+      const data = await configDb.getAll();
+      console.log('configDB', data);
+      this._enableMock = _get(data, 'mockEnable');
+    } catch(e) {
+      console.log('error', e);
+    }
+  }
+
+  _handleEnableMock(event) {
+    configDb.put({ mockEnable: event.target.checked })
+      .then(() => {
+        this._setConfigLists();
+        refreshCurrentPage();
+      })
+      .catch(err => {
+        console.error('error saving mock enable', err);
+      });
   }
 }
 
