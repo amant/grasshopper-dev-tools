@@ -13,7 +13,6 @@ let db1 = content ? JSON.parse(content) : [];
 
 const configContent = localStorage.getItem(DB_CONFIG);
 let configDb = configContent ? JSON.parse(configContent) : {};
-console.log('configDB', configDb);
 
 const putData = (request) => {
     const data = request.data;

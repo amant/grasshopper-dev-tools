@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import * as dJSON from 'dirty-json';
 import { get as _get } from 'lodash';
 import { db, configDb } from '../helpers/request-mocking-db-helpers.js';
-import { refreshPage } from '../helpers/helpers.js';
+import { refreshCurrentPage } from '../helpers/helpers.js';
 
 const SHOW_ADD_FORM = 0;
 
