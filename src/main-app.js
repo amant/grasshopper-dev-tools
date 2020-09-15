@@ -51,17 +51,17 @@ class MainApp extends LitElement {
         height: 100vh;
         min-height: 500px;
       }
-      
+
       .app-title {
         color: var(--title-text-color);
       }
-      
-      .property-title { 
+
+      .property-title {
         margin-right: 8px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: var(--dom-tag-name-color); 
+        color: var(--dom-tag-name-color);
       }
     `,
       mainAppStyle,
@@ -135,7 +135,9 @@ class MainApp extends LitElement {
     // enrich with node reference and element selector path
     componentsWalk([enrichWithRef, enrichWithSelector, convertNodeNameToLowerCase])(components);
 
+    // reset components and properties lists
     this._componentsFilter = this._components = components;
+    this._componentPropertiesFilter = [];
 
     buildComponentsSearchIndex(this._components);
 
@@ -148,7 +150,7 @@ class MainApp extends LitElement {
 
   get _mainContentTemplate() {
     if (this._mainContent === COMPONENT_CHART) {
-     return html`<component-tree-chart 
+     return html`<component-tree-chart
                   .data=${this._components}
                   @highlight-component=${(event) => highlightComponent(event.detail.selector)}
                   @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
@@ -177,7 +179,7 @@ class MainApp extends LitElement {
           <div class="component-tree-container">
             ${!this._components ?
               html`<span>Loading...</span>` :
-              html`<component-tree 
+              html`<component-tree
                       data=${JSON.stringify(this._componentsFilter)}
                       @show-properties=${this._handleShowProperties}
                       @show-source=${(event) => showSource(event.detail.nodeName)}
@@ -187,18 +189,18 @@ class MainApp extends LitElement {
                      ></component-tree>`
               }
           </div>
-        </div>              
+        </div>
         <!-- End left-pane -->
-            
-        <!-- Start right-pane -->  
+
+        <!-- Start right-pane -->
         <div slot="right-pane" class="header">
           <div class="action-header">
-            ${this._showProperty ? html`<div class="property-title"><${this._selectedComponentName}> :</div>` : ''}                      
-            <input 
+            ${this._showProperty ? html`<div class="property-title"><${this._selectedComponentName}> :</div>` : ''}
+            <input
               id="inputFilterProperties"
-              type="search" 
-              placeholder="Filter properties" 
-              class="search" 
+              type="search"
+              placeholder="Filter properties"
+              class="search"
               @input=${(event) => this._debouncedPropertyFilter(event.target.value)}
             >
           </div>
@@ -206,8 +208,8 @@ class MainApp extends LitElement {
         <div slot="right-pane" class="scroll">
           ${this._showProperty ?
             html`<section class="property-tree-container">
-                   <property-tree 
-                    .data=${this._componentPropertiesFilter} 
+                   <property-tree
+                    .data=${this._componentPropertiesFilter}
                     @change-property=${(event) => setProperty({
                       querySelector: this._currentQuerySelector,
                       property: event.detail.property,
@@ -226,13 +228,13 @@ class MainApp extends LitElement {
     const selectedBtn = value => this._mainContent === value ? 'selected' : '';
 
     return html`
-      <button type="button" class="btn ${selectedBtn(COMPONENT_TREE)}" 
+      <button type="button" class="btn ${selectedBtn(COMPONENT_TREE)}"
         @click=${() => this._mainContent = COMPONENT_TREE }
       >Tree</button>
-      <button type="button" class="btn ${selectedBtn(COMPONENT_CHART)}" 
+      <button type="button" class="btn ${selectedBtn(COMPONENT_CHART)}"
         @click=${() => this._mainContent = COMPONENT_CHART }
       >Chart</button>
-      <button type="button" class="btn ${selectedBtn(COMPONENT_REQUEST_MOCKING)}" 
+      <button type="button" class="btn ${selectedBtn(COMPONENT_REQUEST_MOCKING)}"
         @click=${() => this._mainContent = COMPONENT_REQUEST_MOCKING }
       >Request mocking</button>
     `;

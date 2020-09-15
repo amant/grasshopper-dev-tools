@@ -13,29 +13,29 @@ class PropertyTree extends LitElement {
       .property {
         padding: 0px;
       }
-      
+
       .property-list {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
       }
-      
+
       .property-name {
         color: var(--component-property-name-color);
       }
-      
+
       .property-value {
         margin-left: 4px;
         width: 100%
       }
-      
+
       input {
         font-size: 14px;
         background-color: var(--app-bg-color);
         color: var(--app-text-color);
         outline: none;
         border: 1px solid var(--divider-color);
-        width: 100%;                
+        width: 100%;
       }
     `];
   }
@@ -54,7 +54,7 @@ class PropertyTree extends LitElement {
     <ul class="property">${Object.keys(this.data).map(key => html`
       <li class="property-list">
         <div class="property-name">${key}:</div>
-        <div class="property-value">${this._getValue(key, this.data[key])}</div>        
+        <div class="property-value">${this._getValue(key, this.data[key])}</div>
       </li>`)}
     </ul>`;
   };

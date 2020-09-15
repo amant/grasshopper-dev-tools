@@ -9,12 +9,12 @@ class ComponentTree extends LitElement {
         display: flex;
         justify-content: flex-end;
       }
-      
+
       .action .item {
         margin: 0 4px;
         height: 18px;
       }
-      
+
       ul, #tree {
         list-style-type: none;
       }
@@ -23,23 +23,23 @@ class ComponentTree extends LitElement {
         margin: 0;
         padding: 0;
       }
-      
+
       #tree li {
         line-height: 18px;
       }
-      
+
       .caret {
         cursor: pointer;
         user-select: none; /* Prevent text selection */
-        font-size: 9px;        
+        font-size: 9px;
         position: relative;
-        top: -2px;    
+        top: -2px;
       }
 
       .caret::before {
         content: "\\25B6";
         color: var(--item-tree-caret-color);
-        display: inline-block;                
+        display: inline-block;
       }
 
       .caret-down::before {
@@ -57,11 +57,11 @@ class ComponentTree extends LitElement {
       .shadow {
         border: 1px dotted var(--item-is-shadow-element-color);
       }
-      
+
       .selected-element {
         background-color: var(--item-selection-inactive-bg-color);
       }
-      
+
       .small-button {
         border: 1px solid black;
         background-color: grey;
@@ -71,24 +71,24 @@ class ComponentTree extends LitElement {
         cursor: pointer;
         padding: 0 2px;
       }
-      
+
       .small-button:hover {
         background-color: black;
       }
-      
+
       .dom-tag-name:hover {
         background-color: var(--item-selection-bg-color);
         cursor: pointer;
       }
-      
+
       .dom-attribute-name {
         color: var(--dom-attribute-name-color);
       }
-      
+
       .dom-attribute-value {
         color: var(--dom-attribute-value-color);
       }
-      
+
       .dom-tag-name {
         color: var(--dom-tag-name-color);
         font-size: 16px;
@@ -214,16 +214,16 @@ class ComponentTree extends LitElement {
       const nameAttribute = el.name && nodeName === 'slot' ? attributeTemplate('name', el.name) : '';
       const attributes = !this.toShowCompactView ? html`${idAttribute}${nameAttribute}` : '';
 
-      return html`<span 
+      return html`<span
                     class="dom-tag-name ${classMap(cssClassName)}"
                     title="${el.inShadow ? 'inside shadowroot' : ''}"
                     @click="${(event) => this._handleClick(event, el)}"
                     @mouseover="${(event) => this._mouseOver(event, el)}"
                     @mouseout="${(event) => this._mouseOut(event, el)}"
-                  ><${nodeName}${attributes}></span> 
+                  ><${nodeName}${attributes}></span>
                 ${(isCustomEl && !this.toShowCompactView)
-          ? html`<span 
-                              class="small-button" 
+          ? html`<span
+                              class="small-button"
                               @click=${(e) => this._handleCustomElementClick(e, nodeName)}
                            >custom</span>`
           : ''
@@ -290,17 +290,17 @@ class ComponentTree extends LitElement {
               <button class="item" @click=${this._expandAll}>Expand</button>
               <button class="item" @click=${this._collapseAll}>Collapse</button>
               <span class="item">
-                <input 
+                <input
                   type="checkbox"
-                  id="toggleCompactView" 
-                  @click=${() => this.toShowCompactView = !this.toShowCompactView} 
+                  id="toggleCompactView"
+                  @click=${() => this.toShowCompactView = !this.toShowCompactView}
                   ?check=${this.toShowCompactView}
-                >         
+                >
                 <label for="toggleCompactView">Compact View</label>
               </span>
-              <button class="item" @click=${this._refresh}>Refresh</button>              
+              <button class="item" @click=${this._refresh}>Refresh</button>
             </div>
-            
+
             ${this._componentStructureTemplate}
         `;
   }
