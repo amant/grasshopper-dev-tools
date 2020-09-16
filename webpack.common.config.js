@@ -4,3 +4,12 @@ exports.entry = {
   'content-script': './src/content-script.js',
   'content-script-document-start': './src/content-script-document-start.js',
 };
+
+exports.module = {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['css-loader'],
+      },
+    ],
+};

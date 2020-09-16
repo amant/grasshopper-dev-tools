@@ -1,12 +1,13 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
-const { entry } = require('./webpack.common.config');
+const { entry, module: webpackModule } = require('./webpack.common.config');
 
 const distDirPath = path.join(__dirname, 'dist');
 
 module.exports = {
   mode: 'production',
   entry,
+  module: webpackModule,
   output: {
     path: path.join(distDirPath, 'build'),
     filename: '[name].js'
