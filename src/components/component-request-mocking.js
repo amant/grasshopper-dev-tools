@@ -4,10 +4,8 @@ import { get as _get } from 'lodash';
 import CodeMirror from 'codemirror/lib/codemirror.js';
 import { db, configDb } from '../helpers/request-mocking-db-helpers.js';
 import { refreshCurrentPage } from '../helpers/helpers.js';
-import {codeMirrorStyle, codeMirrorTheme} from '../helpers/codemirror-helpers.js';
-
-// import 'codemirror/lib/codemirror.css';
-// import 'codemirror/theme/eclipse.css';
+import { codeMirrorStyle, codeMirrorTheme } from '../helpers/codemirror-helpers.js';
+import { fontAwesomeStyle, fontAwesomeSolidStyle } from '../helpers/fontawesome-helpers.js';
 
 import 'codemirror/mode/javascript/javascript.js';
 
@@ -23,11 +21,15 @@ const defaultFormValues = {
 
 class ComponentRequestMocking extends LitElement {
   static get styles() {
-    return [codeMirrorStyle, codeMirrorTheme, css`
+    return [codeMirrorStyle, codeMirrorTheme, fontAwesomeStyle, fontAwesomeSolidStyle, css`
       .response-body {
         max-height: 150px;
-        width: 100%;
+        width: 98%;
         overflow: scroll;
+      }
+
+      .mock-list .action {
+        margin-top: 12px;
       }
 
       #requestUrl {
@@ -158,11 +160,13 @@ class ComponentRequestMocking extends LitElement {
                       <div>
                         <input type="checkbox" ?checked=${list.requestEnable} @click=${(e) => this._handleRequestEnableClick(list.id, e)}> : Enable request mocking
                       </div>
-                      <div>Id: ${list.id}</div>
                       <div>URL: ${list.requestUrl}</div>
                       <div>Status: ${list.responseStatus}</div>
                       <div class="response-body">Body: ${JSON.stringify(list.responseBody)}</div>
-                      <div><button @click=${() => this._handleEditMock(list.id)}>Edit</button> | <a href="#nolink" @click=${() => this._handleDelete(list.id)}>Delete</a></div>
+                      <div class="action">
+                        <button @click=${() => this._handleEditMock(list.id)}>Edit</button> | 
+                        <a href="#nolink" @click=${() => this._handleDelete(list.id)}>Delete</a>
+                      </div>
                     </div>
                   `}
                 </li>

@@ -24,5 +24,8 @@
     "128": "./assets/images/grass-hopper-logo-128.png",
     "48": "./assets/images/grass-hopper-logo-48.png",
     "16": "./assets/images/grass-hopper-logo-16.png"
-  }
+  },
+  "web_accessible_resources": [
+    "./assets/fonts/*.woff2"
+  ]
 }

@@ -1,11 +1,6 @@
 import { css } from 'lit-element';
 
 export const mainAppStyle = css`
-  @font-face {
-      font-family: 'INGMe';
-      src: url('./assets/INGMeWeb-Regular.woff2') format('woff2');
-  }
-  
   .app {
       font-family: 'INGMe', sans-serif;
       width: 100%;
