@@ -1,10 +1,14 @@
 import { LitElement, html, css } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { get as _get } from 'lodash';
+import { fontAwesomeStyle, fontAwesomeSolidStyle } from '../helpers/fontawesome-helpers.js';
 
 class ComponentTree extends LitElement {
   static get styles() {
-    return css`
+    return [
+      fontAwesomeStyle,
+      fontAwesomeSolidStyle,
+      css`
       .action {
         display: flex;
         justify-content: flex-end;
@@ -91,9 +95,9 @@ class ComponentTree extends LitElement {
 
       .dom-tag-name {
         color: var(--dom-tag-name-color);
-        font-size: 16px;
+        font-size: 12px;
       }
-  `;
+  `];
   }
 
   static get properties() {
@@ -287,8 +291,8 @@ class ComponentTree extends LitElement {
   render() {
     return html`
             <div class="action">
-              <button class="item" @click=${this._expandAll}>Expand</button>
-              <button class="item" @click=${this._collapseAll}>Collapse</button>
+              <button class="item" title="Expand" @click=${this._expandAll}><i class="fas fa-expand"></i></button>
+              <button class="item" title="Collapse" @click=${this._collapseAll}><i class="fas fa-compress-arrows-alt"></i></button>
               <span class="item">
                 <input
                   type="checkbox"
@@ -298,7 +302,7 @@ class ComponentTree extends LitElement {
                 >
                 <label for="toggleCompactView">Compact View</label>
               </span>
-              <button class="item" @click=${this._refresh}>Refresh</button>
+              <button class="item" title="Refresh" @click=${this._refresh}><i class="fas fa-redo"></i></button>
             </div>
 
             ${this._componentStructureTemplate}
