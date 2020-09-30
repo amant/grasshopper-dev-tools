@@ -63,7 +63,7 @@ class ComponentRequestMocking extends LitElement {
       .small-btn {
         width: 18px;
         height: 18px;
-        padding: 0px 2px;
+        padding: 0px;
         font-size: 12px;
         color: var(--app-text-color);
       }
@@ -197,7 +197,7 @@ class ComponentRequestMocking extends LitElement {
           </div>
           <span class="divider">|</span>&nbsp;&nbsp;
           <button class="small-btn" title="Add a mock" @click=${() => this._handleAddMock()}><i class="fas fa-plus"></i></button>&nbsp;&nbsp;
-          <button class="small-btn" title="Remove all mock(s)" @click=${() => this._handleRemoveAllMocks()}><i class="fas fa-minus"></i></button>
+          <button class="small-btn" title="Remove all mock(s)" @click=${() => this._handleRemoveAllMocks()}><i class="fas fa-ban"></i></button>
         </div>
 
         ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html``}

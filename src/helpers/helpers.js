@@ -38,6 +38,14 @@ export const showSource = (nodeName) => {
   return evaluate(`(${_showSource.toString()}('${nodeName}'))`);
 };
 
+export const showElement = (querySelector) => {
+  function _showElement(query) {
+    inspect(document.querySelector(query));
+  }
+
+  return evaluate(`(${_showElement.toString()}('${querySelector}'))`);
+};
+
 // Add a overlay ontop of a component's DOM
 export const highlightComponent = (querySelector) =>
   evaluate(`__GRASSHOPPER_DEVTOOLS__.highlightComponent('${querySelector}')`);

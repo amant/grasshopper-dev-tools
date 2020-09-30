@@ -97,13 +97,22 @@ class ComponentTree extends LitElement {
         color: var(--dom-tag-name-color);
         font-size: 12px;
       }
+
+      .inspect-element {
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+        color: var(--app-text-color);
+        cursor: pointer;
+      }
   `];
   }
 
   static get properties() {
     return {
       data: { type: String },
-      toShowCompactView: { type: Boolean }
+      toShowCompactView: { type: Boolean },
+      _activeItem: { type: String },
     };
   }
 
@@ -171,12 +180,21 @@ class ComponentTree extends LitElement {
       bubbles: true,
       composed: true
     }));
+
+    this._activeItem = el._selector;
   }
 
   _handleCustomElementClick(event, nodeName) {
-    // emit event to parent 'show-properties'
     this.dispatchEvent(new CustomEvent('show-source', {
       detail: { nodeName },
+      bubbles: true,
+      composed: true
+    }));
+  }
+
+  _handleInspectElementClick(event, el) {
+    this.dispatchEvent(new CustomEvent('show-element', {
+      detail: { selector: el._selector },
       bubbles: true,
       composed: true
     }));
@@ -217,6 +235,7 @@ class ComponentTree extends LitElement {
       const idAttribute = isCustomEl && el.idName ? attributeTemplate('id', el.idName) : '';
       const nameAttribute = el.name && nodeName === 'slot' ? attributeTemplate('name', el.name) : '';
       const attributes = !this.toShowCompactView ? html`${idAttribute}${nameAttribute}` : '';
+      const uniqueElId = el._selector;
 
       return html`<span
                     class="dom-tag-name ${classMap(cssClassName)}"
@@ -225,13 +244,19 @@ class ComponentTree extends LitElement {
                     @mouseover="${(event) => this._mouseOver(event, el)}"
                     @mouseout="${(event) => this._mouseOut(event, el)}"
                   ><${nodeName}${attributes}></span>
+
                 ${(isCustomEl && !this.toShowCompactView)
-          ? html`<span
-                              class="small-button"
-                              @click=${(e) => this._handleCustomElementClick(e, nodeName)}
-                           >custom</span>`
-          : ''
-        }
+                  ? html`<span
+                            class="small-button"
+                            @click=${(e) => this._handleCustomElementClick(e, nodeName)}
+                          >custom</span>`
+                  : ''
+                }
+
+                ${ (uniqueElId === this._activeItem) ? html`
+                  <span title="Inspect element" class="fas fa-crosshairs inspect-element" @click=${e => this._handleInspectElementClick(e, el) }></span>
+                ` : ''
+                }
               `;
     };
 

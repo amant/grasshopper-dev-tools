@@ -4,6 +4,7 @@ import {
   getAllComponents,
   getComponentProperties,
   showSource,
+  showElement,
   highlightComponent,
   unHighlightComponent,
   setProperty,
@@ -183,6 +184,7 @@ class MainApp extends LitElement {
                       data=${JSON.stringify(this._componentsFilter)}
                       @show-properties=${this._handleShowProperties}
                       @show-source=${(event) => showSource(event.detail.nodeName)}
+                      @show-element=${(event) => showElement(event.detail.selector)}
                       @highlight-component=${(event) => highlightComponent(event.detail.selector)}
                       @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
                       @refresh-component=${this._refreshComponent}
