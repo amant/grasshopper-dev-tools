@@ -65,7 +65,6 @@ class ComponentRequestMocking extends LitElement {
         height: 18px;
         padding: 0px;
         font-size: 12px;
-        color: var(--app-text-color);
       }
 
       .divider {
@@ -102,6 +101,11 @@ class ComponentRequestMocking extends LitElement {
         list-style: none;
         margin: 0;
         padding: 8px;
+      }
+
+      .delete-btn,
+      .cancel-btn {
+        color: var(--app-text-color);
       }
     `];
   }
@@ -156,10 +160,10 @@ class ComponentRequestMocking extends LitElement {
             <div><textarea id="responseBody">${JSON.stringify(responseBody, null, 2)}</textarea></div>
           </div>
           <div>
-            <button type="button" @click=${() => this._handleSave()}><i class="fas fa-save"></i> Save</button>&nbsp;&nbsp;
+            <button title="Save" type="button" id="save-btn" @click=${() => this._handleSave()}><i class="fas fa-save"></i> Save</button>&nbsp;&nbsp;
             <span class="divider">|</span>&nbsp;&nbsp;
-            <a href="#nolink" @click=${this._handleCancel}>Cancel</a>
-          </div>
+            <a title="Cancel" class="cancel-btn" href="#nolink" @click=${this._handleCancel}>Cancel</a>
+          </div
         </div>
       </form>
     `;
@@ -232,9 +236,9 @@ class ComponentRequestMocking extends LitElement {
                         <div class="response-body">${JSON.stringify(list.responseBody)}</div>
                       </div>  
                       <div class="action">
-                        <button @click=${() => this._handleEditMock(list.id)}><i class="fas fa-edit"></i> Edit</button>&nbsp;&nbsp;
+                        <button title="Edit" @click=${() => this._handleEditMock(list.id)}><i class="fas fa-edit"></i> Edit</button>&nbsp;&nbsp;
                         <span class="divider">|</span>&nbsp;&nbsp;
-                        <a href="#nolink" @click=${() => this._handleDelete(list.id)}>Delete</a>
+                        <a title="Delete" class="delete-btn" href="#nolink" @click=${() => this._handleDelete(list.id)}>Delete</a>
                       </div>
                     </div>
                   `}
