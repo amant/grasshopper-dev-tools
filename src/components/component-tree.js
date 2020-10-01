@@ -157,8 +157,7 @@ class ComponentTree extends LitElement {
   }
 
   _refresh() {
-    // emit event to parent 'show-properties'
-    this.dispatchEvent(new CustomEvent('refresh-component', {
+    this.dispatchEvent(new CustomEvent('refresh', {
       bubbles: true,
       composed: true
     }));
@@ -327,7 +326,7 @@ class ComponentTree extends LitElement {
                 >
                 <label for="toggleCompactView">Compact View</label>
               </span>
-              <button class="item" title="Refresh" @click=${this._refresh}><i class="fas fa-redo"></i></button>
+              <button class="item" title="Refresh" @click=${() => this._refresh()}><i class="fas fa-redo"></i></button>
             </div>
 
             ${this._componentStructureTemplate}

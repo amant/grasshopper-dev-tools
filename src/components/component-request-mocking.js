@@ -32,6 +32,7 @@ class ComponentRequestMocking extends LitElement {
         display: flex;
         flex-flow: column;
         gap: 8px;
+        margin-bottom: 8px;
       }
 
       .mock-list .action {
@@ -103,9 +104,22 @@ class ComponentRequestMocking extends LitElement {
         padding: 8px;
       }
 
+      .list {
+        margin-top: 8px;
+        border-bottom: 1px solid var(--divider-color);
+      }
+
+      .list:first-child {
+        margin-top: 0;
+      }
+
       .delete-btn,
       .cancel-btn {
         color: var(--app-text-color);
+      }
+
+      .hidden {
+        display: none;
       }
     `];
   }
@@ -133,6 +147,16 @@ class ComponentRequestMocking extends LitElement {
     this._editor = null;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+      if (changeInfo.status === 'complete') {
+        this._refresh();
+      }
+    });
+  }
+
   _templateForm({
     id = '',
     requestEnable = true,
@@ -151,7 +175,7 @@ class ComponentRequestMocking extends LitElement {
             <div>URL: </div>
             <div><input type="text" id="requestUrl" value=${requestUrl}></div>
           </div>
-          <div>
+          <div class="hidden">
             <div>Response Status: </div>
             <div><input type="text" size="12" id="responseStatus" value=${responseStatus}></div>
           </div>
@@ -167,6 +191,10 @@ class ComponentRequestMocking extends LitElement {
         </div>
       </form>
     `;
+  }
+
+  _refresh() {
+    this._setMockLists();
   }
 
   firstUpdated() {
@@ -196,12 +224,13 @@ class ComponentRequestMocking extends LitElement {
          <div class="mock-menu">
          <div class="mock-enable">
           <label>
-            <input class="mock-enable-input" type="checkbox" ?checked=${this._enableMock} id="mockEnable" @click=${(e) => this._handleEnableMock(e) }> Enable Mocking
+            <input class="mock-enable-input" type="checkbox" ?checked=${this._enableMock} id="mockEnable" @click=${(e) => this._handleEnableMock(e) }> Enable All Mocking
           </label>&nbsp;
           </div>
           <span class="divider">|</span>&nbsp;&nbsp;
           <button class="small-btn" title="Add a mock" @click=${() => this._handleAddMock()}><i class="fas fa-plus"></i></button>&nbsp;&nbsp;
           <button class="small-btn" title="Remove all mock(s)" @click=${() => this._handleRemoveAllMocks()}><i class="fas fa-ban"></i></button>
+          <button class="small-btn" title="Refresh" @click=${() => this._refresh()}><i class="fas fa-redo"></i></button>
         </div>
 
         ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html``}
@@ -221,13 +250,12 @@ class ComponentRequestMocking extends LitElement {
                   ${this._formIdToShow === list.id ? html`` : html`
                     <div class="mock-list">
                       <div>
-                        <label><input type="checkbox" ?checked=${list.requestEnable} @click=${(e) => this._handleRequestEnableClick(list.id, e)}> Enable request mocking</label>
-                      </div>
-                      <div>
-                        <div>URL:</div> 
+                        <div>
+                          <label><input type="checkbox" ?checked=${list.requestEnable} @click=${(e) => this._handleRequestEnableClick(list.id, e)}> URL:</label>
+                        </div> 
                         <div>${list.requestUrl}</div>
                       </div>
-                      <div>
+                      <div class="hidden">
                         <div>Response Status:</div>
                         <div>${list.responseStatus}</div>
                       </div>
@@ -310,8 +338,6 @@ class ComponentRequestMocking extends LitElement {
       data.id = Number(id);
     }
 
-    console.log('data', data);
-
     db.put(data)
       .then(result => {
         console.log('saved to index db', result);
@@ -335,7 +361,6 @@ class ComponentRequestMocking extends LitElement {
 
     db.put(data)
       .then(result => {
-        console.log('saved', result);
         this._setMockLists();
       })
       .catch(err => {
@@ -350,9 +375,7 @@ class ComponentRequestMocking extends LitElement {
 
   async _setConfigLists() {
     try {
-      console.log('before');
       const data = await configDb.getAll();
-      console.log('configDB', data);
       this._enableMock = _get(data, 'mockEnable');
     } catch(e) {
       console.log('error', e);

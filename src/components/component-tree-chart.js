@@ -1,6 +1,12 @@
 import { LitElement, html, css } from 'lit-element';
 import { renderChart } from '../helpers/component-tree-chart-helpers';
 
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+  }
+}
+
 class ComponentTreeChart extends LitElement {
   static get styles() {
     return [css`
@@ -51,19 +57,28 @@ class ComponentTreeChart extends LitElement {
     this.margin = margin;
   }
 
-  firstUpdated() {
-    // TODO: get ride of need to add body node to display tree hierarchy
-    renderChart({
-      treeData: { nodeName: 'body', children: this.data },
-      margin: this.margin,
-      width: this.width,
-      height: this.height,
-      parentElement: this.shadowRoot.querySelector('#chart')
-    });
+  updated(changed) {
+    if (changed.has('data')) {
+      console.log('yo');
+
+      // clean up
+      removeAllChildNodes(this.shadowRoot.querySelector('#chart'));
+
+      // d3 chart
+      renderChart({
+        treeData: { nodeName: 'body', children: this.data },
+        margin: this.margin,
+        width: this.width,
+        height: this.height,
+        parentElement: this.shadowRoot.querySelector('#chart'),
+      });
+    }
   }
 
   render() {
-    return html`<div id="chart"></div>`
+    return html`
+      <div id="chart"></div>
+    `;
   }
 }
 

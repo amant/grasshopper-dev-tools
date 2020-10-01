@@ -41,7 +41,8 @@ class MainApp extends LitElement {
       _showProperty: { type: Boolean },
       _selectedComponentName: { type: String },
       _view: { type: String },
-      _mainContent: { type: String }
+      _mainContent: { type: String },
+      _components: { type: Object },
     };
   }
 
@@ -74,7 +75,8 @@ class MainApp extends LitElement {
     this._currentQuerySelector = null;
     this._components = null;
     this._componentProperties = null;
-    this._mainContent = COMPONENT_REQUEST_MOCKING;
+    // this._mainContent = COMPONENT_REQUEST_MOCKING;
+    this._mainContent = COMPONENT_TREE;
 
     this._debouncedComponentFilter = _debounce(async (value) => {
       if (!value) {
@@ -113,7 +115,8 @@ class MainApp extends LitElement {
     // listen for changes to the tab
     chrome.tabs.onUpdated.addListener((_, changeInfo) => {
       if (changeInfo.status === 'complete') {
-        this._refreshComponent();
+        // timeout for the DOM to be ready
+        setTimeout(() => this._refreshComponent(), 200);
       }
     });
 
@@ -137,7 +140,8 @@ class MainApp extends LitElement {
     componentsWalk([enrichWithRef, enrichWithSelector, convertNodeNameToLowerCase])(components);
 
     // reset components and properties lists
-    this._componentsFilter = this._components = components;
+    this._componentsFilter = components;
+    this._components = components;
     this._componentPropertiesFilter = [];
 
     buildComponentsSearchIndex(this._components);
@@ -187,7 +191,7 @@ class MainApp extends LitElement {
                       @show-element=${(event) => showElement(event.detail.selector)}
                       @highlight-component=${(event) => highlightComponent(event.detail.selector)}
                       @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
-                      @refresh-component=${this._refreshComponent}
+                      @refresh=${() => this._refreshComponent()}
                      ></component-tree>`
               }
           </div>
