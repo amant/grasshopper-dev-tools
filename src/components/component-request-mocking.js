@@ -283,9 +283,9 @@ class ComponentRequestMocking extends LitElement {
     const responseBodyText = this._editor ? this._editor.getValue() : this.shadowRoot.querySelector('#responseBody').value;
 
     const responseStatus = this.shadowRoot.querySelector('#responseStatus').value;
-    const requestFormFieldSet = this.shadowRoot.querySelector('#requestForm > fieldset');
+    const saveBtn = this.shadowRoot.querySelector('#save-btn');
 
-    requestFormFieldSet.disabled = true;
+    saveBtn.disabled = true;
     this._showSaving = true;
 
     let responseBody;
@@ -310,7 +310,7 @@ class ComponentRequestMocking extends LitElement {
       data.id = Number(id);
     }
 
-    console.log('this is the data', data);
+    console.log('data', data);
 
     db.put(data)
       .then(result => {
@@ -324,7 +324,7 @@ class ComponentRequestMocking extends LitElement {
       })
       .finally(() => {
         this._showSaving = false;
-        requestFormFieldSet.disabled = false;
+        saveBtn.disabled = false;
       });
   }
 
@@ -346,7 +346,6 @@ class ComponentRequestMocking extends LitElement {
   async _setMockLists() {
     const data = await db.getAll();
     this._mockLists = data;
-    // console.log('mockLists', this._mockLists);
   }
 
   async _setConfigLists() {
