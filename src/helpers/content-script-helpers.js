@@ -167,6 +167,7 @@ export function installHelpers(target) {
   Object.defineProperty(target, '__GRASSHOPPER_DEVTOOLS__', {
     get() {
       return {
+        getElement,
         highlightComponent,
         unHighlightComponent,
         getAllComponents,

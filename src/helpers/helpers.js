@@ -40,7 +40,7 @@ export const showSource = (nodeName) => {
 
 export const showElement = (querySelector) => {
   function _showElement(query) {
-    inspect(document.querySelector(query));
+    inspect(__GRASSHOPPER_DEVTOOLS__.getElement(query));
   }
 
   return evaluate(`(${_showElement.toString()}('${querySelector}'))`);
