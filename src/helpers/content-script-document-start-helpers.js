@@ -3,12 +3,6 @@ export function overrideNetworkRequest() {
   const DB_GROUP_NAME = 'grasshopper-db';
   const open = XMLHttpRequest.prototype.open;
 
-  const resolveUrl = (url) => {
-    var anchorElement = document.createElement('a');
-    anchorElement.href = url;
-    return anchorElement.href;
-  }
-
   const getDb = () => {
     const content = localStorage.getItem(DB_GROUP_NAME);
     let parseContent;
@@ -52,8 +46,15 @@ export function overrideNetworkRequest() {
     XMLHttpRequest.prototype.open = function (__, url) {
       const callback = this.onreadystatechange;
       const that = this;
-      const resolvedUrl = resolveUrl(url);
-      const foundItem = db1.find(item => item.requestEnable && resolvedUrl.indexOf(item.requestUrl) >= 0);
+      const foundItem = db1.find(item => {
+        // regexp escape
+        const escapedUrlString = item.requestUrl.replace(/[.+^${}()|[\]\\]/g, '\\$&');
+
+        // support wildcard
+        const reg = new RegExp(`^${escapedUrlString.replace(/\*/g,'.*')}$`, 'i');
+
+        return item.requestEnable && reg.test(url);
+      });
 
       this.onreadystatechange = function() {
         if (foundItem) {

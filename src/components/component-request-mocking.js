@@ -172,7 +172,7 @@ class ComponentRequestMocking extends LitElement {
             <label><input class="mock-enable-input" type="checkbox" ?checked=${requestEnable} id="requestEnable"> : Enable request mock</label>
           </div>
           <div>
-            <div>URL: </div>
+            <div>URL (use * for wildcard): </div>
             <div><input type="text" id="requestUrl" value=${requestUrl}></div>
           </div>
           <div class="hidden">
