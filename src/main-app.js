@@ -116,7 +116,7 @@ class MainApp extends LitElement {
     chrome.tabs.onUpdated.addListener((_, changeInfo) => {
       if (changeInfo.status === 'complete') {
         // timeout for the DOM to be ready
-        setTimeout(() => this._refreshComponent(), 200);
+        setTimeout(() => this._refreshComponent(), 1000);
       }
     });
 
