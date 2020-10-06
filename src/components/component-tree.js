@@ -19,6 +19,10 @@ class ComponentTree extends LitElement {
         height: 18px;
       }
 
+      .divider {
+        color: var(--divider-color);
+      }
+
       ul, #tree {
         list-style-type: none;
       }
@@ -315,8 +319,6 @@ class ComponentTree extends LitElement {
   render() {
     return html`
             <div class="action">
-              <button class="item" title="Expand" @click=${this._expandAll}><i class="fas fa-expand"></i></button>
-              <button class="item" title="Collapse" @click=${this._collapseAll}><i class="fas fa-compress-arrows-alt"></i></button>
               <span class="item">
                 <input
                   type="checkbox"
@@ -326,6 +328,9 @@ class ComponentTree extends LitElement {
                 >
                 <label for="toggleCompactView">Compact View</label>
               </span>
+              <span class="divider">|<span>
+              <button class="item" title="Expand" @click=${this._expandAll}><i class="fas fa-expand"></i></button>
+              <button class="item" title="Collapse" @click=${this._collapseAll}><i class="fas fa-compress-arrows-alt"></i></button>
               <button class="item" title="Refresh" @click=${() => this._refresh()}><i class="fas fa-redo"></i></button>
             </div>
 
