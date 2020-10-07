@@ -13,12 +13,14 @@ module.exports = {
     filename: '[name].js'
   },
   plugins: [
-    new CopyPlugin([
-      'manifest.json',
-      'devtools.html',
-      'panel.html',
-      'assets/**/*'
-    ].map(srcPath => ({ from: srcPath, to: distDirPath }))),
+    new CopyPlugin({
+      patterns: [
+        'manifest.json',
+        'devtools.html',
+        'panel.html',
+        'assets/**/*'
+      ].map(srcPath => ({ from: srcPath, to: distDirPath }))
+    }),
   ],
   devtool: false
 };
