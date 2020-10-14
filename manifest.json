@@ -5,7 +5,7 @@
   "description": "Grasshopper Developer Tools",
   "devtools_page": "devtools.html",
   "manifest_version": 2,
-  "permissions": ["activeTab"],
+  "permissions": [],
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "content_scripts": [
     {
