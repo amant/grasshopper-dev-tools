@@ -221,13 +221,13 @@ class ComponentTree extends LitElement {
 
   get _componentStructureTemplate() {
     const getNameWithToggleExpand = el => html`
-            <span class="caret" @click="${this._toggleExpand}"></span>
-            ${getName(el)}
+            <span class="caret" @click="${ this._toggleExpand }"></span>
+            ${ getName(el) }
         `;
 
     const isCustomElement = nodeName => nodeName.includes('-');
 
-    const attributeTemplate = (key, value) => html` <span class="dom-attribute-name">${key}="</span><span class="dom-attribute-value">${value}</span>"`;
+    const attributeTemplate = (key, value) => html` <span class="dom-attribute-name">${ key }="</span><span class="dom-attribute-value">${ value }</span>"`;
     const getName = el => {
       const nodeName = el.nodeName;
       const isCustomEl = isCustomElement(nodeName);
@@ -237,16 +237,16 @@ class ComponentTree extends LitElement {
       };
       const idAttribute = isCustomEl && el.idName ? attributeTemplate('id', el.idName) : '';
       const nameAttribute = el.name && nodeName === 'slot' ? attributeTemplate('name', el.name) : '';
-      const attributes = !this.toShowCompactView ? html`${idAttribute}${nameAttribute}` : '';
+      const attributes = !this.toShowCompactView ? html`${ idAttribute }${ nameAttribute }` : '';
       const uniqueElId = el._selector;
 
       return html`<span
-                    class="dom-tag-name ${classMap(cssClassName)}"
-                    title="${el.inShadow ? 'inside shadowroot' : ''}"
-                    @click="${(event) => this._handleClick(event, el)}"
-                    @mouseover="${(event) => this._mouseOver(event, el)}"
-                    @mouseout="${(event) => this._mouseOut(event, el)}"
-                  ><${nodeName}${attributes}></span>
+                    class="dom-tag-name ${ classMap(cssClassName) }"
+                    title="${ el.inShadow ? 'inside shadowroot' : '' }"
+                    @click="${ (event) => this._handleClick(event, el) }"
+                    @mouseover="${ (event) => this._mouseOver(event, el) }"
+                    @mouseout="${ (event) => this._mouseOut(event, el) }"
+                  ><${ nodeName }${ attributes }></span>
 
                 ${(isCustomEl && !this.toShowCompactView)
                   ? html`<span
@@ -257,7 +257,7 @@ class ComponentTree extends LitElement {
                 }
 
                 ${ (uniqueElId === this._activeItem) ? html`
-                  <span title="Inspect element" class="fas fa-crosshairs inspect-element" @click=${e => this._handleInspectElementClick(e, el) }></span>
+                  <span title="Inspect element" class="fas fa-crosshairs inspect-element" @click=${ e => this._handleInspectElementClick(e, el) }></span>
                 ` : ''
                 }
               `;
@@ -308,12 +308,12 @@ class ComponentTree extends LitElement {
       const hasChildren = _get(newElement, ['children', 'length']) > 0;
 
       return html`<li>
-                ${nameTemplate}
-                ${hasChildren ? html`<ul class="nested">${buildList(newElement.children)}</ul>` : ''}
+                ${ nameTemplate }
+                ${ hasChildren ? html`<ul class="nested">${ buildList(newElement.children) }</ul>` : '' }
             </li>`;
     });
 
-    return html`<ul id="tree">${buildList(this._getElements(this.data))}</ul>`;
+    return html`<ul id="tree">${ buildList(this._getElements(this.data)) }</ul>`;
   }
 
   render() {
@@ -323,18 +323,18 @@ class ComponentTree extends LitElement {
                 <input
                   type="checkbox"
                   id="toggleCompactView"
-                  @click=${() => this.toShowCompactView = !this.toShowCompactView}
-                  ?check=${this.toShowCompactView}
+                  @click=${ () => this.toShowCompactView = !this.toShowCompactView }
+                  ?check=${ this.toShowCompactView }
                 >
                 <label for="toggleCompactView">Compact View</label>
               </span>
               <span class="divider">|<span>
-              <button class="item" title="Expand" @click=${this._expandAll}><i class="fas fa-expand"></i></button>
-              <button class="item" title="Collapse" @click=${this._collapseAll}><i class="fas fa-compress-arrows-alt"></i></button>
-              <button class="item" title="Refresh" @click=${() => this._refresh()}><i class="fas fa-redo"></i></button>
+              <button class="item" title="Expand" @click=${ this._expandAll }><i class="fas fa-expand"></i></button>
+              <button class="item" title="Collapse" @click=${ this._collapseAll }><i class="fas fa-compress-arrows-alt"></i></button>
+              <button class="item" title="Refresh" @click=${ () => this._refresh() }><i class="fas fa-redo"></i></button>
             </div>
 
-            ${this._componentStructureTemplate}
+            ${ this._componentStructureTemplate }
         `;
   }
 }

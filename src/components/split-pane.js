@@ -21,35 +21,35 @@ customElements.define('split-pane', class SplitPane extends LitElement {
         height: 100%;
         outline: 1px solid blue;
       }
-    
+
       .vertical {
         flex-direction: row;
       }
-  
+
       .horizontal {
         flex-direction: column;
       }
-    
+
       .left, .right {
         position: relative;
         height: 100%;
       }
-    
+
       .scroll-pane {
         display: flex;
         flex-direction: column;
-        height: 100%;        
+        height: 100%;
       }
-      
+
       .divider-outline {
         outline: 1px solid var(--divider-color);
       }
-    
+
       .dragger {
         position: absolute;
         z-index: 99;
       }
-      
+
       .vertical.dragging {
         cursor: ew-resize;
       }
@@ -57,7 +57,7 @@ customElements.define('split-pane', class SplitPane extends LitElement {
       .horizontal.dragging {
         cursor: ns-resize;
       }
-    
+
       .vertical .dragger {
         top: 0;
         bottom: 0;
@@ -65,7 +65,7 @@ customElements.define('split-pane', class SplitPane extends LitElement {
         width: 10px;
         cursor: ew-resize;
       }
-      
+
       .horizontal .dragger {
         left: 0;
         right: 0;
@@ -128,8 +128,8 @@ customElements.define('split-pane', class SplitPane extends LitElement {
 
   render() {
     const styleKey = this.view === VERTICAL ? 'width' : 'height';
-    const leftStyle = { [styleKey]: `${this.boundSplit}%` };
-    const rightStyle = { [styleKey]: `${100 - this.boundSplit}%` };
+    const leftStyle = { [styleKey]: `${ this.boundSplit }%` };
+    const rightStyle = { [styleKey]: `${ 100 - this.boundSplit }%` };
     const splitPaneCssClasses = {
       'split-pane': true,
       [this.view]: true,
@@ -138,17 +138,17 @@ customElements.define('split-pane', class SplitPane extends LitElement {
 
     return html`
              <div id="split-pane"
-                class="split-pane ${classMap(splitPaneCssClasses)}"
-                @mousemove=${this._onDragMove}
-                @mouseup=${this._onDragEnd}
-                @mouseleave=${this._onDragEnd}
-                ><div id="left-side" class="left top" style="${styleMap(leftStyle)}">
+                class="split-pane ${ classMap(splitPaneCssClasses) }"
+                @mousemove=${ this._onDragMove }
+                @mouseup=${ this._onDragEnd }
+                @mouseleave=${ this._onDragEnd }
+                ><div id="left-side" class="left top" style="${ styleMap(leftStyle) }">
                     <div class="scroll-pane divider-outline">
                         <slot name="left-pane"></slot>
                     </div>
-                    <div class="dragger" @mousedown=${this._onDragStart}></div>
+                    <div class="dragger" @mousedown=${ this._onDragStart }></div>
                 </div>
-                <div id="right-side" class="right bottom" style="${styleMap(rightStyle)}">
+                <div id="right-side" class="right bottom" style="${ styleMap(rightStyle) }">
                     <div class="scroll-pane">
                       <slot name="right-pane"></slot>
                     </div>
@@ -156,4 +156,4 @@ customElements.define('split-pane', class SplitPane extends LitElement {
              </div>
             `;
   }
-})
+});

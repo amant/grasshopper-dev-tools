@@ -129,7 +129,7 @@ class ComponentRequestMocking extends LitElement {
       _mockLists: { type: Array },
       // TODO: refactor to activeFormId
       _formIdToShow: { type: Number },
-      
+
       _showSaving: { type: Boolean },
       _showLoading: { type: Boolean },
       _enableMock: { type: Boolean },
@@ -158,35 +158,35 @@ class ComponentRequestMocking extends LitElement {
   }
 
   _templateForm({
-    id = '',
-    requestEnable = true,
-    requestUrl = '',
-    responseBody = '',
-    responseStatus = ''
-  } = {}) {
+                  id = '',
+                  requestEnable = true,
+                  requestUrl = '',
+                  responseBody = '',
+                  responseStatus = ''
+                } = {}) {
     return html`
       <form id="requestForm">
         <div class="request-form-items">
-          <input type="hidden" id="requestId" value=${id}>
+          <input type="hidden" id="requestId" value=${ id }>
           <div>
-            <label><input class="mock-enable-input" type="checkbox" ?checked=${requestEnable} id="requestEnable"> : Enable request mock</label>
+            <label><input class="mock-enable-input" type="checkbox" ?checked=${ requestEnable } id="requestEnable"> : Enable request mock</label>
           </div>
           <div>
             <div>URL (use * for wildcard): </div>
-            <div><input type="text" id="requestUrl" value=${requestUrl}></div>
+            <div><input type="text" id="requestUrl" value=${ requestUrl }></div>
           </div>
           <div class="hidden">
             <div>Response Status: </div>
-            <div><input type="text" size="12" id="responseStatus" value=${responseStatus}></div>
+            <div><input type="text" size="12" id="responseStatus" value=${ responseStatus }></div>
           </div>
           <div>
             <div>Response Body: </div>
-            <div><textarea id="responseBody">${JSON.stringify(responseBody, null, 2)}</textarea></div>
+            <div><textarea id="responseBody">${ JSON.stringify(responseBody, null, 2) }</textarea></div>
           </div>
           <div>
-            <button title="Save" type="button" id="save-btn" @click=${() => this._handleSave()}><i class="fas fa-save"></i> Save</button>&nbsp;&nbsp;
+            <button title="Save" type="button" id="save-btn" @click=${ () => this._handleSave() }><i class="fas fa-save"></i> Save</button>&nbsp;&nbsp;
             <span class="divider">|</span>&nbsp;&nbsp;
-            <a title="Cancel" class="cancel-btn" href="#nolink" @click=${this._handleCancel}>Cancel</a>
+            <a title="Cancel" class="cancel-btn" href="#nolink" @click=${ this._handleCancel }>Cancel</a>
           </div
         </div>
       </form>
@@ -218,62 +218,62 @@ class ComponentRequestMocking extends LitElement {
   // TODO: add spinner icon for saving and loading
   render() {
     return html`
-        ${this._showSaving ? html`<div>Saving....</div>` : html``}
-        ${this._showLoading ? html`<div>Loading....</div>` : html``}
+        ${ this._showSaving ? html`<div>Saving....</div>` : html`` }
+        ${ this._showLoading ? html`<div>Loading....</div>` : html`` }
 
          <div class="mock-menu">
          <div class="mock-enable">
           <label>
-            <input class="mock-enable-input" type="checkbox" ?checked=${this._enableMock} id="mockEnable" @click=${(e) => this._handleEnableMock(e) }> Enable All Mocking
+            <input class="mock-enable-input" type="checkbox" ?checked=${ this._enableMock } id="mockEnable" @click=${ (e) => this._handleEnableMock(e) }> Enable All Mocking
           </label>&nbsp;
           </div>
           <span class="divider">|</span>&nbsp;&nbsp;
-          <button class="small-btn" title="Add a mock" @click=${() => this._handleAddMock()}><i class="fas fa-plus"></i></button>&nbsp;&nbsp;
-          <button class="small-btn" title="Remove all mock(s)" @click=${() => this._handleRemoveAllMocks()}><i class="fas fa-ban"></i></button>
-          <button class="small-btn" title="Refresh" @click=${() => this._refresh()}><i class="fas fa-redo"></i></button>
+          <button class="small-btn" title="Add a mock" @click=${ () => this._handleAddMock() }><i class="fas fa-plus"></i></button>&nbsp;&nbsp;
+          <button class="small-btn" title="Remove all mock(s)" @click=${ () => this._handleRemoveAllMocks() }><i class="fas fa-ban"></i></button>
+          <button class="small-btn" title="Refresh" @click=${ () => this._refresh() }><i class="fas fa-redo"></i></button>
         </div>
 
-        ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html``}
+        ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html`` }
 
         ${ (!this._mockLists.length) ? html`
-            <div class="empty-mock">Request Mocked Empty. &nbsp; <button class="small-btn" title="Add a mock" @click=${() => this._handleAddMock()}><i class="fas fa-plus"></i></button></div>
+            <div class="empty-mock">Request Mocked Empty. &nbsp; <button class="small-btn" title="Add a mock" @click=${ () => this._handleAddMock() }><i class="fas fa-plus"></i></button></div>
           ` : html`
             <ul class="mock-list-container">
-              ${this._mockLists.map(list => html`
-                <li class="list" id="${`mock-list-id-${list.id}`}">
-                  ${this._formIdToShow !== list.id ? html`` : html`
+              ${ this._mockLists.map(list => html`
+                <li class="list" id="${ `mock-list-id-${ list.id }` }">
+                  ${ this._formIdToShow !== list.id ? html`` : html`
                     <div class="edit-list">
-                      ${this._templateForm(list)}
+                      ${ this._templateForm(list) }
                     </div>
-                  `}
+                  ` }
 
-                  ${this._formIdToShow === list.id ? html`` : html`
+                  ${ this._formIdToShow === list.id ? html`` : html`
                     <div class="mock-list">
                       <div>
                         <div>
-                          <label><input type="checkbox" ?checked=${list.requestEnable} @click=${(e) => this._handleRequestEnableClick(list.id, e)}> URL:</label>
-                        </div> 
-                        <div>${list.requestUrl}</div>
+                          <label><input type="checkbox" ?checked=${ list.requestEnable } @click=${ (e) => this._handleRequestEnableClick(list.id, e) }> URL:</label>
+                        </div>
+                        <div>${ list.requestUrl }</div>
                       </div>
                       <div class="hidden">
                         <div>Response Status:</div>
-                        <div>${list.responseStatus}</div>
+                        <div>${ list.responseStatus }</div>
                       </div>
                       <div>
-                        <div>Response Body:</div> 
-                        <div class="response-body">${JSON.stringify(list.responseBody)}</div>
-                      </div>  
+                        <div>Response Body:</div>
+                        <div class="response-body">${ JSON.stringify(list.responseBody) }</div>
+                      </div>
                       <div class="action">
-                        <button title="Edit" @click=${() => this._handleEditMock(list.id)}><i class="fas fa-edit"></i> Edit</button>&nbsp;&nbsp;
+                        <button title="Edit" @click=${ () => this._handleEditMock(list.id) }><i class="fas fa-edit"></i> Edit</button>&nbsp;&nbsp;
                         <span class="divider">|</span>&nbsp;&nbsp;
-                        <a title="Delete" class="delete-btn" href="#nolink" @click=${() => this._handleDelete(list.id)}>Delete</a>
+                        <a title="Delete" class="delete-btn" href="#nolink" @click=${ () => this._handleDelete(list.id) }>Delete</a>
                       </div>
                     </div>
-                  `}
+                  ` }
                 </li>
-              `)}
+              `) }
             </ul>`
-      }
+    }
     `;
   }
 
@@ -355,9 +355,9 @@ class ComponentRequestMocking extends LitElement {
   }
 
   _handleRequestEnableClick(id, event) {
-    const requestEnable = event.target.checked
+    const requestEnable = event.target.checked;
     const list = this._mockLists.find(item => item.id === id);
-    const data = { ...list, requestEnable }
+    const data = { ...list, requestEnable };
 
     db.put(data)
       .then(result => {
@@ -377,7 +377,7 @@ class ComponentRequestMocking extends LitElement {
     try {
       const data = await configDb.getAll();
       this._enableMock = _get(data, 'mockEnable');
-    } catch(e) {
+    } catch (e) {
       console.log('error', e);
     }
   }

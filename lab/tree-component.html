@@ -4,75 +4,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Hello world</title>
 </head>
 
 <body>
-  <at-treeview></at-treeview>
+<at-treeview></at-treeview>
 
-  <script>
+<script>
 
-    function getAllElements(rootNode) {
-      const isWebComponent = (element) => element.tagName.includes('-');
+  function getAllElements(rootNode) {
+    const isWebComponent = (element) => element.tagName.includes('-');
 
-      const toFilterOut = (node) => {
-        return !(node instanceof HTMLElement) ||
-          (!isWebComponent(node) && node.children.length <= 0) ||
-          (['template', 'custom-style', 'style', 'script'].includes(node.nodeName.toLowerCase()));
-      }
+    const toFilterOut = (node) => {
+      return !(node instanceof HTMLElement) ||
+        (!isWebComponent(node) && node.children.length <= 0) ||
+        (['template', 'custom-style', 'style', 'script'].includes(node.nodeName.toLowerCase()));
+    };
 
-      const findAllElements = (node) => {
-        const nodeCollection = [];
+    const findAllElements = (node) => {
+      const nodeCollection = [];
 
-        if (!node.children) debugger;
+      if (!node.children) debugger;
 
-        for (let element of node.children) {
-          const nodeObj = {
-            inShadow: element.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
-            nodeName: element.nodeName,
-            children: []
-          };
+      for (let element of node.children) {
+        const nodeObj = {
+          inShadow: element.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
+          nodeName: element.nodeName,
+          children: []
+        };
 
-          if (toFilterOut(element)) {
-            continue;
-          }
-
-          nodeCollection.push(nodeObj);
-
-          if (element.shadowRoot) {
-            nodeObj.children = nodeObj.children.concat(findAllElements(element.shadowRoot));
-          }
-
-          if (element.children && element.children.length > 0) {
-            nodeObj.children = nodeObj.children.concat(...findAllElements(element));
-          }
-
+        if (toFilterOut(element)) {
+          continue;
         }
 
-        return nodeCollection;
+        nodeCollection.push(nodeObj);
+
+        if (element.shadowRoot) {
+          nodeObj.children = nodeObj.children.concat(findAllElements(element.shadowRoot));
+        }
+
+        if (element.children && element.children.length > 0) {
+          nodeObj.children = nodeObj.children.concat(...findAllElements(element));
+        }
+
       }
 
-      return findAllElements(rootNode);
+      return nodeCollection;
+    };
+
+    return findAllElements(rootNode);
+  }
+
+  copy(JSON.stringify(getAllElements(document.body)));
+</script>
+
+<script type="module">
+  // import {html, render, LitElement} from 'https://unpkg.com/lit-html?module';
+  import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
+
+  class TreeView extends LitElement {
+    _toggleExpand(e) {
+      const el = e.target;
+      el.parentElement.querySelector('.nested').classList.toggle('active');
+      el.classList.toggle('caret-down');
     }
 
-    copy(JSON.stringify(getAllElements(document.body)));
-  </script>
-
-  <script type="module">
-    // import {html, render, LitElement} from 'https://unpkg.com/lit-html?module';
-    import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
-
-    class TreeView extends LitElement {
-      _toggleExpand(e) {
-        const el = e.target;
-        el.parentElement.querySelector('.nested').classList.toggle('active');
-        el.classList.toggle('caret-down');
-      }
-
-      render() {
-        return html`
+    render() {
+      return html`
           <style>
             /* Remove default bullets */
             ul, #myUL {
@@ -115,15 +115,15 @@
             }
             </style>
           <ul id="myUL">
-            <li><span class="caret" @click="${this._toggleExpand}">Beverages</span>
+            <li><span class="caret" @click="${ this._toggleExpand }">Beverages</span>
               <ul class="nested">
                 <li>Water</li>
                 <li>Coffee</li>
-                <li><span class="caret" @click="${this._toggleExpand}">Tea</span>
+                <li><span class="caret" @click="${ this._toggleExpand }">Tea</span>
                   <ul class="nested">
                     <li>Black Tea</li>
                     <li>White Tea</li>
-                    <li><span class="caret" @click="${this._toggleExpand}">Green Tea</span>
+                    <li><span class="caret" @click="${ this._toggleExpand }">Green Tea</span>
                       <ul class="nested">
                         <li>Sencha</li>
                         <li>Gyokuro</li>
@@ -137,10 +137,11 @@
             </li>
           </ul>
         `;
-      }
     }
-    customElements.define('at-treeview', TreeView)
-  </script>
+  }
+
+  customElements.define('at-treeview', TreeView)
+</script>
 </body>
 
 </html>

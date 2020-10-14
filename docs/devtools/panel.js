@@ -1,4 +1,4 @@
-function walk (children = []) {
+function walk(children = []) {
   const collection = [];
 
   const toFilterOut = (node) => {
@@ -32,11 +32,11 @@ function walk (children = []) {
   return collection;
 }
 
-function getList(value) {  
+function getList(value) {
   let list = '<ul>';
 
   value.forEach(el => {
-    list += `<li>${el.name}</li>`;
+    list += `<li>${ el.name }</li>`;
 
     if (el.children && el.children.length > 0) {
       list += getList(el.children);
@@ -48,12 +48,12 @@ function getList(value) {
   return list;
 }
 
-(function(){
+(function () {
   document.querySelector('#reload').addEventListener('click', () => {
     document.querySelector('#app').innerHTML = 'Loading...';
 
     chrome.devtools.inspectedWindow.eval(
-      `(${walk.toString()}(document.body.children))`, (result, isException) => {
+      `(${ walk.toString() }(document.body.children))`, (result, isException) => {
         if (isException) {
           console.error('Error reading DOM');
         } else {

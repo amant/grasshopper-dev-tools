@@ -155,10 +155,10 @@ class MainApp extends LitElement {
 
   get _mainContentTemplate() {
     if (this._mainContent === COMPONENT_CHART) {
-     return html`<component-tree-chart
-                  .data=${this._components}
-                  @highlight-component=${(event) => highlightComponent(event.detail.selector)}
-                  @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
+      return html`<component-tree-chart
+                  .data=${ this._components }
+                  @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
+                  @unhighlight-component=${ (event) => unHighlightComponent(event.detail.selector) }
                  ></component-tree-chart>`
     }
 
@@ -167,7 +167,7 @@ class MainApp extends LitElement {
     }
 
     return html`
-      <split-pane view=${this._view}>
+      <split-pane view=${ this._view }>
         <!-- Start left-pane -->
         <div slot="left-pane" class="header">
           <div class="action-header">
@@ -176,24 +176,24 @@ class MainApp extends LitElement {
               type="search"
               placeholder="Filter component"
               class="search"
-              @input=${(event) => this._debouncedComponentFilter(event.target.value)}
+              @input=${ (event) => this._debouncedComponentFilter(event.target.value) }
             >
           </div>
         </div>
         <div slot="left-pane" class="scroll">
           <div class="component-tree-container">
-            ${!this._components ?
-              html`<span>Loading...</span>` :
-              html`<component-tree
-                      data=${JSON.stringify(this._componentsFilter)}
-                      @show-properties=${this._handleShowProperties}
-                      @show-source=${(event) => showSource(event.detail.nodeName)}
-                      @show-element=${(event) => showElement(event.detail.selector)}
-                      @highlight-component=${(event) => highlightComponent(event.detail.selector)}
-                      @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
-                      @refresh=${() => this._refreshComponent()}
+            ${ !this._components ?
+      html`<span>Loading...</span>` :
+      html`<component-tree
+                      data=${ JSON.stringify(this._componentsFilter) }
+                      @show-properties=${ this._handleShowProperties }
+                      @show-source=${ (event) => showSource(event.detail.nodeName) }
+                      @show-element=${ (event) => showElement(event.detail.selector) }
+                      @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
+                      @unhighlight-component=${ (event) => unHighlightComponent(event.detail.selector) }
+                      @refresh=${ () => this._refreshComponent() }
                      ></component-tree>`
-              }
+    }
           </div>
         </div>
         <!-- End left-pane -->
@@ -201,29 +201,29 @@ class MainApp extends LitElement {
         <!-- Start right-pane -->
         <div slot="right-pane" class="header">
           <div class="action-header">
-            ${this._showProperty ? html`<div class="property-title"><${this._selectedComponentName}> :</div>` : ''}
+            ${ this._showProperty ? html`<div class="property-title"><${ this._selectedComponentName }> :</div>` : '' }
             <input
               id="inputFilterProperties"
               type="search"
               placeholder="Filter properties"
               class="search"
-              @input=${(event) => this._debouncedPropertyFilter(event.target.value)}
+              @input=${ (event) => this._debouncedPropertyFilter(event.target.value) }
             >
           </div>
         </div>
         <div slot="right-pane" class="scroll">
-          ${this._showProperty ?
-            html`<section class="property-tree-container">
+          ${ this._showProperty ?
+      html`<section class="property-tree-container">
                    <property-tree
-                    .data=${this._componentPropertiesFilter}
-                    @change-property=${(event) => setProperty({
-                      querySelector: this._currentQuerySelector,
-                      property: event.detail.property,
-                      value: event.detail.value
-                    })}></property-tree>
+                    .data=${ this._componentPropertiesFilter }
+                    @change-property=${ (event) => setProperty({
+        querySelector: this._currentQuerySelector,
+        property: event.detail.property,
+        value: event.detail.value
+      }) }></property-tree>
                   </section>` :
-            html`<section class="notice"><div>Select a component to inspect.</div></section>`
-          }
+      html`<section class="notice"><div>Select a component to inspect.</div></section>`
+    }
         </div>
         <!-- End right-pane -->
       </split-pane>
@@ -234,14 +234,14 @@ class MainApp extends LitElement {
     const selectedBtn = value => this._mainContent === value ? 'selected' : '';
 
     return html`
-      <button type="button" class="btn ${selectedBtn(COMPONENT_TREE)}"
-        @click=${() => this._mainContent = COMPONENT_TREE }
+      <button type="button" class="btn ${ selectedBtn(COMPONENT_TREE) }"
+        @click=${ () => this._mainContent = COMPONENT_TREE }
       >Tree</button>
-      <button type="button" class="btn ${selectedBtn(COMPONENT_CHART)}"
-        @click=${() => this._mainContent = COMPONENT_CHART }
+      <button type="button" class="btn ${ selectedBtn(COMPONENT_CHART) }"
+        @click=${ () => this._mainContent = COMPONENT_CHART }
       >Chart</button>
-      <button type="button" class="btn ${selectedBtn(COMPONENT_REQUEST_MOCKING)}"
-        @click=${() => this._mainContent = COMPONENT_REQUEST_MOCKING }
+      <button type="button" class="btn ${ selectedBtn(COMPONENT_REQUEST_MOCKING) }"
+        @click=${ () => this._mainContent = COMPONENT_REQUEST_MOCKING }
       >Request mocking</button>
     `;
   }
@@ -258,7 +258,7 @@ class MainApp extends LitElement {
             <div class="ui-group">
               <div class="content-wrapper">
                 <div class="content">
-                  ${this.actionButtonTemplate}
+                  ${ this.actionButtonTemplate }
                 </div>
               </div>
             </div>

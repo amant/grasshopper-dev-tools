@@ -1,9 +1,9 @@
 export function injectScript(fnOrUrl) {
   const script = document.createElement('script');
-  
+
   if (typeof fnOrUrl === 'function') {
     // set script content
-    const source = `;( ${fnOrUrl.toString()} )(window)`;
+    const source = `;( ${ fnOrUrl.toString() } )(window)`;
     script.textContent = source;
     document.documentElement.appendChild(script);
   } else {
@@ -12,10 +12,10 @@ export function injectScript(fnOrUrl) {
     script.src = fnOrUrl;
     document.documentElement.appendChild(script);
   }
-  
+
   document.documentElement.appendChild(script);
   script.parentNode.removeChild(script);
-};
+}
 
 
 export function installHelpers(target) {
@@ -73,13 +73,13 @@ export function installHelpers(target) {
     const highlightEl = document.createElement('div');
     highlightEl.setAttribute('id', 'grasshopper-devtool-highlight');
     highlightEl.setAttribute('style', `
-            width:${rect.width}px; height:${rect.height}px;
+            width:${ rect.width }px; height:${ rect.height }px;
             min-width: 9px; min-height: 9px;
-            left: ${rect.left}px; top: ${rect.top}px; position: fixed;
+            left: ${ rect.left }px; top: ${ rect.top }px; position: fixed;
             background-color: orange; opacity: 0.5; z-index: 999999;
           `
     );
-    highlightEl.innerHTML = `<span style="font-size:9px; color: blue;">${element.nodeName.toLowerCase()}</span>`;
+    highlightEl.innerHTML = `<span style="font-size:9px; color: blue;">${ element.nodeName.toLowerCase() }</span>`;
     document.body.appendChild(highlightEl);
   };
 

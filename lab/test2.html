@@ -2,39 +2,39 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hello world</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hello world</title>
 </head>
 
 <body>
-    <div id="app">
-        <hello-world input="Hello world"></hello-world>
-    </div>
+<div id="app">
+  <hello-world input="Hello world"></hello-world>
+</div>
 
-    <script type="module">
-        import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
+<script type="module">
+  import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
 
-        customElements.define('hello-world', class HelloWorld extends LitElement {
-            static get properties() {
-                return {
-                    input: { type: String }
-                }
-            }
+  customElements.define('hello-world', class HelloWorld extends LitElement {
+    static get properties() {
+      return {
+        input: { type: String }
+      }
+    }
 
-            onChange(event) {
-                this.input = event.target.value;
-            }
+    onChange(event) {
+      this.input = event.target.value;
+    }
 
-            render() {
-                return html`
-                  <div style="1px solid red;">${this.input}</div>
-                  input: <input @change=${this.onChange}>
+    render() {
+      return html`
+                  <div style="1px solid red;">${ this.input }</div>
+                  input: <input @change=${ this.onChange }>
                 `;
-            }
-        })
-    </script>
+    }
+  })
+</script>
 </body>
 
 </html>

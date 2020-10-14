@@ -15,7 +15,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
 });
 
 chrome.tts.getVoices((voices) => {
-  voices.map(({voiceName, lang}) => {
+  voices.map(({ voiceName, lang }) => {
     console.log('name:', voiceName, 'lang:', lang);
   });
 });

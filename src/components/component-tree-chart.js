@@ -3,7 +3,7 @@ import { renderChart } from '../helpers/component-tree-chart-helpers';
 
 function removeAllChildNodes(parent) {
   while (parent.firstChild) {
-      parent.removeChild(parent.firstChild);
+    parent.removeChild(parent.firstChild);
   }
 }
 
@@ -22,7 +22,7 @@ class ComponentTreeChart extends LitElement {
         .node circle.shadow {
           stroke-dasharray: 4;
         }
-        
+
         .node circle.selected {
           stroke-width: 4px;
         }

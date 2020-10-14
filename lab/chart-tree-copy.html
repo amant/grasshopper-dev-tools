@@ -78,8 +78,8 @@
   // Collapse the node and all it's children
   function collapse(d) {
     if (d.children) {
-      d._children = d.children
-      d._children.forEach(collapse)
+      d._children = d.children;
+      d._children.forEach(collapse);
       d.children = null
     }
   }
@@ -144,7 +144,7 @@
         if (clickedNode)
           return "translate(" + clickedNode.y0 + "," + clickedNode.x0 + ")";
       })
-      .on('click', click)
+      .on('click', click);
 
     // Add Circle for the nodes
     nodeEnter.append('circle')
@@ -240,7 +240,7 @@
     var linkExit = link.exit().transition()
       .duration(duration)
       .attr('d', function (d) {
-        var o = { x: clickedNode.x, y: clickedNode.y }
+        var o = { x: clickedNode.x, y: clickedNode.y };
         return diagonal(o, o)
       })
       .remove();
@@ -257,7 +257,7 @@
       path = `M ${ s.y } ${ s.x }
             C ${ (s.y + d.y) / 2 } ${ s.x },
               ${ (s.y + d.y) / 2 } ${ d.x },
-              ${ d.y } ${ d.x }`
+              ${ d.y } ${ d.x }`;
 
       return path
     }

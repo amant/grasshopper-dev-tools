@@ -6,38 +6,39 @@
 </head>
 <body>
 
-  <user-info>
-    <span slot="name">James Bond</span>
-    <span slot="code">007</span>
-    <span slot="movies"><movie-name>No time to Die</movie-name></span>
-  </user-info>
+<user-info>
+  <span slot="name">James Bond</span>
+  <span slot="code">007</span>
+  <span slot="movies"><movie-name>No time to Die</movie-name></span>
+</user-info>
 
-  <script>
-    customElements.define('user-info', class extends HTMLElement {
-      connectedCallback() {
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
+<script>
+  customElements.define('user-info', class extends HTMLElement {
+    connectedCallback() {
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.innerHTML = `
           <div>Name: <slot name="name"></slot></div>
           <div>Code: <slot name="code"></slot></div>
           <slot name="movies"></slot>
         `;
-      }
-    });
-  </script>
+    }
+  });
+</script>
 
-  <script type="module">
-    import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
+<script type="module">
+  import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
 
-    customElements.define('movie-name', class MovieName extends LitElement {
-      static get styles() {
-        return [css`
+  customElements.define('movie-name', class MovieName extends LitElement {
+    static get styles() {
+      return [css`
           .container { border: 1px solid red; }
         `]
-      }
-      render() {
-        return html`<div class="container"><b>Movies</b>: <slot></slot></div>`;
-      }
-    });
-  </script>
+    }
+
+    render() {
+      return html`<div class="container"><b>Movies</b>: <slot></slot></div>`;
+    }
+  });
+</script>
 </body>
 </html>
