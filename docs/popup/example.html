@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Content Script Basic Example</title>
+</head>
+<body>
+  <h1>Sum of</h1>
+  <div>
+    <input type="number" id="value1" value="2"> + <input type="number" id="value2" value="3"> = <span id="result"></span>
+    <button id="add-btn">Add</button>
+  </div>
+
+
+  <script>
+    const $ = document.querySelector.bind(document);
+    $('#add-btn').addEventListener('click', () => {
+      const result = parseFloat($('#value1').value) + parseFloat($('#value2').value);
+      $('#result').textContent = result.toString();
+    })
+  </script>
+</body>
+</html>

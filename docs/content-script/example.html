@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Content script</title>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <button id="load-content">Load ajax</button>
+  <pre id="response"></pre>
+
+  <h1>Sum of</h1>
+  <div>
+    <input type="number" id="value1" value="2"> + <input type="number" id="value2" value="3"> = <span id="result"></span>
+    <button id="add-btn">Add</button>
+  </div>
+
+  <script>
+    $('#load-content').click(() => {
+      const $el = $('#response');
+
+      $el.html('Loading...');
+
+      $.get('https://reqres.in/api/users?page=2', (response) => {
+        $el.html(JSON.stringify(response, null, 2))
+      });
+    });
+
+    $('#add-btn').click(() => {
+      const result = parseFloat($('#value1').val()) + parseFloat($('#value2').val());
+      $('#result').html(result.toString());
+    });
+  </script>
+</body>
+</html>

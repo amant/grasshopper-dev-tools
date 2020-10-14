@@ -22,15 +22,20 @@
   },
   "homepage": "https://github.com/amant/grasshopper-dev-tools#readme",
   "dependencies": {
+    "codemirror": "^5.57.0",
     "d3": "^5.14.2",
+    "dirty-json": "^0.9.1",
+    "idb": "^5.0.4",
     "lit-element": "^2.2.1",
     "lit-html": "^1.1.2",
     "lodash": "^4.17.19",
     "trie-search": "^1.2.11",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "xhr-mock": "^2.5.1"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^6.2.0",
+    "css-loader": "^4.3.0",
     "rimraf": "^3.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"

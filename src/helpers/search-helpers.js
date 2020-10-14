@@ -26,10 +26,10 @@ export const searchComponents = (elements, searchValue) => {
     .get(searchValue)
     .map(item => _get(elements, item._ref));
 
-  // slower, search entire string
-  if (result.length <= 0) {
+  // slower, regx match string
+  if (result.length <= 0 && searchValue.length >= 3) {
     result = searchIndex
-      .filter(({ nodeName, id }) => nodeName.includes(searchValue) || id.includes(searchValue))
+      .filter(({ nodeName, id }) => !!(nodeName || id || '').match(searchValue))
       .map(item => _get(elements, item._ref));
   }
 

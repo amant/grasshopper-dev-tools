@@ -13,29 +13,29 @@ class PropertyTree extends LitElement {
       .property {
         padding: 0px;
       }
-      
+
       .property-list {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
       }
-      
+
       .property-name {
         color: var(--component-property-name-color);
       }
-      
+
       .property-value {
         margin-left: 4px;
         width: 100%
       }
-      
+
       input {
         font-size: 14px;
         background-color: var(--app-bg-color);
         color: var(--app-text-color);
         outline: none;
         border: 1px solid var(--divider-color);
-        width: 100%;                
+        width: 100%;
       }
     `];
   }
@@ -51,11 +51,11 @@ class PropertyTree extends LitElement {
 
   _treeList() {
     return html`
-    <ul class="property">${Object.keys(this.data).map(key => html`
+    <ul class="property">${ Object.keys(this.data).map(key => html`
       <li class="property-list">
-        <div class="property-name">${key}:</div>
-        <div class="property-value">${this._getValue(key, this.data[key])}</div>        
-      </li>`)}
+        <div class="property-name">${ key }:</div>
+        <div class="property-value">${ this._getValue(key, this.data[key]) }</div>
+      </li>`) }
     </ul>`;
   };
 
@@ -63,18 +63,18 @@ class PropertyTree extends LitElement {
     const value = this._parseValue(val);
 
     if (typeof value === 'string') {
-      return html`<input @change=${(event) => this._onChange(event, key)} type="text" value="${value}">`;
+      return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ value }">`;
     } else if (_isArray(value)) {
-      return html`<input @change=${(event) => this._onChange(event, key)} type="text" value="${JSON.stringify(value)}">`;
+      return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ JSON.stringify(value) }">`;
       // return html`<button>arr +</button>${value.map(item => this._getValue(key, item))}`;
     } else if (_isObject(value) && !_isEmpty(value)) {
-      return html`<input @change=${(event) => this._onChange(event, key)} type="text" value="${JSON.stringify(value)}">`;
+      return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ JSON.stringify(value) }">`;
       //return html`${this._treeList(value)}`;
     } else if (_isBoolean(value)) {
       return html`
-      <select @change=${(event) => this._onChange(event, key)}>
-        <option value="true" ?selected=${value.toString() === 'true'}>True</option>
-        <option value="false" ?selected=${value.toString() === 'false'}>False</option>
+      <select @change=${ (event) => this._onChange(event, key) }>
+        <option value="true" ?selected=${ value.toString() === 'true' }>True</option>
+        <option value="false" ?selected=${ value.toString() === 'false' }>False</option>
       </select>`;
     }
 
@@ -96,7 +96,7 @@ class PropertyTree extends LitElement {
   }
 
   render() {
-    return html`${(Object.keys(this.data).length > 0) ? this._treeList() : html`<div>No Properties Found</div>`}`;
+    return html`${ (Object.keys(this.data).length > 0) ? this._treeList() : html`<div>No Properties Found</div>` }`;
   }
 }
 

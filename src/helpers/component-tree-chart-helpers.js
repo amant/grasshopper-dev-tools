@@ -43,9 +43,9 @@ function addText(nodeEnter) {
     .attr('text-anchor', d => d.children || d._children ? 'end' : 'start')
     .text(d => {
       if (d.data.nodeName === 'slot' && d.data.name) {
-        return `<${ d.data.nodeName } name="${d.data.name}">`;
+        return `<${ d.data.nodeName } name="${ d.data.name }">`;
       } else if (d.data.idName) {
-        return `<${ d.data.nodeName } id="${d.data.idName}">`;
+        return `<${ d.data.nodeName } id="${ d.data.idName }">`;
       }
       return `<${ d.data.nodeName }>`;
     })
@@ -54,7 +54,7 @@ function addText(nodeEnter) {
 
 // Wraps Long Labels, https://bl.ocks.org/mbostock/7555321
 function wrap(text, width) {
-  text.each(function() {
+  text.each(function () {
     let text = d3.select(this),
       words = text.text().split(/\s+/).reverse(),
       word,
@@ -148,7 +148,7 @@ export function renderChart({ treeData, parentElement, width, height, margin }) 
       .enter()
       .append('g')
       .attr('class', 'node')
-      .attr('transform', () => source ? `translate(${ source.y0 },${ source.x0 })`: null)
+      .attr('transform', () => source ? `translate(${ source.y0 },${ source.x0 })` : null)
       .on('click', clickHandler)
       .on('mouseover', mouseOverHandler)
       .on('mouseout', mouseOutHandler);

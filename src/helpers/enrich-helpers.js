@@ -11,7 +11,7 @@ export const componentsWalk = (fns) => {
 };
 
 export const enrichWithRef = (component, index, parentComponent = {}) => {
-  component._ref = parentComponent._ref ? `${parentComponent._ref}.children.[${index}]` : `[${index}]`;
+  component._ref = parentComponent._ref ? `${ parentComponent._ref }.children.[${ index }]` : `[${ index }]`;
 };
 
 export const convertNodeNameToLowerCase = (component) => {
@@ -20,11 +20,11 @@ export const convertNodeNameToLowerCase = (component) => {
 
 const getQuerySelector = (element, selector = 'body') => {
   const nodeName = element.nodeName.toLowerCase();
-  const query = `${selector}>${(element.inShadow ? `::shadowroot>${nodeName}` : nodeName)}`;
+  const query = `${ selector }>${ (element.inShadow ? `::shadowroot>${ nodeName }` : nodeName) }`;
   const ownIndex = element.ownIndex;
 
   if (ownIndex !== null) {
-    return `${query}:nth-child(${ownIndex + 1})`;
+    return `${ query }:nth-child(${ ownIndex + 1 })`;
   }
 
   return query;

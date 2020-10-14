@@ -4,14 +4,11 @@ import {
   getAllComponents,
   getComponentProperties,
   showSource,
+  showElement,
   highlightComponent,
   unHighlightComponent,
   setProperty,
 } from './helpers/helpers.js';
-import './components/component-tree.js';
-import './components/component-tree-chart.js';
-import './components/property-tree.js';
-import './components/split-pane.js';
 import {
   componentsWalk,
   enrichWithSelector,
@@ -19,14 +16,22 @@ import {
   convertNodeNameToLowerCase
 } from './helpers/enrich-helpers.js';
 import { buildComponentsSearchIndex, searchComponents, searchComponentProperty } from './helpers/search-helpers.js';
-import { DEBOUNCE_WAIT, VERTICAL, HORIZONTAL } from './constants';
+import {
+  DEBOUNCE_WAIT,
+  VERTICAL,
+  HORIZONTAL,
+  CHROME_THEME,
+  COMPONENT_TREE,
+  COMPONENT_CHART,
+  COMPONENT_REQUEST_MOCKING,
+} from './constants';
 import { mainAppStyle } from './styles/main-app-style';
-import { classMap } from "lit-html/directives/class-map";
 
-const CHROME_THEME = chrome.devtools.panels.themeName || 'dark';
-
-const COMPONENT_TREE = 'COMPONENT_TREE';
-const COMPONENT_CHART = 'COMPONENT_CHART';
+import './components/component-tree.js';
+import './components/component-tree-chart.js';
+import './components/component-request-mocking';
+import './components/property-tree.js';
+import './components/split-pane.js';
 
 class MainApp extends LitElement {
   static get properties() {
@@ -36,7 +41,8 @@ class MainApp extends LitElement {
       _showProperty: { type: Boolean },
       _selectedComponentName: { type: String },
       _view: { type: String },
-      _mainContent: { type: String }
+      _mainContent: { type: String },
+      _components: { type: Object },
     };
   }
 
@@ -47,17 +53,17 @@ class MainApp extends LitElement {
         height: 100vh;
         min-height: 500px;
       }
-      
+
       .app-title {
         color: var(--title-text-color);
       }
-      
-      .property-title { 
+
+      .property-title {
         margin-right: 8px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: var(--dom-tag-name-color); 
+        color: var(--dom-tag-name-color);
       }
     `,
       mainAppStyle,
@@ -69,6 +75,7 @@ class MainApp extends LitElement {
     this._currentQuerySelector = null;
     this._components = null;
     this._componentProperties = null;
+    // this._mainContent = COMPONENT_REQUEST_MOCKING;
     this._mainContent = COMPONENT_TREE;
 
     this._debouncedComponentFilter = _debounce(async (value) => {
@@ -108,7 +115,8 @@ class MainApp extends LitElement {
     // listen for changes to the tab
     chrome.tabs.onUpdated.addListener((_, changeInfo) => {
       if (changeInfo.status === 'complete') {
-        this._refreshComponent();
+        // timeout for the DOM to be ready
+        setTimeout(() => this._refreshComponent(), 1000);
       }
     });
 
@@ -117,7 +125,7 @@ class MainApp extends LitElement {
     }
   }
 
-  async _handlerShowProperties(event) {
+  async _handleShowProperties(event) {
     this._selectedComponentName = event.detail.nodeName;
     this._currentQuerySelector = event.detail.selector;
     this._showProperty = Boolean(this._currentQuerySelector);
@@ -131,25 +139,35 @@ class MainApp extends LitElement {
     // enrich with node reference and element selector path
     componentsWalk([enrichWithRef, enrichWithSelector, convertNodeNameToLowerCase])(components);
 
-    this._componentsFilter = this._components = components;
+    // reset components and properties lists
+    this._componentsFilter = components;
+    this._components = components;
+    this._componentPropertiesFilter = [];
 
     buildComponentsSearchIndex(this._components);
 
     // reset search component value
-    this.shadowRoot.querySelector('#inputFilterComponent').value = '';
+    const inputFilterComponentEl = this.shadowRoot.querySelector('#inputFilterComponent');
+    if (inputFilterComponentEl) {
+      inputFilterComponentEl.value = '';
+    }
   }
 
   get _mainContentTemplate() {
     if (this._mainContent === COMPONENT_CHART) {
-     return html`<component-tree-chart 
-                  .data=${this._components}
-                  @highlight-component=${(event) => highlightComponent(event.detail.selector)}
-                  @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
+      return html`<component-tree-chart
+                  .data=${ this._components }
+                  @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
+                  @unhighlight-component=${ (event) => unHighlightComponent(event.detail.selector) }
                  ></component-tree-chart>`
     }
 
+    if (this._mainContent === COMPONENT_REQUEST_MOCKING) {
+      return html`<component-request-mocking></component-request-mocking>`
+    }
+
     return html`
-      <split-pane view=${this._view}>
+      <split-pane view=${ this._view }>
         <!-- Start left-pane -->
         <div slot="left-pane" class="header">
           <div class="action-header">
@@ -158,53 +176,54 @@ class MainApp extends LitElement {
               type="search"
               placeholder="Filter component"
               class="search"
-              @input=${(event) => this._debouncedComponentFilter(event.target.value)}
+              @input=${ (event) => this._debouncedComponentFilter(event.target.value) }
             >
           </div>
         </div>
         <div slot="left-pane" class="scroll">
           <div class="component-tree-container">
-            ${!this._components ?
-              html`<span>Loading...</span>` :
-              html`<component-tree 
-                      data=${JSON.stringify(this._componentsFilter)}
-                      @show-properties=${this._handlerShowProperties}
-                      @show-source=${(event) => showSource(event.detail.nodeName)}
-                      @highlight-component=${(event) => highlightComponent(event.detail.selector)}
-                      @unhighlight-component=${(event) => unHighlightComponent(event.detail.selector)}
-                      @refresh-component=${this._refreshComponent}
+            ${ !this._components ?
+      html`<span>Loading...</span>` :
+      html`<component-tree
+                      data=${ JSON.stringify(this._componentsFilter) }
+                      @show-properties=${ this._handleShowProperties }
+                      @show-source=${ (event) => showSource(event.detail.nodeName) }
+                      @show-element=${ (event) => showElement(event.detail.selector) }
+                      @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
+                      @unhighlight-component=${ (event) => unHighlightComponent(event.detail.selector) }
+                      @refresh=${ () => this._refreshComponent() }
                      ></component-tree>`
-              }
+    }
           </div>
-        </div>              
+        </div>
         <!-- End left-pane -->
-            
-        <!-- Start right-pane -->  
+
+        <!-- Start right-pane -->
         <div slot="right-pane" class="header">
           <div class="action-header">
-            ${this._showProperty ? html`<div class="property-title"><${this._selectedComponentName}> :</div>` : ''}                      
-            <input 
+            ${ this._showProperty ? html`<div class="property-title"><${ this._selectedComponentName }> :</div>` : '' }
+            <input
               id="inputFilterProperties"
-              type="search" 
-              placeholder="Filter properties" 
-              class="search" 
-              @input=${(event) => this._debouncedPropertyFilter(event.target.value)}
+              type="search"
+              placeholder="Filter properties"
+              class="search"
+              @input=${ (event) => this._debouncedPropertyFilter(event.target.value) }
             >
           </div>
         </div>
         <div slot="right-pane" class="scroll">
-          ${this._showProperty ?
-            html`<section class="property-tree-container">
-                   <property-tree 
-                    .data=${this._componentPropertiesFilter} 
-                    @change-property=${(event) => setProperty({
-                      querySelector: this._currentQuerySelector,
-                      property: event.detail.property,
-                      value: event.detail.value
-                    })}></property-tree>
+          ${ this._showProperty ?
+      html`<section class="property-tree-container">
+                   <property-tree
+                    .data=${ this._componentPropertiesFilter }
+                    @change-property=${ (event) => setProperty({
+        querySelector: this._currentQuerySelector,
+        property: event.detail.property,
+        value: event.detail.value
+      }) }></property-tree>
                   </section>` :
-            html`<section class="notice"><div>Select a component to inspect.</div></section>`
-          }
+      html`<section class="notice"><div>Select a component to inspect.</div></section>`
+    }
         </div>
         <!-- End right-pane -->
       </split-pane>
@@ -215,8 +234,15 @@ class MainApp extends LitElement {
     const selectedBtn = value => this._mainContent === value ? 'selected' : '';
 
     return html`
-      <button type="button" class="btn ${selectedBtn(COMPONENT_TREE)}" @click=${() => this._mainContent = COMPONENT_TREE }>Tree</button>
-      <button type="button" class="btn ${selectedBtn(COMPONENT_CHART)}" @click=${() => this._mainContent = COMPONENT_CHART }>Chart</button>
+      <button type="button" class="btn ${ selectedBtn(COMPONENT_TREE) }"
+        @click=${ () => this._mainContent = COMPONENT_TREE }
+      >Tree</button>
+      <button type="button" class="btn ${ selectedBtn(COMPONENT_CHART) }"
+        @click=${ () => this._mainContent = COMPONENT_CHART }
+      >Chart</button>
+      <button type="button" class="btn ${ selectedBtn(COMPONENT_REQUEST_MOCKING) }"
+        @click=${ () => this._mainContent = COMPONENT_REQUEST_MOCKING }
+      >Request mocking</button>
     `;
   }
 
@@ -232,7 +258,7 @@ class MainApp extends LitElement {
             <div class="ui-group">
               <div class="content-wrapper">
                 <div class="content">
-                  ${this.actionButtonTemplate}
+                  ${ this.actionButtonTemplate }
                 </div>
               </div>
             </div>

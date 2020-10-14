@@ -1,7 +1,7 @@
 {
   "name": "GrassHopper Dev-Tools",
   "short_name": "GrassHopper",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Grasshopper Developer Tools",
   "devtools_page": "devtools.html",
   "manifest_version": 2,
@@ -9,7 +9,12 @@
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "content_scripts": [
     {
-      "matches": ["*://localhost/*", "*://127.0.0.1/*", "*://0.0.0.0/*", "*://*.ing.nl/*", "*://*.ing.be/*"],
+      "matches": ["<all_urls>"],
+      "js": ["./build/content-script-document-start.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://localhost/*", "*://127.0.0.1/*", "*://0.0.0.0/*", "*://*.ing.nl/*", "*://*.ing.net/*", "*://*.ing.be/*"],
       "js": ["./build/content-script.js"],
       "run_at": "document_idle"
     }
@@ -19,5 +24,8 @@
     "128": "./assets/images/grass-hopper-logo-128.png",
     "48": "./assets/images/grass-hopper-logo-48.png",
     "16": "./assets/images/grass-hopper-logo-16.png"
-  }
+  },
+  "web_accessible_resources": [
+    "./assets/fonts/*.woff2"
+  ]
 }

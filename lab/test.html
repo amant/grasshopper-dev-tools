@@ -3,44 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <title>Hello world</title>
-  <style >
+  <style>
     #container {
-        display: flex;
-        height: 100%;
-        outline: 1px solid red;
+      display: flex;
+      height: 100%;
+      outline: 1px solid red;
     }
 
     .app {
-        width: 100%;
-        height: 100%;
-        user-select: none;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        outline: 1px solid blue;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      outline: 1px solid blue;
     }
 
     .app > .header {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        position: relative;
-        outline: 1px solid blue;
-        box-shadow: 0 0 8px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      position: relative;
+      outline: 1px solid blue;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
     }
 
     .container {
-        height: calc(100%  - 60px);
-        position: relative;
-        overflow: hidden;
-        flex: 1;
+      height: calc(100% - 60px);
+      position: relative;
+      overflow: hidden;
+      flex: 1;
     }
 
     .split-pane {
-        display: flex;
-        height: 100%;
-        outline: 1px solid blue;
-        transform: translateZ(0);
+      display: flex;
+      height: 100%;
+      outline: 1px solid blue;
+      transform: translateZ(0);
     }
 
     .vertical {
@@ -52,8 +52,8 @@
     }
 
     .left, .right {
-        position: relative;
-        height: 100%;
+      position: relative;
+      height: 100%;
     }
 
     .top {
@@ -69,24 +69,24 @@
     }
 
     .scroll-pane {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        outline: 1px solid green;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      outline: 1px solid green;
     }
 
     .dragger {
-        position: absolute;
-        z-index: 99;
+      position: absolute;
+      z-index: 99;
     }
 
     .vertical .dragger {
-        top: 0;
-        bottom: 0;
-        right: -5px;
-        width: 10px;
-        cursor: ew-resize;
-        border: 1px solid green;
+      top: 0;
+      bottom: 0;
+      right: -5px;
+      width: 10px;
+      cursor: ew-resize;
+      border: 1px solid green;
     }
 
     .horizontal .dragger {
@@ -98,14 +98,14 @@
     }
 
     .action-header {
-        display: flex;
-        align-items: center;
-        padding: 0 10px;
-        font-size: 12px;
-        border-bottom: 1px solid #eee;
-        color: #666;
-        height: 50px;
-        outline: 1px solid blue;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      border-bottom: 1px solid #eee;
+      color: #666;
+      height: 50px;
+      outline: 1px solid blue;
     }
 
     .search {
@@ -115,19 +115,19 @@
     }
 
     .scroll {
-        position: relative;
-        flex: 1;
-        overflow: auto;
-        outline: 1px solid blue;
+      position: relative;
+      flex: 1;
+      overflow: auto;
+      outline: 1px solid blue;
     }
 
     .notice {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        width: 100%;
-        color: #aaa;
-        outline: 1px solid blue;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      color: #aaa;
+      outline: 1px solid blue;
     }
 
     .notice div {
@@ -172,10 +172,11 @@
       position: relative;
     }
 
-    .ui-group>.content-wrapper {
+    .ui-group > .content-wrapper {
       position: relative;
     }
-    .ui-group> .content-wrapper > .content {
+
+    .ui-group > .content-wrapper > .content {
       display: flex;
       flex-direction: row;
       align-items: stretch;
@@ -337,36 +338,118 @@
       --dom-attribute-name-color: rgb(153, 69, 0);
     }
 
-    .cm-js-keyword {color: hsl(310, 86%, 36%);}
-    .cm-js-number {color: hsl(248, 100%, 41%);}
-    .cm-js-comment {color: hsl(120, 100%, 23%); font-style: italic;}
-    .cm-js-string {color: hsl(1, 80%, 43%);}
-    .cm-js-string-2 {color: hsl(1, 99%, 39%);}
-    .cm-js-atom {color: hsl(310, 86%, 36%);}
-    .cm-js-def {color: hsl(240, 73%, 38%);}
-    .cm-js-operator {color: hsl(27, 100%, 30%);}
-    .cm-js-meta {color: hsl(27, 100%, 30%);}
-    .cm-js-variable-2 {color: hsl(240, 73%, 38%);}
+    .cm-js-keyword {
+      color: hsl(310, 86%, 36%);
+    }
 
-    .cm-css-keyword { color: rgb(7, 144, 154);}
-    .cm-css-number {color: rgb(50, 0, 255);}
-    .cm-css-comment {color: rgb(0, 116, 0);}
-    .cm-css-def {color: rgb(200, 0, 0);}
-    .cm-css-meta {color: rgb(200, 0, 0);}
-    .cm-css-atom {color: rgb(7, 144, 154);}
-    .cm-css-string {color: rgb(7, 144, 154);}
-    .cm-css-string-2 {color: rgb(7, 144, 154);}
-    .cm-css-link {color: rgb(7, 144, 154);}
-    .cm-css-variable {color: rgb(200, 0, 0);}
-    .cm-css-variable-2 {color: rgb(0, 0, 128);}
-    .cm-css-property, .webkit-css-property {color: rgb(200, 0, 0);}
+    .cm-js-number {
+      color: hsl(248, 100%, 41%);
+    }
 
-    .cm-xml-meta {color: rgb(192, 192, 192);}
-    .cm-xml-comment {color: rgb(35, 110, 37);}
-    .cm-xml-string {color: rgb(26, 26, 166);}
-    .cm-xml-tag {color: var(--dom-tag-name-color);}
-    .cm-xml-attribute {color: rgb(153, 69, 0);}
-    .cm-xml-link {color: #00e;}
+    .cm-js-comment {
+      color: hsl(120, 100%, 23%);
+      font-style: italic;
+    }
+
+    .cm-js-string {
+      color: hsl(1, 80%, 43%);
+    }
+
+    .cm-js-string-2 {
+      color: hsl(1, 99%, 39%);
+    }
+
+    .cm-js-atom {
+      color: hsl(310, 86%, 36%);
+    }
+
+    .cm-js-def {
+      color: hsl(240, 73%, 38%);
+    }
+
+    .cm-js-operator {
+      color: hsl(27, 100%, 30%);
+    }
+
+    .cm-js-meta {
+      color: hsl(27, 100%, 30%);
+    }
+
+    .cm-js-variable-2 {
+      color: hsl(240, 73%, 38%);
+    }
+
+    .cm-css-keyword {
+      color: rgb(7, 144, 154);
+    }
+
+    .cm-css-number {
+      color: rgb(50, 0, 255);
+    }
+
+    .cm-css-comment {
+      color: rgb(0, 116, 0);
+    }
+
+    .cm-css-def {
+      color: rgb(200, 0, 0);
+    }
+
+    .cm-css-meta {
+      color: rgb(200, 0, 0);
+    }
+
+    .cm-css-atom {
+      color: rgb(7, 144, 154);
+    }
+
+    .cm-css-string {
+      color: rgb(7, 144, 154);
+    }
+
+    .cm-css-string-2 {
+      color: rgb(7, 144, 154);
+    }
+
+    .cm-css-link {
+      color: rgb(7, 144, 154);
+    }
+
+    .cm-css-variable {
+      color: rgb(200, 0, 0);
+    }
+
+    .cm-css-variable-2 {
+      color: rgb(0, 0, 128);
+    }
+
+    .cm-css-property, .webkit-css-property {
+      color: rgb(200, 0, 0);
+    }
+
+    .cm-xml-meta {
+      color: rgb(192, 192, 192);
+    }
+
+    .cm-xml-comment {
+      color: rgb(35, 110, 37);
+    }
+
+    .cm-xml-string {
+      color: rgb(26, 26, 166);
+    }
+
+    .cm-xml-tag {
+      color: var(--dom-tag-name-color);
+    }
+
+    .cm-xml-attribute {
+      color: rgb(153, 69, 0);
+    }
+
+    .cm-xml-link {
+      color: #00e;
+    }
 
     .panel {
       background-color: white;
@@ -375,96 +458,317 @@
   <style>
     /* Dark theme */
 
-    .cm-js-atom{color:rgb(161, 247, 181);}
-    .cm-js-attribute{color:rgb(97, 148, 198);}
-    .cm-js-builtin{color:rgb(159, 180, 214);}
-    .cm-js-comment{color:rgb(116, 116, 116);}
-    .cm-js-def{color:var(--dom-tag-name-color);}
-    .cm-js-keyword{color:rgb(154, 127, 213);}
-    .cm-js-link{color:rgb(159, 180, 214);}
-    .cm-js-meta{color:rgb(221, 251, 85);}
-    .cm-js-number{color:rgb(161, 247, 181);}
-    .cm-js-operator{color:rgb(210, 192, 87);}
-    .cm-js-property{color:rgb(210, 192, 87);}
-    .cm-js-string{color:rgb(242, 139, 84);}
-    .cm-js-string-2{color:rgb(242, 139, 84);}
-    .cm-js-tag{color:var(--dom-tag-name-color);}
-    .cm-js-variable{color:rgb(217, 217, 217);}
-    .cm-js-variable-2{color:rgb(217, 217, 217);}
-    .cm-atom{color:rgb(161, 247, 181);}
-    .cm-comment{color:rgb(116, 116, 116);}
-    .cm-variable{color:rgb(217, 217, 217);}
-    .cm-string{color:rgb(242, 139, 84);}
-    .cm-keyword{color:rgb(154, 127, 213);}
-    .cm-number{color:rgb(161, 247, 181);}
-    .cm-operator{color:rgb(210, 192, 87);}
-    .cm-css-atom{color:rgb(217, 217, 217);}
-    .cm-css-builtin{color:rgb(255, 163, 79);}
-    .cm-css-def{color:rgb(255, 163, 79);}
-    .cm-css-comment{color:rgb(116, 116, 116);}
-    .cm-css-meta{color:rgb(132, 240, 255);}
-    .cm-css-number{color:rgb(217, 217, 217);}
-    .cm-css-operator{color:rgb(217, 217, 217);}
-    .cm-css-property{color:rgb(132, 240, 255);}
-    .cm-css-qualifier{color:rgb(255, 163, 79);}
-    .cm-css-string{color:rgb(231, 194, 111);}
-    .cm-css-string-2{color:rgb(217, 217, 217);}
-    .cm-css-tag{color:rgb(255, 163, 79);}
-    .cm-css-variable{color:rgb(255, 163, 79);}
-    .cm-css-variable-2{color:rgb(255, 163, 79);}
-    .cm-xml-comment{color:rgb(137, 137, 137);}
-    .cm-xml-error{color:rgb(198, 95, 95);}
-    .cm-xml-string{color:rgb(242, 151, 102);}
-    .cm-xml-tag{color:var(--dom-tag-name-color);}
-    .cm-xml-attribute{color:var(--dom-attribute-name-color);}
-    .cm-xml-link{color:rgb(231, 194, 111);}
+    .cm-js-atom {
+      color: rgb(161, 247, 181);
+    }
 
-    .webkit-html-attribute-name{color:var(--dom-attribute-name-color);}
-    .webkit-html-attribute-value{color:rgb(242, 151, 102);}
-    .webkit-html-comment{color:rgb(137, 137, 137);}
-    .devtools-link{color:rgb(231, 194, 111);}
-    .webkit-html-tag{color:var(--dom-tag-name-color);}
-    .webkit-html-tag-name{color:var(--dom-tag-name-color);}
-    .webkit-html-close-tag-name{color:var(--dom-tag-name-color);}
-    .webkit-html-text-node{color:rgb(207, 208, 208);}
-    .webkit-html-css-node{color:rgb(207, 208, 208);}
-    .webkit-html-js-node{color:rgb(207, 208, 208);}
-    .webkit-html-pseudo-element{color:rgb(93, 175, 215);}
-    .webkit-css-property{color: rgb(53, 212, 199);}
+    .cm-js-attribute {
+      color: rgb(97, 148, 198);
+    }
 
-    .cm-def{color:var(--dom-tag-name-color);}
-    .cm-header{color:var(--dom-tag-name-color);}
-    .cm-variable-2{color:rgb(217, 217, 217);}
+    .cm-js-builtin {
+      color: rgb(159, 180, 214);
+    }
 
-    .cm-variable-2 {color: #05a;}
-    .cm-variable-3, .cm-type {color: rgb(93, 176, 215);}
-    .cm-string {color: rgb(242, 139, 84);}
-    .cm-meta {color: #555;}
-    .cm-meta {color:rgb(221, 251, 85);}
-    .cm-qualifier{color:rgb(255, 163, 79);}
-    .cm-builtin{color:rgb(159, 180, 214);}
-    .cm-bracket {color: #997;}
-    .cm-tag{color:var(--dom-tag-name-color);}
-    .cm-attribute{color:rgb(97, 148, 198);}
-    .cm-hr {color: #999;}
-    .cm-link{color:rgb(159, 180, 214);}
+    .cm-js-comment {
+      color: rgb(116, 116, 116);
+    }
+
+    .cm-js-def {
+      color: var(--dom-tag-name-color);
+    }
+
+    .cm-js-keyword {
+      color: rgb(154, 127, 213);
+    }
+
+    .cm-js-link {
+      color: rgb(159, 180, 214);
+    }
+
+    .cm-js-meta {
+      color: rgb(221, 251, 85);
+    }
+
+    .cm-js-number {
+      color: rgb(161, 247, 181);
+    }
+
+    .cm-js-operator {
+      color: rgb(210, 192, 87);
+    }
+
+    .cm-js-property {
+      color: rgb(210, 192, 87);
+    }
+
+    .cm-js-string {
+      color: rgb(242, 139, 84);
+    }
+
+    .cm-js-string-2 {
+      color: rgb(242, 139, 84);
+    }
+
+    .cm-js-tag {
+      color: var(--dom-tag-name-color);
+    }
+
+    .cm-js-variable {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-js-variable-2 {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-atom {
+      color: rgb(161, 247, 181);
+    }
+
+    .cm-comment {
+      color: rgb(116, 116, 116);
+    }
+
+    .cm-variable {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-string {
+      color: rgb(242, 139, 84);
+    }
+
+    .cm-keyword {
+      color: rgb(154, 127, 213);
+    }
+
+    .cm-number {
+      color: rgb(161, 247, 181);
+    }
+
+    .cm-operator {
+      color: rgb(210, 192, 87);
+    }
+
+    .cm-css-atom {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-css-builtin {
+      color: rgb(255, 163, 79);
+    }
+
+    .cm-css-def {
+      color: rgb(255, 163, 79);
+    }
+
+    .cm-css-comment {
+      color: rgb(116, 116, 116);
+    }
+
+    .cm-css-meta {
+      color: rgb(132, 240, 255);
+    }
+
+    .cm-css-number {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-css-operator {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-css-property {
+      color: rgb(132, 240, 255);
+    }
+
+    .cm-css-qualifier {
+      color: rgb(255, 163, 79);
+    }
+
+    .cm-css-string {
+      color: rgb(231, 194, 111);
+    }
+
+    .cm-css-string-2 {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-css-tag {
+      color: rgb(255, 163, 79);
+    }
+
+    .cm-css-variable {
+      color: rgb(255, 163, 79);
+    }
+
+    .cm-css-variable-2 {
+      color: rgb(255, 163, 79);
+    }
+
+    .cm-xml-comment {
+      color: rgb(137, 137, 137);
+    }
+
+    .cm-xml-error {
+      color: rgb(198, 95, 95);
+    }
+
+    .cm-xml-string {
+      color: rgb(242, 151, 102);
+    }
+
+    .cm-xml-tag {
+      color: var(--dom-tag-name-color);
+    }
+
+    .cm-xml-attribute {
+      color: var(--dom-attribute-name-color);
+    }
+
+    .cm-xml-link {
+      color: rgb(231, 194, 111);
+    }
+
+    .webkit-html-attribute-name {
+      color: var(--dom-attribute-name-color);
+    }
+
+    .webkit-html-attribute-value {
+      color: rgb(242, 151, 102);
+    }
+
+    .webkit-html-comment {
+      color: rgb(137, 137, 137);
+    }
+
+    .devtools-link {
+      color: rgb(231, 194, 111);
+    }
+
+    .webkit-html-tag {
+      color: var(--dom-tag-name-color);
+    }
+
+    .webkit-html-tag-name {
+      color: var(--dom-tag-name-color);
+    }
+
+    .webkit-html-close-tag-name {
+      color: var(--dom-tag-name-color);
+    }
+
+    .webkit-html-text-node {
+      color: rgb(207, 208, 208);
+    }
+
+    .webkit-html-css-node {
+      color: rgb(207, 208, 208);
+    }
+
+    .webkit-html-js-node {
+      color: rgb(207, 208, 208);
+    }
+
+    .webkit-html-pseudo-element {
+      color: rgb(93, 175, 215);
+    }
+
+    .webkit-css-property {
+      color: rgb(53, 212, 199);
+    }
+
+    .cm-def {
+      color: var(--dom-tag-name-color);
+    }
+
+    .cm-header {
+      color: var(--dom-tag-name-color);
+    }
+
+    .cm-variable-2 {
+      color: rgb(217, 217, 217);
+    }
+
+    .cm-variable-2 {
+      color: #05a;
+    }
+
+    .cm-variable-3, .cm-type {
+      color: rgb(93, 176, 215);
+    }
+
+    .cm-string {
+      color: rgb(242, 139, 84);
+    }
+
+    .cm-meta {
+      color: #555;
+    }
+
+    .cm-meta {
+      color: rgb(221, 251, 85);
+    }
+
+    .cm-qualifier {
+      color: rgb(255, 163, 79);
+    }
+
+    .cm-builtin {
+      color: rgb(159, 180, 214);
+    }
+
+    .cm-bracket {
+      color: #997;
+    }
+
+    .cm-tag {
+      color: var(--dom-tag-name-color);
+    }
+
+    .cm-attribute {
+      color: rgb(97, 148, 198);
+    }
+
+    .cm-hr {
+      color: #999;
+    }
+
+    .cm-link {
+      color: rgb(159, 180, 214);
+    }
 
     :root {
       --dom-tag-name-color: rgb(93, 176, 215);
       --dom-attribute-name-color: rgb(155, 187, 220);
     }
 
-    body{color:rgb(213, 213, 213);background-color:rgb(36, 36, 36);}
-    .platform-linux{color:rgb(189, 198, 207);}
-    .platform-mac{color:rgb(189, 198, 207);}
-    .panel{background-color:rgb(36, 36, 36);}
-    .panel-sidebar{background-color:var(--toolbar-bg-color);}
+    body {
+      color: rgb(213, 213, 213);
+      background-color: rgb(36, 36, 36);
+    }
+
+    .platform-linux {
+      color: rgb(189, 198, 207);
+    }
+
+    .platform-mac {
+      color: rgb(189, 198, 207);
+    }
+
+    .panel {
+      background-color: rgb(36, 36, 36);
+    }
+
+    .panel-sidebar {
+      background-color: var(--toolbar-bg-color);
+    }
 
   </style>
   <script>
     customElements.define('user-card', class extends HTMLElement {
       connectedCallback() {
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = `
       <div>Name:
         <slot name="username"></slot>
@@ -484,11 +788,11 @@
   <span slot="birthday">01.01.2001</span>
 </user-card>
 
-  <div id="container">
-    <div class="app">
-        <div class="header">
-          <div class="logo"></div>
-          <span class="message-container">
+<div id="container">
+  <div class="app">
+    <div class="header">
+      <div class="logo"></div>
+      <span class="message-container">
             <span class="message">
               <span class="text">
                   Ready Set and Go ...
@@ -496,126 +800,127 @@
             </span>
 
           </span>
-          <div class="actions">
-            <div class="ui-group">
-              <div class="content-wrapper">
-                <div class="content">
-                  <button>Option 1</button>
-                  <button>Option 2</button>
-                  <button>Option 3</button>
-                  <button>Option 4</button>
-                  <button>Option 5</button>
-                </div>
-              </div>
+      <div class="actions">
+        <div class="ui-group">
+          <div class="content-wrapper">
+            <div class="content">
+              <button>Option 1</button>
+              <button>Option 2</button>
+              <button>Option 3</button>
+              <button>Option 4</button>
+              <button>Option 5</button>
             </div>
           </div>
         </div>
-        <div class="container">
-            <div id="pane" class="split-pane vertical" onmousemove="dragMove(event)" onmouseup="dragEnd()" onmouseleave="dragEnd()">
-                <div id="left-pane" class="left top" style="width: 50%">
-                    <div class="scroll-pane">
-                        <div class="header">
-                            <div class="action-header">
-                              <input type="text" placeholder="Filter component" class="search">
-                            </div>
-                        </div>
-                        <div class="scroll">
-                          <div class="tree">
-                              <ul id="myUL">
-                                  <li><span class="caret">&lt;Beverages&gt;</span>
-                                    <ul class="active">
-                                      <li>&lt;Water&gt;</li>
-                                      <li>&lt;Coffee&gt;</li>
-                                      <li><span class="caret">&lt;Tea&gt;</span>
-                                        <ul class="active">
-                                          <li>&lt;Black Tea&gt;</li>
-                                          <li>&lt;White Tea&gt;</li>
-                                          <li><span class="caret">&lt;Green Tea&gt;</span>
-                                            <ul class="active">
-                                              <li>&lt;Sencha&gt;</li>
-                                              <li>&lt;Gyokuro&gt;</li>
-                                              <li>&lt;Matcha&gt;</li>
-                                              <li>&lt;Pi Lo Chun&gt;</li>
-                                            </ul>
-                                          </li>
-                                        </ul>
-                                      </li>
-                                    </ul>
-                                  </li>
-                                </ul>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="dragger" onmousedown="dragStart(event);"></div>
-                </div>
-                <div id="right-pane" class="right bottom" style="width: 50%">
-                    <div class="scroll-pane">
-                        <div class="header">
-                            <div class="action-header">
-                              <span class="title" style="margin-right: 10px;">&lt;water&gt;</span>
-                              <input type="text" placeholder="Filter properties" class="search">
-                            </div>
-                        </div>
-                        <div class="scroll">
-                            <section class="notice">
-                                <div>Select a component to inspect.</div>
-                            </section>
-                        </div>
-                    </div>
-                </div>
+      </div>
+    </div>
+    <div class="container">
+      <div id="pane" class="split-pane vertical" onmousemove="dragMove(event)" onmouseup="dragEnd()"
+           onmouseleave="dragEnd()">
+        <div id="left-pane" class="left top" style="width: 50%">
+          <div class="scroll-pane">
+            <div class="header">
+              <div class="action-header">
+                <input type="text" placeholder="Filter component" class="search">
+              </div>
             </div>
+            <div class="scroll">
+              <div class="tree">
+                <ul id="myUL">
+                  <li><span class="caret">&lt;Beverages&gt;</span>
+                    <ul class="active">
+                      <li>&lt;Water&gt;</li>
+                      <li>&lt;Coffee&gt;</li>
+                      <li><span class="caret">&lt;Tea&gt;</span>
+                        <ul class="active">
+                          <li>&lt;Black Tea&gt;</li>
+                          <li>&lt;White Tea&gt;</li>
+                          <li><span class="caret">&lt;Green Tea&gt;</span>
+                            <ul class="active">
+                              <li>&lt;Sencha&gt;</li>
+                              <li>&lt;Gyokuro&gt;</li>
+                              <li>&lt;Matcha&gt;</li>
+                              <li>&lt;Pi Lo Chun&gt;</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="dragger" onmousedown="dragStart(event);"></div>
         </div>
+        <div id="right-pane" class="right bottom" style="width: 50%">
+          <div class="scroll-pane">
+            <div class="header">
+              <div class="action-header">
+                <span class="title" style="margin-right: 10px;">&lt;water&gt;</span>
+                <input type="text" placeholder="Filter properties" class="search">
+              </div>
+            </div>
+            <div class="scroll">
+              <section class="notice">
+                <div>Select a component to inspect.</div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
-  <script>
-    const el = document.querySelector('#pane');
-    const leftPaneEl = document.querySelector('#left-pane');
-    const rightPaneEl = document.querySelector('#right-pane');
-    const view = 'vertical';
+<script>
+  const el = document.querySelector('#pane');
+  const leftPaneEl = document.querySelector('#left-pane');
+  const rightPaneEl = document.querySelector('#right-pane');
+  const view = 'vertical';
 
-    let dragging = false;
-    let startPosition = 0;
-    let split = 50;
-    let startSplit;
+  let dragging = false;
+  let startPosition = 0;
+  let split = 50;
+  let startSplit;
 
-    function dragStart(e) {
-      dragging = true;
-      startPosition = view === 'vertical' ? e.pageX : e.pageY;
-      startSplit = split;
-      e.preventDefault();
+  function dragStart(e) {
+    dragging = true;
+    startPosition = view === 'vertical' ? e.pageX : e.pageY;
+    startSplit = split;
+    e.preventDefault();
 
-      el.classList.add('dragging');
-    }
+    el.classList.add('dragging');
+  }
 
-    function dragMove(e) {
-      if (dragging) {
-        let position
-        let totalSize
+  function dragMove(e) {
+    if (dragging) {
+      let position;
+      let totalSize;
 
-        if (view === 'vertical') {
-          position = e.pageX
-          totalSize = el.offsetWidth
-        } else {
-          position = e.pageY
-          totalSize = el.offsetHeight
-        }
-
-        const dPosition = position - startPosition
-        split = startSplit + Math.floor(dPosition / totalSize * 100)
-
-        requestAnimationFrame(() => {
-          leftPaneEl.style.width = `${split}%`;
-          rightPaneEl.style.width = `${(100 - split)}%`;
-        });
-
+      if (view === 'vertical') {
+        position = e.pageX;
+        totalSize = el.offsetWidth
+      } else {
+        position = e.pageY;
+        totalSize = el.offsetHeight
       }
-    }
 
-    function dragEnd() {
-      dragging = false
-      el.classList.remove('dragging');
+      const dPosition = position - startPosition;
+      split = startSplit + Math.floor(dPosition / totalSize * 100);
+
+      requestAnimationFrame(() => {
+        leftPaneEl.style.width = `${ split }%`;
+        rightPaneEl.style.width = `${ (100 - split) }%`;
+      });
+
     }
-  </script>
+  }
+
+  function dragEnd() {
+    dragging = false;
+    el.classList.remove('dragging');
+  }
+</script>
 </body>
 </html>

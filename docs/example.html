@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example on extending devtools panel</title>
+</head>
+<body>
+
+  <movie-info>
+    <span slot="title">Lord of the Right</span>
+    <span slot="vol">3</span>
+    <span slot="characters">
+      <movie-characters characters="Frodo, Samwise, Gollum, Aragorn, Gandalf, Saruman, Sauron"></movie-characters>
+    </span>
+  </movie-info>
+
+  <script>
+    customElements.define('movie-info', class extends HTMLElement {
+      connectedCallback() {
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = `
+          <div>Title: <slot name="title"></slot></div>
+          <div>Vol: <slot name="vol"></slot></div>
+          <div><slot name="characters"></slot></div>
+        `;
+      }
+    });
+  </script>
+
+  <script type="module">
+    import { LitElement, html, css } from 'https://unpkg.com/lit-element?module';
+
+    customElements.define('movie-characters', class extends LitElement {
+      static get styles() {
+        return [css`
+          :host { display: block; border: 1px solid blue; height: 200px; width: 200px; }
+        `];
+      }
+
+      static get properties() {
+          return {
+            characters: { type: String },
+            show: { type: Boolean },
+          }
+      }
+
+      constructor() {
+        super();
+        this.show = false;
+      }
+
+      get _characters() {
+        return this.characters.split(',');
+      }
+
+      render() {
+        return html`<div>
+                        <b>Characters</b>:
+                        <button @click="${() => this.show = !this.show}">${!this.show ? 'Show' : 'Hide'} casts</button>
+                        ${this.show ?
+                          html`<ul> ${this._characters.map(character => html`<li>${character}</li>`)} </ul>`
+                          : ''
+                        }
+                    </div>`;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Content script</title>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+
+    <script src="xhr-mock.js"></script>
+    <script>
+      function parseHeaders(string) {
+          var headers = {};
+          var lines = string.split('\r\n');
+          lines.forEach(function (line) {
+              var _a = line.split(':', 2), name = _a[0], value = _a[1];
+              if (name && value) {
+                  headers[name] = value.replace(/^\s*/g, '').replace(/\s*$/g, '');
+              }
+          });
+          return headers;
+      }
+
+      function proxy(req, res) {
+        return new Promise(function (resolve, reject) {
+            var xhr = new XHRMock.RealXMLHttpRequest();
+            // TODO: reject with the correct type of error
+            xhr.onerror = function (event) { return reject(event.error); };
+            xhr.onloadend = function () {
+                res
+                    .status(xhr.status)
+                    .reason(xhr.statusText)
+                    .headers(parseHeaders(xhr.getAllResponseHeaders()))
+                    .body(xhr.response);
+                resolve(res);
+            };
+            xhr.open(req.method(), req.url().toString());
+            var headers = req.headers();
+            Object.keys(headers).forEach(function (name) {
+                var value = headers[name];
+                xhr.setRequestHeader(name, value);
+            });
+            xhr.send(req.body());
+        });
+    }
+
+    function setupRequestMock(urls) {
+      XHRMock.setup();
+      XHRMock.error(({req, err}) => console.log('Request error', req.url()));
+
+      urls.forEach(({url, method, mock}) => {
+        return XHRMock.use(method, url, mock);
+      });
+
+      XHRMock.use(proxy);
+    }
+    </script>
+</head>
+<body>
+  <button id="load-content">Load ajax</button>
+  <pre id="response"></pre>
+  <pre id="response2"></pre>
+
+  <script>
+    // const urls = [{
+    //   url: '',
+    //   method: '',
+    //   mock: {
+    //     status: '',
+    //     reason: '',
+    //     headers: '',
+    //     body: ''
+    //   }
+    // }];
+
+    let urls = [{
+      url: 'https://reqres.in/api/users?page=1',
+      method: 'GET',
+      mock: {
+        body: {hello1: 'world1'}
+      }
+    }, {
+      url: 'https://reqres.in/api/users?page=2',
+      method: 'GET',
+      mock: {
+        body: {hello1: 'world2'}
+      }
+    }];
+
+    setupRequestMock(urls);
+
+    // XHRMock.setup();
+    
+    // XHRMock.get('https://reqres.in/api/users?page=1', {
+    //   body: {hello1: 'world1'}
+    // });
+
+    // XHRMock.get('https://reqres.in/api/users?page=2', {
+    //   body: {hello2: 'world2'}
+    // });
+
+    // XHRMock.use(proxy);
+
+    // XHRMock.error(({req, err}) => console.log('Request error', req.url()));
+
+  </script>
+  <script>
+    $('#load-content').click(() => {
+      const $el = $('#response');
+      const $el2 = $('#response2');
+
+      $el.html('Loading...');
+
+      $.get('https://reqres.in/api/users?page=1', (response) => {
+        $el.html(JSON.stringify(response, null, 2))
+      });
+
+      $.get('https://reqres.in/api/users?page=2', (response) => {
+        $el2.html(JSON.stringify(response, null, 2))
+      });
+    });
+  </script>
+
+  <script type="module">
+
+  </script>
+</body>
+</html>
