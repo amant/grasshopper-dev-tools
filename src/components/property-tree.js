@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { isArray as _isArray, isBoolean as _isBoolean, isObject as _isObject, isEmpty as _isEmpty } from 'lodash';
 
 class PropertyTree extends LitElement {
   static get properties() {
@@ -18,18 +17,21 @@ class PropertyTree extends LitElement {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
+        margin-top: 4px;
       }
 
       .property-name {
         color: var(--component-property-name-color);
+        width: 20%;
       }
 
       .property-value {
         margin-left: 4px;
-        width: 100%
+        width: 75%;
       }
 
-      input {
+      .property-value input,
+      .property-value textarea {
         font-size: 14px;
         background-color: var(--app-bg-color);
         color: var(--app-text-color);
@@ -54,23 +56,23 @@ class PropertyTree extends LitElement {
     <ul class="property">${ Object.keys(this.data).map(key => html`
       <li class="property-list">
         <div class="property-name">${ key }:</div>
-        <div class="property-value">${ this._getValue(key, this.data[key]) }</div>
+        <div class="property-value">${ this._getValue(key, this.data[key].value, this.data[key].type) }</div>
       </li>`) }
     </ul>`;
   };
 
-  _getValue(key, val) {
+  _getValue(key, val, type) {
     const value = this._parseValue(val);
 
-    if (typeof value === 'string') {
+    if (type === 'string') {
       return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ value }">`;
-    } else if (_isArray(value)) {
+    } else if (type === 'array') {
       return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ JSON.stringify(value) }">`;
       // return html`<button>arr +</button>${value.map(item => this._getValue(key, item))}`;
-    } else if (_isObject(value) && !_isEmpty(value)) {
-      return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ JSON.stringify(value) }">`;
+    } else if (type === 'object') {
+      return html`<textarea rows="3" @change=${ (event) => this._onChange(event, key)}>${ JSON.stringify(value) }</textarea>`;
       //return html`${this._treeList(value)}`;
-    } else if (_isBoolean(value)) {
+    } else if (type === 'boolean') {
       return html`
       <select @change=${ (event) => this._onChange(event, key) }>
         <option value="true" ?selected=${ value.toString() === 'true' }>True</option>

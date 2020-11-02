@@ -133,16 +133,51 @@ export function installHelpers(target) {
     return findAllElements(rootNode.children);
   };
 
-  const getComponentProperties = (selector) => {
-    const element = getElement(selector);
+  const getLitElementProperties = (element) => {
+    // attempt to get constructor of the custom-element
+    const tagName = element && element.tagName.toLowerCase();
+    const elConstructor = customElements.get(tagName);
+    const properties = elConstructor && elConstructor.properties;
 
-    const props = ((element.__data) ?
+    return properties && Object.keys(properties).sort().map(prop => ({
+      key: prop,
+      type: properties[prop].type.name.toLowerCase(),
+      value: JSON.stringify(element[prop]) || null
+    }));
+  }
+
+  // try to get properties from an element object
+  const getElementProperties = (element) => {
+    const properties = ((element.__data) ?
       Object.keys(element.__data) :
       Object.keys(element).filter(prop => prop.includes('__') && prop.substr(2) in element)) || [];
 
-    return props.sort().reduce((acc, prop) => {
-      const key = prop.includes('__') ? prop.substr(2) : prop;
-      acc[key] = JSON.stringify(element[prop]) || null;
+    return properties && properties.sort().map(prop => ({
+      key: prop.includes('__') ? prop.substr(2) : prop,
+      type: typeof element[prop],
+      value: JSON.stringify(element[prop]) || null,
+    }));
+  }
+
+  const getComponentProperties = (selector) => {
+    const element = getElement(selector);
+
+    // get properties
+    const props = getLitElementProperties(element) || getElementProperties(element);
+
+    return props.reduce((acc, prop) => {
+      let { key, type, value } = prop;
+
+      // set defaults
+      if (type === 'boolean' && value === null) {
+        value = false;
+      }
+
+      acc[key] = {
+        type,
+        value,
+      }
+
       return acc;
     }, {});
   };
