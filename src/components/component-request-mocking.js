@@ -175,7 +175,7 @@ class ComponentRequestMocking extends LitElement {
             <div>URL (use * for wildcard): </div>
             <div><input type="text" id="requestUrl" value=${ requestUrl }></div>
           </div>
-          <div class="hidden">
+          <div>
             <div>Response Status: </div>
             <div><input type="text" size="12" id="responseStatus" value=${ responseStatus }></div>
           </div>
@@ -255,7 +255,7 @@ class ComponentRequestMocking extends LitElement {
                         </div>
                         <div>${ list.requestUrl }</div>
                       </div>
-                      <div class="hidden">
+                      <div>
                         <div>Response Status:</div>
                         <div>${ list.responseStatus }</div>
                       </div>

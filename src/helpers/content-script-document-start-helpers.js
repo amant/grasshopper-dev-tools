@@ -62,9 +62,7 @@ export function overrideNetworkRequest() {
         if (foundItem) {
           Object.defineProperty(that, 'response', { value: JSON.stringify(foundItem.responseBody) });
           Object.defineProperty(that, 'responseText', { value: JSON.stringify(foundItem.responseBody) });
-
-          // TODO: implement response status
-          // Object.defineProperty(that, 'status', { value: JSON.stringify(foundItem.responseStatus) });
+          Object.defineProperty(that, 'status', { value: Number(foundItem.responseStatus) || 200 });
         }
 
         if (callback) {
