@@ -46,6 +46,8 @@ export function overrideNetworkRequest() {
     XMLHttpRequest.prototype.open = function (__, url) {
       const callback = this.onreadystatechange;
       const that = this;
+      const resolvedURL = new URL(url, window.location.href).href;
+
       const foundItem = db1.find(item => {
         // regexp escape
         const escapedUrlString = item.requestUrl.replace(/[.+^${}()|[\]\\]/g, '\\$&');
@@ -53,7 +55,7 @@ export function overrideNetworkRequest() {
         // support wildcard
         const reg = new RegExp(`^${ escapedUrlString.replace(/\*/g, '.*') }$`, 'i');
 
-        return item.requestEnable && reg.test(url);
+        return item.requestEnable && reg.test(resolvedURL);
       });
 
       this.onreadystatechange = function () {
