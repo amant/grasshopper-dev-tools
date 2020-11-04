@@ -329,9 +329,9 @@ class ComponentTree extends LitElement {
                 <label for="toggleCompactView">Compact View</label>
               </span>
               <span class="divider">|<span>
-              <button class="item" title="Expand" @click=${ this._expandAll }><i class="fas fa-expand"></i></button>
-              <button class="item" title="Collapse" @click=${ this._collapseAll }><i class="fas fa-compress-arrows-alt"></i></button>
-              <button class="item" title="Refresh" @click=${ () => this._refresh() }><i class="fas fa-redo"></i></button>
+              <button class="item" title="Expand elements list" @click=${ this._expandAll }><i class="fas fa-expand"></i></button>
+              <button class="item" title="Collapse elements list" @click=${ this._collapseAll }><i class="fas fa-compress-arrows-alt"></i></button>
+              <button class="item" title="Refresh elements list" @click=${ () => this._refresh() }><i class="fas fa-redo"></i></button>
             </div>
 
             ${ this._componentStructureTemplate }

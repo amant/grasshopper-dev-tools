@@ -230,7 +230,7 @@ class ComponentRequestMocking extends LitElement {
           <span class="divider">|</span>&nbsp;&nbsp;
           <button class="small-btn" title="Add a mock" @click=${ () => this._handleAddMock() }><i class="fas fa-plus"></i></button>&nbsp;&nbsp;
           <button class="small-btn" title="Remove all mock(s)" @click=${ () => this._handleRemoveAllMocks() }><i class="fas fa-ban"></i></button>
-          <button class="small-btn" title="Refresh" @click=${ () => this._refresh() }><i class="fas fa-redo"></i></button>
+          <button class="small-btn" title="Refresh mocks list" @click=${ () => this._refresh() }><i class="fas fa-redo"></i></button>
         </div>
 
         ${ this._formIdToShow === SHOW_ADD_FORM ? this._templateForm(defaultFormValues) : html`` }
