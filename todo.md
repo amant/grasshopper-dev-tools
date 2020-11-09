@@ -11,7 +11,7 @@
 - (done) Search filter in Component Tree
 - (done) Search filter in Property Tree
 - (done) Splitbar implementation - Horizontal
-- (done) Splitbar responsive - Vertial
+- (done) Splitbar responsive - Vertical
 - (done) Style Component-Tree
 - (done) Style Property-Tree
 - (done) Dark mode and responsive layout, custom element bold
@@ -27,9 +27,9 @@
 - (done) Refresh tree on tab reload
 - (done) Setup build script
 - (?) Refactor background script and bridge to communicate via postMessage
-- (?) Refresh on DOM mutation
+- (done) Refresh on DOM mutation
 - (?) Remember last checked component
-- (?) Publish to google store
+- (done) Publish to google store
 - (?) Ask for feedback
 - () Unit test, and demo pages
 - () Implement A11 tab

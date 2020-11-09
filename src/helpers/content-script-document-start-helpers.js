@@ -2,11 +2,11 @@ export function overrideNetworkRequest() {
   const DB_CONFIG = 'grasshopper-config-db';
   const DB_GROUP_NAME = 'grasshopper-db';
   const open = XMLHttpRequest.prototype.open;
+  const send = XMLHttpRequest.prototype.send;
 
   const getDb = () => {
     const content = localStorage.getItem(DB_GROUP_NAME);
     let parseContent;
-    let data;
 
     try {
       parseContent = JSON.parse(content);
@@ -35,15 +35,17 @@ export function overrideNetworkRequest() {
   const overrideNetworkRequestSetup = () => {
     const db1 = getDb();
     const configDb = getConfigDb();
+    const delaySets = new WeakMap();
 
     // mock only when `Enable mocking` is checked
     if (!configDb.mockEnable) {
       XMLHttpRequest.prototype.open = open;
+      XMLHttpRequest.prototype.send = send;
       return;
     }
 
     // override Ajax open to set mocked reponses
-    XMLHttpRequest.prototype.open = function (__, url) {
+    XMLHttpRequest.prototype.open = function (__, url, isAsync) {
       const callback = this.onreadystatechange;
       const that = this;
       const resolvedURL = new URL(url, window.location.href).href;
@@ -58,6 +60,10 @@ export function overrideNetworkRequest() {
         return item.requestEnable && reg.test(resolvedURL);
       });
 
+      if (foundItem) {
+        delaySets.set(that, { isAsync, delay: foundItem.requestDelay, url: resolvedURL });
+      }
+
       this.onreadystatechange = function () {
         if (foundItem) {
           Object.defineProperty(that, 'response', { value: JSON.stringify(foundItem.responseBody) });
@@ -71,6 +77,18 @@ export function overrideNetworkRequest() {
       };
 
       open.apply(this, arguments);
+    }
+
+    XMLHttpRequest.prototype.send = function () {
+      const delaySet = delaySets.get(this);
+      const delay = (delaySet && Number(delaySet.delay)) || 0;
+
+      if (delaySet && delaySet.isAsync && delay > 0) {
+        setTimeout(() => send.apply(this, arguments), delay);
+        return;
+      }
+
+      return send.apply(this, arguments);
     }
   };
 

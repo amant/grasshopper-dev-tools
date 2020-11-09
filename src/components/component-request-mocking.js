@@ -16,7 +16,8 @@ const SHOW_ADD_FORM = 0;
 const defaultFormValues = {
   requestUrl: 'https://google.com',
   responseBody: { hello: 'world' },
-  responseStatus: '200',
+  responseStatus: 200,
+  requestDelay: 0,
 };
 
 class ComponentRequestMocking extends LitElement {
@@ -162,7 +163,8 @@ class ComponentRequestMocking extends LitElement {
                   requestEnable = true,
                   requestUrl = '',
                   responseBody = '',
-                  responseStatus = ''
+                  responseStatus = 200,
+                  requestDelay = 0,
                 } = {}) {
     return html`
       <form id="requestForm">
@@ -178,6 +180,10 @@ class ComponentRequestMocking extends LitElement {
           <div>
             <div>Response Status: </div>
             <div><input type="text" size="12" id="responseStatus" value=${ responseStatus }></div>
+          </div>
+          <div>
+            <div>Delay request: </div>
+            <div><input type="text" size="12" id="requestDelay" value=${ requestDelay }> (milliseconds)</div>
           </div>
           <div>
             <div>Response Body: </div>
@@ -260,6 +266,10 @@ class ComponentRequestMocking extends LitElement {
                         <div>${ list.responseStatus }</div>
                       </div>
                       <div>
+                        <div>Request Delay:</div>
+                        <div>${ list.requestDelay }</div>
+                      </div>
+                      <div>
                         <div>Response Body:</div>
                         <div class="response-body">${ JSON.stringify(list.responseBody) }</div>
                       </div>
@@ -311,6 +321,7 @@ class ComponentRequestMocking extends LitElement {
     const responseBodyText = this._editor ? this._editor.getValue() : this.shadowRoot.querySelector('#responseBody').value;
 
     const responseStatus = this.shadowRoot.querySelector('#responseStatus').value;
+    const requestDelay = this.shadowRoot.querySelector('#requestDelay').value;
     const saveBtn = this.shadowRoot.querySelector('#save-btn');
 
     saveBtn.disabled = true;
@@ -332,6 +343,7 @@ class ComponentRequestMocking extends LitElement {
       requestUrl,
       responseBody,
       responseStatus,
+      requestDelay,
     };
 
     if (id) {
