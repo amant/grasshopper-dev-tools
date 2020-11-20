@@ -183,17 +183,17 @@ class MainApp extends LitElement {
         <div slot="left-pane" class="scroll">
           <div class="component-tree-container">
             ${ !this._components ?
-      html`<span>Loading...</span>` :
-      html`<component-tree
-                      data=${ JSON.stringify(this._componentsFilter) }
-                      @show-properties=${ this._handleShowProperties }
-                      @show-source=${ (event) => showSource(event.detail.nodeName) }
-                      @show-element=${ (event) => showElement(event.detail.selector) }
-                      @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
-                      @unhighlight-component=${ (event) => unHighlightComponent(event.detail.selector) }
-                      @refresh=${ () => this._refreshComponent() }
-                     ></component-tree>`
-    }
+            html`<span>Loading...</span>` :
+            html`<component-tree
+                  data=${ JSON.stringify(this._componentsFilter) }
+                  @show-properties=${ this._handleShowProperties }
+                  @show-source=${ (event) => showSource(event.detail.nodeName) }
+                  @show-element=${ (event) => showElement(event.detail.selector) }
+                  @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
+                  @unhighlight-component=${ (event) => unHighlightComponent(event.detail.selector) }
+                  @refresh=${ () => this._refreshComponent() }
+                 ></component-tree>`
+          }
           </div>
         </div>
         <!-- End left-pane -->
@@ -213,17 +213,18 @@ class MainApp extends LitElement {
         </div>
         <div slot="right-pane" class="scroll">
           ${ this._showProperty ?
-      html`<section class="property-tree-container">
+            html`<section class="property-tree-container">
                    <property-tree
                     .data=${ this._componentPropertiesFilter }
                     @change-property=${ (event) => setProperty({
-        querySelector: this._currentQuerySelector,
-        property: event.detail.property,
-        value: event.detail.value
-      }) }></property-tree>
+                      querySelector: this._currentQuerySelector,
+                      property: event.detail.property,
+                      value: event.detail.value
+                    }) }>
+                    </property-tree>
                   </section>` :
-      html`<section class="notice"><div>Select a component to inspect.</div></section>`
-    }
+            html`<section class="notice"><div>Select a component to inspect.</div></section>`
+          }
         </div>
         <!-- End right-pane -->
       </split-pane>

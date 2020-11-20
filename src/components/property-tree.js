@@ -1,5 +1,10 @@
 import { LitElement, html, css } from 'lit-element';
 
+// https://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript
+function isValidDate(d) {
+  return d instanceof Date && !isNaN(d);
+}
+
 class PropertyTree extends LitElement {
   static get properties() {
     return {
@@ -9,6 +14,11 @@ class PropertyTree extends LitElement {
 
   static get styles() {
     return [css`
+
+      ::-webkit-calendar-picker-indicator {
+          filter: invert(var(--calendar-picker-indicator));
+      }
+
       .property {
         padding: 0px;
       }
@@ -68,10 +78,19 @@ class PropertyTree extends LitElement {
       return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ value }">`;
     } else if (type === 'array') {
       return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ JSON.stringify(value) }">`;
-      // return html`<button>arr +</button>${value.map(item => this._getValue(key, item))}`;
     } else if (type === 'object') {
+      const dateValue = new Date(value);
+      // TODO: pass down date object from page content, rather than guess via the value
+      // is a date type object
+      if ( value && isValidDate(dateValue) ) {
+        return html`<input
+                        type="date"
+                        value="${dateValue.toLocaleDateString('en-CA')}"
+                        @change=${ (event) => this._onChangeDate(event, key)}
+                    >`;
+      }
+
       return html`<textarea rows="3" @change=${ (event) => this._onChange(event, key)}>${ JSON.stringify(value) }</textarea>`;
-      //return html`${this._treeList(value)}`;
     } else if (type === 'boolean') {
       return html`
       <select @change=${ (event) => this._onChange(event, key) }>
@@ -88,10 +107,17 @@ class PropertyTree extends LitElement {
     this.data = [];
   }
 
+  _onChangeDate(event, key) {
+    this._dispatch(key, new Date(event.target.value));
+  }
+
   _onChange(event, key) {
-    const el = event.target;
+    this._dispatch(key, event.target.value);
+  }
+
+  _dispatch(property, value) {
     this.dispatchEvent(new CustomEvent('change-property', {
-      detail: { value: el.value, property: key },
+      detail: { property, value },
       bubbles: true,
       composed: true
     }));

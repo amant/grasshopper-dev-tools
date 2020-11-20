@@ -57,6 +57,9 @@ export function installHelpers(target) {
     return element;
   };
 
+  // https://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript
+  const isValidDate = (date) => date instanceof Date && !isNaN(date)
+
   const highlightComponent = (selector) => {
     const el = getElement(selector);
     const element = el.nodeName.toLowerCase() === 'slot' ? el.parentElement : el;
@@ -189,8 +192,12 @@ export function installHelpers(target) {
       return;
     }
 
+    const dateValue = new Date(value);
+
     // TODO: implement for polymer elements
-    if (value === 'true') {
+    if (value && isValidDate(dateValue)) {
+      element[key] = dateValue;
+    } else if (value === 'true') {
       element[key] = true;
     } else if (value === 'false') {
       element[key] = false;

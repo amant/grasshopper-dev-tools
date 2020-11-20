@@ -25,6 +25,7 @@
   --component-property-name-color: rgb(200, 0, 0);
 
   --focus-ring-inactive-shadow: 0 0 0 1px #e0e0e0;
+  --calendar-picker-indicator: 0;
 
 }
 
@@ -54,6 +55,7 @@
   --component-property-name-color: rgb(53, 212, 199);
 
   --focus-ring-inactive-shadow: 0 0 0 1px #5a5a5a;
+  --calendar-picker-indicator: 1;
 }
 
 :root {
