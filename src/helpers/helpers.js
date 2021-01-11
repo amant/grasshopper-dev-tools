@@ -32,7 +32,14 @@ export const setProperty = ({ querySelector, property, value }) =>
 
 export const showSource = (nodeName) => {
   function _showSource(customElementName) {
-    inspect(customElements.get(customElementName));
+    let elConstructor = customElements.get(customElementName);
+
+    // open-wc scopedElement mixer created an anonymous class by extending the custom element's constructor
+    if (!elConstructor.name) {
+      elConstructor = Object.getPrototypeOf(elConstructor);
+    }
+
+    inspect(elConstructor);
   }
 
   return evaluate(`(${ _showSource.toString() }('${ nodeName }'))`);
