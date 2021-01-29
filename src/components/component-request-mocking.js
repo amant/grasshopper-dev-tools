@@ -103,6 +103,8 @@ class ComponentRequestMocking extends LitElement {
         list-style: none;
         margin: 0;
         padding: 8px;
+        max-height: calc(100vh - 100px);
+        overflow: scroll;
       }
 
       .list {
