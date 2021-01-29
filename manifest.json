@@ -1,7 +1,7 @@
 {
   "name": "GrassHopper Dev-Tools",
   "short_name": "GrassHopper",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "Grasshopper Developer Tools",
   "devtools_page": "devtools.html",
   "manifest_version": 2,
