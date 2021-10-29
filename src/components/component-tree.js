@@ -102,7 +102,7 @@ class ComponentTree extends LitElement {
         font-size: 12px;
       }
 
-      .inspect-element {
+      .cursor-pointer {
         width: 18px;
         height: 18px;
         font-size: 12px;
@@ -122,7 +122,7 @@ class ComponentTree extends LitElement {
 
   constructor() {
     super();
-    this.toShowCompactView = false;
+    this.toShowCompactView = true;
   }
 
   _getElements(value) {
@@ -224,6 +224,11 @@ class ComponentTree extends LitElement {
             <span class="caret" @click="${ this._toggleExpand }"></span>
             ${ getName(el) }
         `;
+    const customElementButtonTmpl = (isCustomEl) => {
+      if (!isCustomEl) return;
+
+      return html`<span class="small-button" @click=${(e) => this._handleCustomElementClick(e, nodeName)}>Custom</span>`
+    }
 
     const isCustomElement = nodeName => nodeName.includes('-');
 
@@ -248,16 +253,10 @@ class ComponentTree extends LitElement {
                     @mouseout="${ (event) => this._mouseOut(event, el) }"
                   ><${ nodeName }${ attributes }></span>
 
-                ${(isCustomEl && !this.toShowCompactView)
-                  ? html`<span
-                            class="small-button"
-                            @click=${(e) => this._handleCustomElementClick(e, nodeName)}
-                          >custom</span>`
-                  : ''
-                }
+                ${ customElementButtonTmpl(isCustomEl) }
 
                 ${ (uniqueElId === this._activeItem) ? html`
-                  <span title="Inspect element" class="fas fa-crosshairs inspect-element" @click=${ e => this._handleInspectElementClick(e, el) }></span>
+                  <span title="Inspect element" class="fas fa-crosshairs cursor-pointer" @click=${ e => this._handleInspectElementClick(e, el) }></span>
                 ` : ''
                 }
               `;
@@ -324,12 +323,12 @@ class ComponentTree extends LitElement {
                   type="checkbox"
                   id="toggleCompactView"
                   @click=${ () => this.toShowCompactView = !this.toShowCompactView }
-                  ?check=${ this.toShowCompactView }
+                  ?checked=${ this.toShowCompactView }
                 >
                 <label for="toggleCompactView">Compact View</label>
               </span>
               <span class="divider">|<span>
-              <button class="item" title="Expand elements list" @click=${ this._expandAll }><i class="fas fa-expand"></i></button>
+              <button class="item" title="Expand elements list" @click=${ this._expandAll }><i class="fas fa-expand-alt"></i></button>
               <button class="item" title="Collapse elements list" @click=${ this._collapseAll }><i class="fas fa-compress-arrows-alt"></i></button>
               <button class="item" title="Refresh elements list" @click=${ () => this._refresh() }><i class="fas fa-redo"></i></button>
             </div>
