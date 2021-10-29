@@ -224,7 +224,7 @@ class ComponentTree extends LitElement {
             <span class="caret" @click="${ this._toggleExpand }"></span>
             ${ getName(el) }
         `;
-    const customElementButtonTmpl = (isCustomEl) => {
+    const customElementButtonTmpl = (isCustomEl, nodeName) => {
       if (!isCustomEl) return;
 
       return html`<span class="small-button" @click=${(e) => this._handleCustomElementClick(e, nodeName)}>Custom</span>`
@@ -253,7 +253,7 @@ class ComponentTree extends LitElement {
                     @mouseout="${ (event) => this._mouseOut(event, el) }"
                   ><${ nodeName }${ attributes }></span>
 
-                ${ customElementButtonTmpl(isCustomEl) }
+                ${ customElementButtonTmpl(isCustomEl, nodeName) }
 
                 ${ (uniqueElId === this._activeItem) ? html`
                   <span title="Inspect element" class="fas fa-crosshairs cursor-pointer" @click=${ e => this._handleInspectElementClick(e, el) }></span>

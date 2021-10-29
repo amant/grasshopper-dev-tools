@@ -139,7 +139,13 @@ export function installHelpers(target) {
   const getLitElementProperties = (element) => {
     // attempt to get constructor of the custom-element
     const tagName = element && element.tagName.toLowerCase();
-    const elConstructor = customElements.get(tagName);
+    let elConstructor = customElements.get(tagName);
+
+    // open-wc scopedElement mixer created an anonymous class by extending the custom element's constructor
+    if (elConstructor && !elConstructor.name) {
+      elConstructor = Object.getPrototypeOf(elConstructor);
+    }
+
     const properties = elConstructor && elConstructor.properties;
 
     return properties && Object.keys(properties).sort().map(prop => ({
@@ -185,8 +191,22 @@ export function installHelpers(target) {
     }, {});
   };
 
+  const getProperties = (tagName) => {
+    let elConstructor = customElements.get(tagName);
+
+    // open-wc scopedElement mixer created an anonymous class by extending the custom element's constructor
+    if (elConstructor && !elConstructor.name) {
+      elConstructor = Object.getPrototypeOf(elConstructor);
+    }
+
+    return elConstructor && elConstructor.properties;
+  }
+
   const setComponentProperty = (selector, key, value) => {
     const element = getElement(selector);
+    const tagName = element && element.tagName.toLowerCase();
+    const properties = getProperties(tagName) || {};
+    const type = properties[key] && properties[key].type && properties[key].type.name.toLowerCase();
 
     if (!element) {
       return;
@@ -194,13 +214,18 @@ export function installHelpers(target) {
 
     const dateValue = new Date(value);
 
-    // TODO: implement for polymer elements
     if (value && isValidDate(dateValue)) {
       element[key] = dateValue;
     } else if (value === 'true') {
       element[key] = true;
     } else if (value === 'false') {
       element[key] = false;
+    } else if (properties[key] && (type === 'array' || type === 'object')) {
+      try {
+        element[key] = JSON.parse(value);
+      } catch (err) {
+        element[key] = value;
+      }
     } else {
       element[key] = value;
     }

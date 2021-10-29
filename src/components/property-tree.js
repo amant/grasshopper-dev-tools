@@ -30,14 +30,18 @@ class PropertyTree extends LitElement {
         margin-top: 4px;
       }
 
+      .small-text {
+        font-size: 9px;
+      }
+
       .property-name {
         color: var(--component-property-name-color);
-        width: 20%;
+        width: 25%;
       }
 
       .property-value {
         margin-left: 4px;
-        width: 75%;
+        width: 70%;
       }
 
       .property-value input,
@@ -65,7 +69,7 @@ class PropertyTree extends LitElement {
     return html`
     <ul class="property">${ Object.keys(this.data).map(key => html`
       <li class="property-list">
-        <div class="property-name">${ key }:</div>
+        <div class="property-name">${ key }:<div class="small-text">&lsaquo;${this.data[key].type}&rsaquo;</div></div>
         <div class="property-value">${ this._getValue(key, this.data[key].value, this.data[key].type) }</div>
       </li>`) }
     </ul>`;
