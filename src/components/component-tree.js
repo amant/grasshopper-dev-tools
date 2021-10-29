@@ -167,6 +167,14 @@ class ComponentTree extends LitElement {
     }));
   }
 
+  _handleDblClick(event, el) {
+    this.dispatchEvent(new CustomEvent('set-search', {
+      detail: { nodeName: el.nodeName },
+      bubbles: true,
+      composed: true
+    }));
+  }
+
   _handleClick(event, el) {
     if (event.target.classList.contains('dom-tag-name')) {
       // clear previous selection
@@ -248,6 +256,7 @@ class ComponentTree extends LitElement {
       return html`<span
                     class="dom-tag-name ${ classMap(cssClassName) }"
                     title="${ el.inShadow ? 'inside shadowroot' : '' }"
+                    @dblclick="${(event) => this._handleDblClick(event, el)}"
                     @click="${ (event) => this._handleClick(event, el) }"
                     @mouseover="${ (event) => this._mouseOver(event, el) }"
                     @mouseout="${ (event) => this._mouseOut(event, el) }"

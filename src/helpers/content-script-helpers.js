@@ -146,11 +146,11 @@ export function installHelpers(target) {
       elConstructor = Object.getPrototypeOf(elConstructor);
     }
 
-    const properties = elConstructor && elConstructor.properties;
+    const properties = elConstructor?.properties;
 
     return properties && Object.keys(properties).sort().map(prop => ({
       key: prop,
-      type: properties[prop].type.name.toLowerCase(),
+      type: properties[prop]?.type?.name?.toLowerCase() ?? typeof element[prop],
       value: JSON.stringify(element[prop]) || null
     }));
   }
@@ -204,9 +204,9 @@ export function installHelpers(target) {
 
   const setComponentProperty = (selector, key, value) => {
     const element = getElement(selector);
-    const tagName = element && element.tagName.toLowerCase();
-    const properties = getProperties(tagName) || {};
-    const type = properties[key] && properties[key].type && properties[key].type.name.toLowerCase();
+    const tagName = element?.tagName.toLowerCase();
+    const properties = getProperties(tagName) ?? {};
+    const type = properties[key]?.type?.name.toLowerCase();
 
     if (!element) {
       return;

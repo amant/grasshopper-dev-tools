@@ -1,6 +1,6 @@
 {
   "name": "grasshopper-dev-tools",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "description": "The Developer Tools for Webcomponent",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import { debounce as _debounce } from 'lodash';
+import { debounce as _debounce, toLower } from 'lodash';
 import {
   getAllComponents,
   getComponentProperties,
@@ -125,6 +125,15 @@ class MainApp extends LitElement {
     }
   }
 
+  _handleSetSearchComponentTree(event) {
+    const inputFilterComponentEl = this.shadowRoot.querySelector('#inputFilterComponent');
+    if (inputFilterComponentEl) {
+      inputFilterComponentEl.value = toLower(event.detail.nodeName);
+      // trigger input event to invoke search functionality.
+      inputFilterComponentEl.dispatchEvent(new Event('input'));
+    }
+  }
+
   async _handleShowProperties(event) {
     this._selectedComponentName = event.detail.nodeName;
     this._currentQuerySelector = event.detail.selector;
@@ -192,6 +201,7 @@ class MainApp extends LitElement {
                   @highlight-component=${ (event) => highlightComponent(event.detail.selector) }
                   @unhighlight-component=${ (event) => unHighlightComponent(event.detail.selector) }
                   @refresh=${ () => this._refreshComponent() }
+                  @set-search=${(event) => this._handleSetSearchComponentTree(event) }
                  ></component-tree>`
           }
           </div>
