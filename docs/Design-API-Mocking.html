@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello world</title>
+  <style>
+    .interceptor-table {
+      text-align: left;
+      position: relative;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .interceptor-table th,
+    .interceptor-table td
+    {
+      padding: 10px;
+      border: 1px solid black;
+      border-collapse: collapse;
+      text-align: left;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .interceptor-table th {
+      background: lightcyan;
+      position: sticky;
+      top: 0; /* Don't forget this, required for the stickiness */
+      box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    .interceptor-table .enable {
+      width: 20px;
+      max-width: 20px;
+    }
+
+    .interceptor-table .url {
+      width: 200px;
+      max-width: 400px;
+    }
+
+    .interceptor-table .status {
+      width: 50px;
+      max-width: 50px;
+    }
+
+    .interceptor-table .delay {
+      width: 70px;
+      max-width: 70px;
+    }
+
+    .interceptor-table .body {
+      width: 150px;
+      max-width: 150px;
+    }
+
+    .interceptor-table .action {
+      width: 100px;
+      max-width: 100px;
+    }
+
+  </style>
+</head>
+<body>
+  <table class="interceptor-table">
+    <thead>
+      <tr>
+        <th class="enable"></th>
+        <th class="url">URL</th>
+        <th class="status">Status</th>
+        <th class="delay">Delay(ms)</th>
+        <th class="body">Body</th>
+        <th class="action">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status˙">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+      <tr>
+        <td class="enable"><input type="checkbox"></td>
+        <td class="url">http://localhost:8000/mb/registration/api/*/devices/registration/api/*/devices/registration/api/*/devices/registration/api/*/devices</td>
+        <td class="status">200</td>
+        <td class="delay">0</td>
+        <td class="body">{"devices":["Hello world"],"_links":[{"rel":"self","href":"/mb/registration/api/devicemanagement/devices"}],"_messages":[]}</td>
+        <td class="action"><button>Edit</button> | <a href="#">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
