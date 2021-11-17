@@ -39,6 +39,12 @@ class PropertyTree extends LitElement {
         width: 25%;
       }
 
+      .property-key {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       .property-value {
         margin-left: 4px;
         width: 70%;
@@ -69,7 +75,10 @@ class PropertyTree extends LitElement {
     return html`
     <ul class="property">${ Object.keys(this.data).map(key => html`
       <li class="property-list">
-        <div class="property-name">${ key }:<div class="small-text">&lsaquo;${this.data[key].type}&rsaquo;</div></div>
+        <div class="property-name">
+          <div class="property-key">${ key }:</div>
+          <div class="small-text">&lsaquo;${this.data[key].type}&rsaquo;</div>
+        </div>
         <div class="property-value">${ this._getValue(key, this.data[key].value, this.data[key].type) }</div>
       </li>`) }
     </ul>`;
@@ -78,8 +87,12 @@ class PropertyTree extends LitElement {
   _getValue(key, val, type) {
     const value = this._parseValue(val);
 
+    console.log()
+
     if (type === 'string') {
-      return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ value }">`;
+      return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ value }">`
+    } else if (type === 'number') {
+        return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ value }">`;
     } else if (type === 'array') {
       return html`<input @change=${ (event) => this._onChange(event, key) } type="text" value="${ JSON.stringify(value) }">`;
     } else if (type === 'object') {
